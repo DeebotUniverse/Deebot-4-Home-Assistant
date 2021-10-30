@@ -1,5 +1,5 @@
 {
-  "name": "Deebot for Home Assistant",
+  "name": "Deebot 4 Home Assistant",
   "iot_class": "Cloud Polling",
   "zip_release": true,
   "filename": "deebot.zip",

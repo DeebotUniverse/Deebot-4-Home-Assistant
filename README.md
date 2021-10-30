@@ -252,3 +252,10 @@ More information can be found in the [HA logger documentation](https://www.home-
 ## Misc
 
 An SVG of the Deebot 950 can be found under [images](docs/images/deebot950.svg)
+
+## Thanks
+
+My heartfelt thanks to:
+
+- [Deebot-for-Home-Assistant](https://github.com/And3rsL/Deebot-for-Home-Assistant), After all, this is a Deebot-for-Home-Assistant fork :)
+- [integration template](https://github.com/custom-components/integration_blueprint), a template for HA integrations
