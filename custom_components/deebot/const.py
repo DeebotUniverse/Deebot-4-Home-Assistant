@@ -33,7 +33,7 @@ MIN_REQUIRED_HA_VERSION = "0.0.0"  # set min required version in hacs.json
 
 # Values below can be changed
 DOMAIN = "deebot"
-ISSUE_URL = "https://github.com/And3rsL/Deebot-for-Home-Assistant/issues"
+ISSUE_URL = "https://github.com/DeebotUniverse/Deebot-4-Home-Assistant/issues"
 
 STARTUP_MESSAGE = f"""
 -------------------------------------------------------------------
