@@ -5,7 +5,7 @@ sort-direction: ascending
 filter-by-commitish: true
 categories:
   - title: ":boom: Breaking changes"
-    label: "Breaking Change"
+    label: "pr: Breaking Change"
 
   - title: ":sparkles: New features"
     label: "pr: new-feature"
@@ -25,7 +25,7 @@ categories:
       - "dependencies"
 
 include-labels:
-  - "Breaking Change"
+  - "pr: Breaking Change"
   - "pr: enhancement"
   - "pr: dependency-update"
   - "pr: new-feature"
@@ -35,7 +35,7 @@ include-labels:
 version-resolver:
   major:
     labels:
-      - "Breaking Change"
+      - "pr: Breaking Change"
   minor:
     labels:
       - "pr: enhancement"
