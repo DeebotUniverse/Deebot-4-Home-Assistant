@@ -111,12 +111,7 @@ body:
       description: >
         For example, error message, or stack traces.
 
-        Please filter the logs before adding it on:
-          - deebotozmo
-          - custom_components.deebot
-          - homeassistant.components.vacuum
-
-        If you have multiple vacuums please add the logs only for the relevant one.
+        Please refer to the [documentation](https://deebot.readthedocs.io/integrations/home-assistant/issues/).
       render: txt
   - type: textarea
     attributes:
