@@ -1,7 +1,7 @@
 """Helpers module."""
 from typing import Dict, Optional
 
-from deebotozmo.vacuum_bot import VacuumBot
+from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.core import HomeAssistant
 from homeassistant.util import uuid
 

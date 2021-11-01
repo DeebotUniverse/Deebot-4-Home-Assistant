@@ -7,9 +7,9 @@ from typing import Any, Dict, List, Optional
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from aiohttp import ClientError
-from deebotozmo import create_instances
-from deebotozmo.models import Configuration, DeviceInfo
-from deebotozmo.util import md5
+from deebot_client import create_instances
+from deebot_client.models import Configuration, DeviceInfo
+from deebot_client.util import md5
 from homeassistant import config_entries
 from homeassistant.const import (
     CONF_DEVICES,

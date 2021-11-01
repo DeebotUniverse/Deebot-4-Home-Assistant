@@ -2,7 +2,7 @@
 import logging
 from typing import Any, Callable, Dict, Optional, Type, TypeVar
 
-from deebotozmo.events import (
+from deebot_client.events import (
     CleanLogEventDto,
     ErrorEventDto,
     EventDto,
@@ -13,8 +13,8 @@ from deebotozmo.events import (
     TotalStatsEventDto,
     WaterInfoEventDto,
 )
-from deebotozmo.events.event_bus import EventListener
-from deebotozmo.vacuum_bot import VacuumBot
+from deebot_client.events.event_bus import EventListener
+from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_DESCRIPTION, STATE_UNKNOWN

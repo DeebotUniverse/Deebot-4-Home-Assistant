@@ -1,7 +1,7 @@
 """Util module."""
 from typing import List
 
-from deebotozmo.events.event_bus import EventListener
+from deebot_client.events.event_bus import EventListener
 
 
 def unsubscribe_listeners(listeners: List[EventListener]) -> None:
