@@ -1,5 +1,5 @@
 deebot-client==0.0.1b1
-homeassistant~=2021.10.0
+homeassistant~=2021.10.6
 
 # Test requirements
 #pytest-homeassistant-custom-component==0.4.4
