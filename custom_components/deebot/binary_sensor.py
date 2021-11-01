@@ -2,9 +2,9 @@
 import logging
 from typing import Any, Dict, Optional
 
-from deebotozmo.events import WaterInfoEventDto
-from deebotozmo.events.event_bus import EventListener
-from deebotozmo.vacuum_bot import VacuumBot
+from deebot_client.events import WaterInfoEventDto
+from deebot_client.events.event_bus import EventListener
+from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant

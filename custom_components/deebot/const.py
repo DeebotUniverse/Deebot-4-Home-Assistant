@@ -1,7 +1,7 @@
 """Const module."""
 from typing import Mapping, Type
 
-from deebotozmo.events import (
+from deebot_client.events import (
     BatteryEventDto,
     CleanLogEventDto,
     ErrorEventDto,
@@ -14,7 +14,7 @@ from deebotozmo.events import (
     StatusEventDto,
     WaterInfoEventDto,
 )
-from deebotozmo.models import VacuumState
+from deebot_client.models import VacuumState
 from homeassistant.components.vacuum import (
     STATE_CLEANING,
     STATE_DOCKED,

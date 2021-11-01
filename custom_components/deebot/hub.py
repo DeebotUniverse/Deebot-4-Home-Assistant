@@ -7,10 +7,10 @@ from typing import Any, List, Mapping
 
 import aiohttp
 from aiohttp import ClientError
-from deebotozmo import Configuration, create_instances
-from deebotozmo.mqtt_client import MqttClient
-from deebotozmo.util import md5
-from deebotozmo.vacuum_bot import VacuumBot
+from deebot_client import Configuration, create_instances
+from deebot_client.mqtt_client import MqttClient
+from deebot_client.util import md5
+from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.const import (
     CONF_DEVICES,
     CONF_PASSWORD,

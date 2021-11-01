@@ -4,7 +4,7 @@ import logging
 from typing import Any, Dict, List, Mapping, Optional
 
 import voluptuous as vol
-from deebotozmo.commands import (
+from deebot_client.commands import (
     Charge,
     Clean,
     FanSpeedLevel,
@@ -13,9 +13,9 @@ from deebotozmo.commands import (
     SetRelocationState,
     SetWaterInfo,
 )
-from deebotozmo.commands.clean import CleanAction, CleanArea, CleanMode
-from deebotozmo.commands.custom import CustomCommand
-from deebotozmo.events import (
+from deebot_client.commands.clean import CleanAction, CleanArea, CleanMode
+from deebot_client.commands.custom import CustomCommand
+from deebot_client.events import (
     BatteryEventDto,
     CustomCommandEventDto,
     ErrorEventDto,
@@ -23,9 +23,9 @@ from deebotozmo.events import (
     RoomsEventDto,
     StatusEventDto,
 )
-from deebotozmo.events.event_bus import EventListener
-from deebotozmo.models import Room, VacuumState
-from deebotozmo.vacuum_bot import VacuumBot
+from deebot_client.events.event_bus import EventListener
+from deebot_client.models import Room, VacuumState
+from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.vacuum import (
     SUPPORT_BATTERY,
     SUPPORT_FAN_SPEED,

@@ -1,4 +1,4 @@
-deebotozmo==4.0.0b2
+deebot-client==0.0.1b1
 homeassistant~=2021.10.0
 
 # Test requirements
@@ -7,3 +7,6 @@ mypy==0.910
 pre-commit==2.15.0
 pylint==2.11.1
 pylint-strict-informational==0.1
+
+# uses in deebbot-client, adding for mypi
+types-cachetools

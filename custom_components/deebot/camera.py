@@ -3,9 +3,9 @@ import base64
 import logging
 from typing import Any, Dict, Optional
 
-from deebotozmo.events import MapEventDto
-from deebotozmo.events.event_bus import EventListener
-from deebotozmo.vacuum_bot import VacuumBot
+from deebot_client.events import MapEventDto
+from deebot_client.events.event_bus import EventListener
+from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.camera import Camera
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
