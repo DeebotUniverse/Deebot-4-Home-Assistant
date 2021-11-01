@@ -24,7 +24,7 @@ async def async_setup_entry(
     config_entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Add sensors for passed config_entry in HA."""
+    """Add entities for passed config_entry in HA."""
     hub: DeebotHub = hass.data[DOMAIN][config_entry.entry_id]
 
     new_devices = []
@@ -39,7 +39,7 @@ class WaterInfoSelect(SelectEntity):  # type: ignore
     """Water info select entity."""
 
     entity_description = SelectEntityDescription(
-        key="water_amount",
+        key="water",
         entity_registry_enabled_default=False,
         icon="mdi:water",
     )
