@@ -2,10 +2,10 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from deebotozmo.commands import SetWaterInfo
-from deebotozmo.events import StatusEventDto, WaterAmount, WaterInfoEventDto
-from deebotozmo.events.event_bus import EventListener
-from deebotozmo.vacuum_bot import VacuumBot
+from deebot_client.commands import SetWaterInfo
+from deebot_client.events import StatusEventDto, WaterAmount, WaterInfoEventDto
+from deebot_client.events.event_bus import EventListener
+from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
