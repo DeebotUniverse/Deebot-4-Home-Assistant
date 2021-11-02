@@ -29,7 +29,7 @@ async def async_setup_entry(
     new_devices = []
 
     for vacbot in hub.vacuum_bots:
-        new_devices.append(DeeboLiveCamera(vacbot, "liveMap"))
+        new_devices.append(DeeboLiveCamera(vacbot, "live_map"))
 
     if new_devices:
         async_add_entities(new_devices)
