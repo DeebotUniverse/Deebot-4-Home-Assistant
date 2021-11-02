@@ -1,18 +1,17 @@
 """Select module."""
 import logging
-from typing import Any, Dict, List, Optional
+from typing import List, Optional
 
 from deebot_client.commands import SetWaterInfo
 from deebot_client.events import StatusEventDto, WaterAmount, WaterInfoEventDto
 from deebot_client.events.event_bus import EventListener
-from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
-from .helpers import get_device_info
+from .entity import DeebotEntity
 from .hub import DeebotHub
 from .util import unsubscribe_listeners
 
@@ -35,7 +34,7 @@ async def async_setup_entry(
         async_add_entities(new_devices)
 
 
-class WaterInfoSelect(SelectEntity):  # type: ignore
+class WaterInfoSelect(DeebotEntity, SelectEntity):  # type: ignore
     """Water info select entity."""
 
     entity_description = SelectEntityDescription(
@@ -44,27 +43,8 @@ class WaterInfoSelect(SelectEntity):  # type: ignore
         icon="mdi:water",
     )
 
-    def __init__(self, vacuum_bot: VacuumBot):
-        """Initialize the Sensor."""
-        self._vacuum_bot: VacuumBot = vacuum_bot
-
-        device_info = self._vacuum_bot.device_info
-        if device_info.nick is not None:
-            name: str = device_info.nick
-        else:
-            # In case there is no nickname defined, use the device id
-            name = device_info.did
-
-        self._attr_name = f"{name}_{self.entity_description.key}"
-        self._attr_unique_id = f"{device_info.did}_{self.entity_description.key}"
-
-        self._attr_options = [amount.display_name for amount in WaterAmount]
-        self._attr_current_option: Optional[str] = None
-
-    @property
-    def device_info(self) -> Optional[Dict[str, Any]]:
-        """Return device specific attributes."""
-        return get_device_info(self._vacuum_bot)
+    _attr_options = [amount.display_name for amount in WaterAmount]
+    _attr_current_option: Optional[str] = None
 
     async def async_added_to_hass(self) -> None:
         """Set up the event listeners now that hass is ready."""
