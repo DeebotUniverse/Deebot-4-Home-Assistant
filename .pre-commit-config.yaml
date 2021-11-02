@@ -76,12 +76,10 @@ repos:
         entry: scripts/run-in-env.sh mypy
         language: script
         types: [python]
-        require_serial: true
         <<: *python-files
       - id: pylint
         name: Check with pylint
         entry: scripts/run-in-env.sh pylint
         language: script
         types: [python]
-        require_serial: true
         <<: *python-files

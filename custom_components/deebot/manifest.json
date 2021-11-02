@@ -5,7 +5,7 @@
   "config_flow": true,
   "documentation": "https://deebot.readthedocs.io/integrations/home-assistant",
   "issue_tracker": "https://github.com/DeebotUniverse/Deebot-4-Home-Assistant/issues",
-  "requirements": ["deebotozmo==4.0.0b2"],
+  "requirements": ["deebot-client==0.0.1b2", "numpy>=1.21.2"],
   "codeowners": ["@DeebotUniverse", "@edenhaus"],
   "iot_class": "cloud_polling"
 }
