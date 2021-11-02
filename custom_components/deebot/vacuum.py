@@ -202,17 +202,21 @@ class DeebotVacuum(StateVacuumEntity):  # type: ignore
         is lowercase snake_case.
         """
         attributes: Dict[str, Any] = {}
+        rooms: Dict[str, Any] = {}
         for room in self._rooms:
             # convert room name to snake_case to meet the convention
-            room_name = "room_" + slugify(room.subtype)
-            room_values = attributes.get(room_name)
+            room_name = slugify(room.subtype)
+            room_values = rooms.get(room_name)
             if room_values is None:
-                attributes[room_name] = room.id
+                rooms[room_name] = room.id
             elif isinstance(room_values, list):
                 room_values.append(room.id)
             else:
                 # Convert from int to list
-                attributes[room_name] = [room_values, room.id]
+                rooms[room_name] = [room_values, room.id]
+
+        if rooms:
+            attributes["rooms"] = rooms
 
         if self._last_error:
             attributes[
