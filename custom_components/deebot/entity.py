@@ -50,20 +50,17 @@ class DeebotEntity(Entity):  # type: ignore
     def device_info(self) -> Optional[DeviceInfo]:
         """Return device specific attributes."""
         device = self._vacuum_bot.device_info
-        identifiers = set()
-        if device.did:
-            identifiers.add((DOMAIN, device.did))
-        if device.name:
-            identifiers.add((DOMAIN, device.name))
-
-        if not identifiers:
-            # we don't get a identifier to identify the device correctly abort
-            return None
-
-        return {
-            "identifiers": identifiers,
-            "name": device.get("nick", "Deebot vacuum"),
+        info = {
+            "default_name": "Deebot vacuum",
+            "identifiers": {(DOMAIN, device.did)},
             "manufacturer": "Ecovacs",
-            "model": device.get("deviceName", "Deebot vacuum"),
             "sw_version": self._vacuum_bot.fw_version,
         }
+
+        if "nick" in device:
+            info["name"] = device["nick"]
+
+        if "deviceName" in device:
+            info["model"] = device["deviceName"]
+
+        return info
