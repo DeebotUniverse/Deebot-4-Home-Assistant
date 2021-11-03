@@ -17,7 +17,7 @@ from .const import (
     MIN_REQUIRED_HA_VERSION,
     STARTUP_MESSAGE,
 )
-from .helpers import get_bumper_device_id
+from .util import get_bumper_device_id
 
 _LOGGER = logging.getLogger(__name__)
 

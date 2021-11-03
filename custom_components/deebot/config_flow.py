@@ -21,6 +21,7 @@ from homeassistant.const import (
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers import aiohttp_client
 
+from . import get_bumper_device_id
 from .const import (
     BUMPER_CONFIGURATION,
     CONF_CLIENT_DEVICE_ID,
@@ -30,7 +31,6 @@ from .const import (
     CONF_MODE_CLOUD,
     DOMAIN,
 )
-from .helpers import get_bumper_device_id
 
 _LOGGER = logging.getLogger(__name__)
 

@@ -1,6 +1,6 @@
 # if code from specifix branch is needed
 # git+https://github.com/DeebotUniverse/client.py@add-volume#deebot-client==0.0.1b1
-deebot-client==0.0.1b4
+deebot-client==0.0.1b5
 
 homeassistant~=2021.10.0
 mypy==0.910
