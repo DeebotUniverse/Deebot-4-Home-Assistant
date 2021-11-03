@@ -29,7 +29,10 @@ class DeebotEntity(Entity):  # type: ignore
         self._vacuum_bot: VacuumBot = vacuum_bot
 
         device_info = self._vacuum_bot.device_info
-        self._attr_unique_id = f"{device_info.did}_{self.entity_description.key}"
+        self._attr_unique_id = device_info.did
+
+        if self.entity_description.key:
+            self._attr_unique_id += f"_{self.entity_description.key}"
 
         if self.entity_description.name:
             # Name provided, using the provided one

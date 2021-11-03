@@ -117,7 +117,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
             # In case there is no nickname defined, use the device id
             name = device_info.did
 
-        super().__init__(vacuum_bot, StateVacuumEntityDescription(key=name, name=name))
+        super().__init__(vacuum_bot, StateVacuumEntityDescription(key="", name=name))
 
         self._battery: Optional[int] = None
         self._fan_speed: Optional[str] = None
