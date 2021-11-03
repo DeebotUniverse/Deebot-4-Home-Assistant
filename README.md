@@ -1,9 +1,9 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-custom-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
 <br><a href="https://www.buymeacoffee.com/edenhaus" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-black.png" width="150px" height="35px" alt="Buy Me A Coffee" style="height: 35px !important;width: 150px !important;" ></a>
 
-# Home Assistant Custom Component for Ecovacs vacuum cleaner
+# Home Assistant integration for deebot vacuums
 
-With this Home Assistant Custom Component you'll be able to
+With this custom component you'll be able to
 
 - play/pause
 - locate

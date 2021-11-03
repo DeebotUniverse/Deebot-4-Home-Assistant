@@ -1,5 +1,4 @@
 """Support for Deebot Vaccums."""
-import dataclasses
 import logging
 from typing import Any, Dict, List, Mapping, Optional
 
@@ -20,6 +19,7 @@ from deebot_client.events import (
     CustomCommandEventDto,
     ErrorEventDto,
     FanSpeedEventDto,
+    ReportStatsEventDto,
     RoomsEventDto,
     StatusEventDto,
 )
@@ -49,6 +49,7 @@ from homeassistant.util import slugify
 
 from .const import (
     DOMAIN,
+    EVENT_CLEANING_JOB,
     EVENT_CUSTOM_COMMAND,
     LAST_ERROR,
     STR_TO_EVENT_DTO,
@@ -56,7 +57,7 @@ from .const import (
 )
 from .entity import DeebotEntity
 from .hub import DeebotHub
-from .util import unsubscribe_listeners
+from .util import dataclass_to_dict, unsubscribe_listeners
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -134,7 +135,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
             self.async_write_ha_state()
 
         async def on_custom_command(event: CustomCommandEventDto) -> None:
-            self.hass.bus.fire(EVENT_CUSTOM_COMMAND, dataclasses.asdict(event))
+            self.hass.bus.fire(EVENT_CUSTOM_COMMAND, dataclass_to_dict(event))
 
         async def on_error(event: ErrorEventDto) -> None:
             self._last_error = event
@@ -143,6 +144,9 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
         async def on_fan_speed(event: FanSpeedEventDto) -> None:
             self._fan_speed = event.speed
             self.async_write_ha_state()
+
+        async def on_report_stats(event: ReportStatsEventDto) -> None:
+            self.hass.bus.fire(EVENT_CLEANING_JOB, dataclass_to_dict(event))
 
         async def on_rooms(event: RoomsEventDto) -> None:
             self._rooms = event.rooms
@@ -158,6 +162,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
             self._vacuum_bot.events.subscribe(CustomCommandEventDto, on_custom_command),
             self._vacuum_bot.events.subscribe(ErrorEventDto, on_error),
             self._vacuum_bot.events.subscribe(FanSpeedEventDto, on_fan_speed),
+            self._vacuum_bot.events.subscribe(ReportStatsEventDto, on_report_stats),
             self._vacuum_bot.events.subscribe(RoomsEventDto, on_rooms),
             self._vacuum_bot.events.subscribe(StatusEventDto, on_status),
         ]

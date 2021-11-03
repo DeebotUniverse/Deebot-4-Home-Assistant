@@ -88,4 +88,5 @@ STR_TO_EVENT_DTO: Mapping[str, Type[EventDto]] = {
     "Water": WaterInfoEventDto,
 }
 
+EVENT_CLEANING_JOB = "deebot_cleaning_job"
 EVENT_CUSTOM_COMMAND = "deebot_custom_command"
