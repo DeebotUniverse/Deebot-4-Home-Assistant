@@ -1,7 +1,9 @@
-[![hacs_badge](https://img.shields.io/badge/HACS-custom-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
-<br><a href="https://www.buymeacoffee.com/edenhaus" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-black.png" width="150px" height="35px" alt="Buy Me A Coffee" style="height: 35px !important;width: 150px !important;" ></a>
-
 # Home Assistant integration for deebot vacuums
+
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/DeebotUniverse/Deebot-4-Home-Assistant.svg?logo=lgtm&logoWidth=18&style=for-the-badge)](https://lgtm.com/projects/g/DeebotUniverse/Deebot-4-Home-Assistant/alerts/)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/DeebotUniverse/Deebot-4-Home-Assistant.svg?logo=lgtm&logoWidth=18&style=for-the-badge)](https://lgtm.com/projects/g/DeebotUniverse/Deebot-4-Home-Assistant/context:python)
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
+<a href="https://www.buymeacoffee.com/edenhaus" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-black.png" width="150px" height="28px" alt="Buy Me A Coffee" style="height: 35px !important;width: 150px !important;" ></a>
 
 With this custom component you'll be able to
 
