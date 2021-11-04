@@ -6,7 +6,6 @@ import string
 from typing import Any, List, Mapping
 
 import aiohttp
-from aiohttp import ClientError
 from deebot_client import Configuration, create_instances
 from deebot_client.mqtt_client import MqttClient
 from deebot_client.util import md5
@@ -103,7 +102,7 @@ class DeebotHub:
             try:
                 await asyncio.sleep(60)
                 await self._check_status_function()
-            except ClientError as ex:
+            except aiohttp.ClientError as ex:
                 _LOGGER.warning(
                     "A client error occurred, probably the ecovacs servers are unstable: %s",
                     ex,

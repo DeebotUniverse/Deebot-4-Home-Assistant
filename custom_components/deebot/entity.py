@@ -7,7 +7,7 @@ from homeassistant.helpers.entity import DeviceInfo, Entity, EntityDescription
 from . import DOMAIN
 
 
-class DeebotEntity(Entity):  # type: ignore
+class DeebotEntity(Entity):  # type: ignore # lgtm [py/missing-equals]
     """Deebot entity."""
 
     _attr_should_poll = False
