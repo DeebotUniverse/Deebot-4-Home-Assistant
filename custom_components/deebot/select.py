@@ -7,6 +7,7 @@ from deebot_client.events import StatusEventDto, WaterAmount, WaterInfoEventDto
 from deebot_client.events.event_bus import EventListener
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import ENTITY_CATEGORY_CONFIG
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -41,6 +42,7 @@ class WaterInfoSelect(DeebotEntity, SelectEntity):  # type: ignore
         key="water_amount",
         entity_registry_enabled_default=False,
         icon="mdi:water",
+        entity_category=ENTITY_CATEGORY_CONFIG,
     )
 
     _attr_options = [amount.display_name for amount in WaterAmount]
