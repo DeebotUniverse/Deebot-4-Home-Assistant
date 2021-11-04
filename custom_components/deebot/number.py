@@ -7,6 +7,7 @@ from deebot_client.events import StatusEventDto, VolumeEventDto
 from deebot_client.events.event_bus import EventListener
 from homeassistant.components.number import NumberEntity, NumberEntityDescription
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import ENTITY_CATEGORY_CONFIG
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from numpy import array_split
@@ -41,6 +42,7 @@ class VolumeEntity(DeebotEntity, NumberEntity):  # type: ignore
     entity_description = NumberEntityDescription(
         key="volume",
         entity_registry_enabled_default=False,
+        entity_category=ENTITY_CATEGORY_CONFIG,
     )
 
     _attr_min_value = 0
