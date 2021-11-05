@@ -3,8 +3,6 @@ import base64
 import logging
 from typing import Optional
 
-from deebot_client.events import MapEventDto
-from deebot_client.events.event_bus import EventListener
 from homeassistant.components.camera import Camera
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -58,10 +56,9 @@ class DeeboLiveCamera(DeebotEntity, Camera):  # type: ignore
         """Set up the event listeners now that hass is ready."""
         await super().async_added_to_hass()
 
-        async def on_event(_: MapEventDto) -> None:
-            self.schedule_update_ha_state()
+        self._vacuum_bot.map.enable()
 
-        listener: EventListener = self._vacuum_bot.events.subscribe(
-            MapEventDto, on_event
-        )
-        self.async_on_remove(listener.unsubscribe)
+        def disable() -> None:
+            self._vacuum_bot.map.disable()
+
+        self.async_on_remove(disable)

@@ -3,7 +3,7 @@ import logging
 from typing import List, Optional
 
 from deebot_client.commands import SetVolume
-from deebot_client.events import StatusEventDto, VolumeEventDto
+from deebot_client.events import StatusEvent, VolumeEvent
 from deebot_client.events.event_bus import EventListener
 from homeassistant.components.number import NumberEntity, NumberEntityDescription
 from homeassistant.config_entries import ConfigEntry
@@ -54,20 +54,20 @@ class VolumeEntity(DeebotEntity, NumberEntity):  # type: ignore
         """Set up the event listeners now that hass is ready."""
         await super().async_added_to_hass()
 
-        async def on_status(event: StatusEventDto) -> None:
+        async def on_status(event: StatusEvent) -> None:
             if not event.available:
                 self._attr_value = None
                 self.async_write_ha_state()
 
-        async def on_volume(event: VolumeEventDto) -> None:
+        async def on_volume(event: VolumeEvent) -> None:
             if event.maximum is not None:
                 self._attr_max_value = event.maximum
             self._attr_value = event.volume
             self.async_write_ha_state()
 
         listeners: List[EventListener] = [
-            self._vacuum_bot.events.subscribe(VolumeEventDto, on_volume),
-            self._vacuum_bot.events.subscribe(StatusEventDto, on_status),
+            self._vacuum_bot.events.subscribe(VolumeEvent, on_volume),
+            self._vacuum_bot.events.subscribe(StatusEvent, on_status),
         ]
         self.async_on_remove(lambda: unsubscribe_listeners(listeners))
 

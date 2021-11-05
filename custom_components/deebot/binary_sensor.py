@@ -2,7 +2,7 @@
 import logging
 from typing import Optional
 
-from deebot_client.events import WaterInfoEventDto
+from deebot_client.events import WaterInfoEvent
 from deebot_client.events.event_bus import EventListener
 from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
@@ -54,11 +54,11 @@ class DeebotMopAttachedBinarySensor(DeebotEntity, BinarySensorEntity):  # type: 
         """Set up the event listeners now that hass is ready."""
         await super().async_added_to_hass()
 
-        async def on_event(event: WaterInfoEventDto) -> None:
+        async def on_event(event: WaterInfoEvent) -> None:
             self._attr_is_on = event.mop_attached
             self.async_write_ha_state()
 
         listener: EventListener = self._vacuum_bot.events.subscribe(
-            WaterInfoEventDto, on_event
+            WaterInfoEvent, on_event
         )
         self.async_on_remove(listener.unsubscribe)

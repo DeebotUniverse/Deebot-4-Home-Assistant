@@ -2,17 +2,16 @@
 from typing import Mapping, Type
 
 from deebot_client.events import (
-    BatteryEventDto,
-    CleanLogEventDto,
-    ErrorEventDto,
-    EventDto,
-    FanSpeedEventDto,
-    LifeSpanEventDto,
-    MapEventDto,
-    RoomsEventDto,
-    StatsEventDto,
-    StatusEventDto,
-    WaterInfoEventDto,
+    BatteryEvent,
+    CleanLogEvent,
+    ErrorEvent,
+    Event,
+    FanSpeedEvent,
+    LifeSpanEvent,
+    RoomsEvent,
+    StatsEvent,
+    StatusEvent,
+    WaterInfoEvent,
 )
 from deebot_client.models import VacuumState
 from homeassistant.components.vacuum import (
@@ -75,18 +74,18 @@ VACUUMSTATE_TO_STATE = {
 LAST_ERROR = "last_error"
 
 
-STR_TO_EVENT_DTO: Mapping[str, Type[EventDto]] = {
-    "Battery": BatteryEventDto,
-    "Clean logs": CleanLogEventDto,
-    "Error": ErrorEventDto,
-    "Fan speed": FanSpeedEventDto,
-    "Life spans": LifeSpanEventDto,
-    "Map": MapEventDto,
-    "Rooms": RoomsEventDto,
-    "Stats": StatsEventDto,
-    "Status": StatusEventDto,
-    "Water": WaterInfoEventDto,
+REFRESH_STR_TO_EVENT_DTO: Mapping[str, Type[Event]] = {
+    "Battery": BatteryEvent,
+    "Clean logs": CleanLogEvent,
+    "Error": ErrorEvent,
+    "Fan speed": FanSpeedEvent,
+    "Life spans": LifeSpanEvent,
+    "Rooms": RoomsEvent,
+    "Stats": StatsEvent,
+    "Status": StatusEvent,
+    "Water": WaterInfoEvent,
 }
+REFRESH_MAP = "Map"
 
 EVENT_CLEANING_JOB = "deebot_cleaning_job"
 EVENT_CUSTOM_COMMAND = "deebot_custom_command"
