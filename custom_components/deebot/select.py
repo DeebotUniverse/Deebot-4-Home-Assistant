@@ -3,7 +3,7 @@ import logging
 from typing import List, Optional
 
 from deebot_client.commands import SetWaterInfo
-from deebot_client.events import StatusEventDto, WaterAmount, WaterInfoEventDto
+from deebot_client.events import StatusEvent, WaterAmount, WaterInfoEvent
 from deebot_client.events.event_bus import EventListener
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.config_entries import ConfigEntry
@@ -52,18 +52,18 @@ class WaterInfoSelect(DeebotEntity, SelectEntity):  # type: ignore
         """Set up the event listeners now that hass is ready."""
         await super().async_added_to_hass()
 
-        async def on_status(event: StatusEventDto) -> None:
+        async def on_status(event: StatusEvent) -> None:
             if not event.available:
                 self._attr_current_option = None
                 self.async_write_ha_state()
 
-        async def on_water_info(event: WaterInfoEventDto) -> None:
+        async def on_water_info(event: WaterInfoEvent) -> None:
             self._attr_current_option = event.amount.display_name
             self.async_write_ha_state()
 
         listeners: List[EventListener] = [
-            self._vacuum_bot.events.subscribe(WaterInfoEventDto, on_water_info),
-            self._vacuum_bot.events.subscribe(StatusEventDto, on_status),
+            self._vacuum_bot.events.subscribe(WaterInfoEvent, on_water_info),
+            self._vacuum_bot.events.subscribe(StatusEvent, on_status),
         ]
         self.async_on_remove(lambda: unsubscribe_listeners(listeners))
 

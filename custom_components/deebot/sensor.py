@@ -3,14 +3,14 @@ import logging
 from typing import Callable, Type, TypeVar
 
 from deebot_client.events import (
-    CleanLogEventDto,
-    ErrorEventDto,
-    EventDto,
+    CleanLogEvent,
+    ErrorEvent,
+    Event,
     LifeSpan,
-    LifeSpanEventDto,
-    StatsEventDto,
-    StatusEventDto,
-    TotalStatsEventDto,
+    LifeSpanEvent,
+    StatsEvent,
+    StatusEvent,
+    TotalStatsEvent,
 )
 from deebot_client.events.event_bus import EventListener
 from deebot_client.vacuum_bot import VacuumBot
@@ -66,7 +66,7 @@ async def async_setup_entry(
                         native_unit_of_measurement=AREA_SQUARE_METERS,
                         entity_registry_enabled_default=False,
                     ),
-                    StatsEventDto,
+                    StatsEvent,
                     lambda e: e.area,
                 ),
                 DeebotGenericSensor(
@@ -77,7 +77,7 @@ async def async_setup_entry(
                         native_unit_of_measurement=TIME_MINUTES,
                         entity_registry_enabled_default=False,
                     ),
-                    StatsEventDto,
+                    StatsEvent,
                     lambda e: round(e.time / 60) if e.time else None,
                 ),
                 DeebotGenericSensor(
@@ -87,7 +87,7 @@ async def async_setup_entry(
                         icon="mdi:cog",
                         entity_registry_enabled_default=False,
                     ),
-                    StatsEventDto,
+                    StatsEvent,
                     lambda e: e.type,
                 ),
                 # TotalStats
@@ -100,7 +100,7 @@ async def async_setup_entry(
                         entity_registry_enabled_default=False,
                         state_class=STATE_CLASS_TOTAL_INCREASING,
                     ),
-                    TotalStatsEventDto,
+                    TotalStatsEvent,
                     lambda e: e.area,
                 ),
                 DeebotGenericSensor(
@@ -112,7 +112,7 @@ async def async_setup_entry(
                         entity_registry_enabled_default=False,
                         state_class=STATE_CLASS_TOTAL_INCREASING,
                     ),
-                    TotalStatsEventDto,
+                    TotalStatsEvent,
                     lambda e: round(e.time / 3600),
                 ),
                 DeebotGenericSensor(
@@ -123,7 +123,7 @@ async def async_setup_entry(
                         entity_registry_enabled_default=False,
                         state_class=STATE_CLASS_TOTAL_INCREASING,
                     ),
-                    TotalStatsEventDto,
+                    TotalStatsEvent,
                     lambda e: e.cleanings,
                 ),
             ]
@@ -140,18 +140,18 @@ class BaseSensor(DeebotEntity, SensorEntity):  # type: ignore
         """Set up the event listeners now that hass is ready."""
         await super().async_added_to_hass()
 
-        async def on_event(event: StatusEventDto) -> None:
+        async def on_event(event: StatusEvent) -> None:
             if not event.available:
                 self._attr_native_value = STATE_UNKNOWN
                 self.async_write_ha_state()
 
         listener: EventListener = self._vacuum_bot.events.subscribe(
-            StatusEventDto, on_event
+            StatusEvent, on_event
         )
         self.async_on_remove(listener.unsubscribe)
 
 
-T = TypeVar("T", bound=EventDto)
+T = TypeVar("T", bound=Event)
 
 
 class DeebotGenericSensor(BaseSensor):
@@ -199,13 +199,13 @@ class LastErrorSensor(DeebotEntity, SensorEntity):  # type: ignore
         """Set up the event listeners now that hass is ready."""
         await super().async_added_to_hass()
 
-        async def on_event(event: ErrorEventDto) -> None:
+        async def on_event(event: ErrorEvent) -> None:
             self._attr_native_value = event.code
             self._attr_extra_state_attributes = {CONF_DESCRIPTION: event.description}
             self.async_write_ha_state()
 
         listener: EventListener = self._vacuum_bot.events.subscribe(
-            ErrorEventDto, on_event
+            ErrorEvent, on_event
         )
         self.async_on_remove(listener.unsubscribe)
 
@@ -229,13 +229,13 @@ class LifeSpanSensor(BaseSensor):
         """Set up the event listeners now that hass is ready."""
         await super().async_added_to_hass()
 
-        async def on_event(event: LifeSpanEventDto) -> None:
+        async def on_event(event: LifeSpanEvent) -> None:
             if event.type == self._component:
                 self._attr_native_value = event.percent
                 self.async_write_ha_state()
 
         listener: EventListener = self._vacuum_bot.events.subscribe(
-            LifeSpanEventDto, on_event
+            LifeSpanEvent, on_event
         )
         self.async_on_remove(listener.unsubscribe)
 
@@ -253,7 +253,7 @@ class LastCleaningJobSensor(DeebotEntity, SensorEntity):  # type: ignore
         """Set up the event listeners now that hass is ready."""
         await super().async_added_to_hass()
 
-        async def on_event(event: CleanLogEventDto) -> None:
+        async def on_event(event: CleanLogEvent) -> None:
             if event.logs:
                 log = event.logs[0]
                 self._attr_native_value = log.stop_reason.display_name
@@ -267,6 +267,6 @@ class LastCleaningJobSensor(DeebotEntity, SensorEntity):  # type: ignore
                 self.async_write_ha_state()
 
         listener: EventListener = self._vacuum_bot.events.subscribe(
-            ErrorEventDto, on_event
+            ErrorEvent, on_event
         )
         self.async_on_remove(listener.unsubscribe)
