@@ -14,6 +14,7 @@ from .const import (
     CONF_BUMPER,
     CONF_CLIENT_DEVICE_ID,
     DOMAIN,
+    INTEGRATION_VERSION,
     MIN_REQUIRED_HA_VERSION,
     STARTUP_MESSAGE,
 )
@@ -45,6 +46,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     if not is_ha_supported():
         return False
+
+    if INTEGRATION_VERSION == "main":
+        _LOGGER.warning("Beta-Version! Use this version only for testing.")
 
     # Store an instance of the "connecting" class that does the work of speaking
     # with your actual devices.

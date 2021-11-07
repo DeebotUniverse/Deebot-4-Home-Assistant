@@ -3,7 +3,6 @@
   "iot_class": "Cloud Polling",
   "zip_release": true,
   "filename": "deebot.zip",
-  "hide_default_branch": true,
   "domain": ["binary_sensor", "camera", "select", "sensor", "vacuum"],
   "homeassistant": "2021.11.0b0",
   "render_readme": true
