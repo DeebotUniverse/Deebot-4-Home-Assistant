@@ -9,7 +9,6 @@ from deebot_client.events import (
     LifeSpan,
     LifeSpanEvent,
     StatsEvent,
-    StatusEvent,
     TotalStatsEvent,
 )
 from deebot_client.events.event_bus import EventListener
@@ -24,7 +23,6 @@ from homeassistant.const import (
     AREA_SQUARE_METERS,
     CONF_DESCRIPTION,
     ENTITY_CATEGORY_DIAGNOSTIC,
-    STATE_UNKNOWN,
     TIME_HOURS,
     TIME_MINUTES,
 )
@@ -133,28 +131,10 @@ async def async_setup_entry(
         async_add_entities(new_devices)
 
 
-class BaseSensor(DeebotEntity, SensorEntity):  # type: ignore
-    """Base sensor."""
-
-    async def async_added_to_hass(self) -> None:
-        """Set up the event listeners now that hass is ready."""
-        await super().async_added_to_hass()
-
-        async def on_event(event: StatusEvent) -> None:
-            if not event.available:
-                self._attr_native_value = STATE_UNKNOWN
-                self.async_write_ha_state()
-
-        listener: EventListener = self._vacuum_bot.events.subscribe(
-            StatusEvent, on_event
-        )
-        self.async_on_remove(listener.unsubscribe)
-
-
 T = TypeVar("T", bound=Event)
 
 
-class DeebotGenericSensor(BaseSensor):
+class DeebotGenericSensor(DeebotEntity, SensorEntity):  # type: ignore
     """Deebot generic sensor."""
 
     def __init__(
@@ -188,6 +168,7 @@ class DeebotGenericSensor(BaseSensor):
 class LastErrorSensor(DeebotEntity, SensorEntity):  # type: ignore
     """Last error sensor."""
 
+    _always_available = True
     entity_description = SensorEntityDescription(
         key=LAST_ERROR,
         icon="mdi:alert-circle",
@@ -210,7 +191,7 @@ class LastErrorSensor(DeebotEntity, SensorEntity):  # type: ignore
         self.async_on_remove(listener.unsubscribe)
 
 
-class LifeSpanSensor(BaseSensor):
+class LifeSpanSensor(DeebotEntity, SensorEntity):  # type: ignore
     """Life span sensor."""
 
     def __init__(self, vacuum_bot: VacuumBot, component: LifeSpan):
@@ -243,6 +224,7 @@ class LifeSpanSensor(BaseSensor):
 class LastCleaningJobSensor(DeebotEntity, SensorEntity):  # type: ignore
     """Last cleaning job sensor."""
 
+    _always_available = True
     entity_description = SensorEntityDescription(
         key="last_cleaning",
         icon="mdi:history",
