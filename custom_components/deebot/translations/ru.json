@@ -1,0 +1,30 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "Уже настроено"
+    },
+    "error": {
+      "cannot_connect": "Не удается подключиться к API ecovacs",
+      "invalid_auth": "Неверное имя пользователя или пароль",
+      "unknown": "Неизвестная ошибка",
+      "invalid_country": "Код страны должен быть двухбуквенным, например: ru, us, итд ",
+      "invalid_continent": "Код континента должен быть двухбуквенным, например: eu, ww, итд ",
+      "select_robots": "Выберите хотя бы 1 робота"
+    },
+    "step": {
+      "user": {
+        "data": {
+          "password": "Пароль",
+          "username": "E-mail или Ecovacs ID",
+          "country": "Страна",
+          "continent": "Континент"
+        }
+      },
+      "robots": {
+        "data": {
+          "devices": "Устройства"
+        }
+      }
+    }
+  }
+}
