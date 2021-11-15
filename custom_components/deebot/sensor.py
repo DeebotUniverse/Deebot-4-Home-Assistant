@@ -267,6 +267,6 @@ class LastCleaningJobSensor(DeebotEntity, SensorEntity):  # type: ignore
                 self.async_write_ha_state()
 
         listener: EventListener = self._vacuum_bot.events.subscribe(
-            ErrorEvent, on_event
+            CleanLogEvent, on_event
         )
         self.async_on_remove(listener.unsubscribe)
