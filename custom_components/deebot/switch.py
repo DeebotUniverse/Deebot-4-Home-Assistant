@@ -67,7 +67,7 @@ async def async_setup_entry(
                 DeebotSwitchEntity(
                     vacbot,
                     SwitchEntityDescription(
-                        key="auto_carpet_fan_speed_boost",
+                        key="carpet_auto_fan_speed_boost",
                         entity_registry_enabled_default=False,
                         entity_category=ENTITY_CATEGORY_CONFIG,
                         icon="mdi:fan-auto",
