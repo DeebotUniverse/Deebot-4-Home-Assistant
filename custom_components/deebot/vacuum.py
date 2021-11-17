@@ -156,7 +156,6 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
             self.async_write_ha_state()
 
         async def on_status(event: StatusEvent) -> None:
-            self._attr_available = event.available
             self._state = event.state
             self.async_write_ha_state()
 

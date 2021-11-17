@@ -1,6 +1,8 @@
 """Deebot entity module."""
 from typing import Optional
 
+from deebot_client.events import StatusEvent
+from deebot_client.events.event_bus import EventListener
 from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.helpers.entity import DeviceInfo, Entity, EntityDescription
 
@@ -11,6 +13,7 @@ class DeebotEntity(Entity):  # type: ignore # lgtm [py/missing-equals]
     """Deebot entity."""
 
     _attr_should_poll = False
+    _always_available: bool = False
 
     def __init__(
         self,
@@ -44,7 +47,9 @@ class DeebotEntity(Entity):  # type: ignore # lgtm [py/missing-equals]
             # In case there is no nickname defined, use the device id
             device_name = device_info.did
 
-        self._attr_name = f"{device_name}_{self.entity_description.key}"
+        self._attr_name = (
+            f"{device_name} {self.entity_description.key.replace('_', ' ')}"
+        )
 
     @property
     def device_info(self) -> Optional[DeviceInfo]:
@@ -64,3 +69,18 @@ class DeebotEntity(Entity):  # type: ignore # lgtm [py/missing-equals]
             info["model"] = device["deviceName"]
 
         return info
+
+    async def async_added_to_hass(self) -> None:
+        """Set up the event listeners now that hass is ready."""
+        await super().async_added_to_hass()
+
+        if not self._always_available:
+
+            async def on_status(event: StatusEvent) -> None:
+                self._attr_available = event.available
+                self.async_write_ha_state()
+
+            listener: EventListener = self._vacuum_bot.events.subscribe(
+                StatusEvent, on_status
+            )
+            self.async_on_remove(listener.unsubscribe)
