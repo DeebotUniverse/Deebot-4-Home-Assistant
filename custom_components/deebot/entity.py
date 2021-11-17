@@ -47,7 +47,9 @@ class DeebotEntity(Entity):  # type: ignore # lgtm [py/missing-equals]
             # In case there is no nickname defined, use the device id
             device_name = device_info.did
 
-        self._attr_name = f"{device_name}_{self.entity_description.key}"
+        self._attr_name = (
+            f"{device_name} {self.entity_description.key.replace('_', ' ')}"
+        )
 
     @property
     def device_info(self) -> Optional[DeviceInfo]:
