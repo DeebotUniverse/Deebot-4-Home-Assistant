@@ -38,12 +38,12 @@ jobs:
         uses: actions/setup-python@v2.3.0
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
+          cache: "pip"
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-      - name: Run pre-commit checks
-        run: |
-          SKIP=no-commit-to-branch pre-commit run --hook-stage manual --all-files --show-diff-on-failure
+      # Following steps cannot run by pre-commit.ci as repo = local
+      - name: Run mypy
+        run: mypy custom_components/
       - name: Pylint review
-        run: |
-          pylint custom_components
+        run: pylint custom_components/
