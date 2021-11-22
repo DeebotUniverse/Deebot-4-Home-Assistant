@@ -7,13 +7,18 @@ body:
       value: |
         This issue form is for reporting bugs only!
 
-        If you have a feature request or a question, please use the other templates.
+        If you have a feature request or a question, please use discussions.
   - type: checkboxes
     attributes:
-      label: Is there an existing issue for this?
-      description: Please search to see if an issue already exists for the bug you encountered.
+      label: Checks
       options:
         - label: I have searched the existing issues and no issue is describing my issue
+          required: true
+        - label: I have checked the [FAQ](https://deebot.readthedocs.io/home/faq/)
+          required: true
+        - label: I have checked the [documentation](https://deebot.readthedocs.io/integrations/home-assistant)
+          required: true
+        - label: I have installed the latest version
           required: true
 
   - type: textarea
@@ -47,6 +52,7 @@ body:
       placeholder: X.X.X
       description: >
         Will be logged during starting on Level Info. Can be found in the log file.
+        Latest is not a valid version!
   - type: input
     id: ha_version
     validations:

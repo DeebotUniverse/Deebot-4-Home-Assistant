@@ -44,7 +44,7 @@ version-resolver:
   patch:
     labels:
       - "pr: bugfix"
-  default: minor
+  default: patch
 
 template: |
   [![Downloads for this release](https://img.shields.io/github/downloads/DeebotUniverse/Deebot-4-Home-Assistant/$RESOLVED_VERSION/total.svg)](https://github.com/DeebotUniverse/Deebot-4-Home-Assistant/releases/$RESOLVED_VERSION)
