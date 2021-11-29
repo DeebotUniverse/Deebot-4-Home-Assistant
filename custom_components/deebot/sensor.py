@@ -1,5 +1,6 @@
 """Sensor module."""
 import logging
+from math import floor
 from typing import Callable, Type, TypeVar
 
 from deebot_client.events import (
@@ -213,6 +214,9 @@ class LifeSpanSensor(DeebotEntity, SensorEntity):  # type: ignore
         async def on_event(event: LifeSpanEvent) -> None:
             if event.type == self._component:
                 self._attr_native_value = event.percent
+                self._attr_extra_state_attributes = {
+                    "remaining": floor(event.remaining / 60)
+                }
                 self.async_write_ha_state()
 
         listener: EventListener = self._vacuum_bot.events.subscribe(
