@@ -1,8 +1,10 @@
 """Util module."""
 import dataclasses
+from enum import Enum
 from typing import Any, Dict, List
 
 from deebot_client.events.event_bus import EventListener
+from deebot_client.util import DisplayNameIntEnum
 from homeassistant.core import HomeAssistant
 from homeassistant.util import uuid
 
@@ -28,5 +30,10 @@ def dataclass_to_dict(obj: Any) -> Dict[str, Any]:
     for key, value in dic.copy().items():
         if value is None:
             dic.pop(key)
+        elif isinstance(value, Enum):
+            if isinstance(value, DisplayNameIntEnum):
+                dic[key] = value.display_name
+            else:
+                dic[key] = value.value
 
     return dic
