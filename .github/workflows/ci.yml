@@ -6,16 +6,17 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - release
+      - dev
   pull_request: ~
 
 env:
   DEFAULT_PYTHON: 3.9
 
 jobs:
-  validate:
+  validate-hacs:
     runs-on: "ubuntu-latest"
-    name: Validate
+    name: Validate with HACS
     steps:
       - uses: "actions/checkout@v2"
 
@@ -23,7 +24,12 @@ jobs:
         uses: "hacs/action@main"
         with:
           category: "integration"
-          ignore: brands
+
+  validate-hassfest:
+    runs-on: "ubuntu-latest"
+    name: Validate with Hassfest
+    steps:
+      - uses: "actions/checkout@v2"
 
       - name: Hassfest validation
         uses: "home-assistant/actions/hassfest@master"
