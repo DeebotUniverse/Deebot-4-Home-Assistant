@@ -6,7 +6,7 @@ homeassistant~=2021.11.0
 mypy==0.910
 
 numpy>=1.21.2
-pre-commit==2.15.0
+pre-commit==2.16.0
 pylint==2.12.1
 pylint-strict-informational==0.1
 
