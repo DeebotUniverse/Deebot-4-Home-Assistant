@@ -18,9 +18,8 @@ from deebot_client.events.event_bus import EventListener
 from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import ENTITY_CATEGORY_CONFIG
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity import EntityDescription
+from homeassistant.helpers.entity import EntityCategory, EntityDescription
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
@@ -47,7 +46,7 @@ async def async_setup_entry(
                     SwitchEntityDescription(
                         key="advanced_mode",
                         entity_registry_enabled_default=False,
-                        entity_category=ENTITY_CATEGORY_CONFIG,
+                        entity_category=EntityCategory.CONFIG,
                         icon="mdi:tune",
                     ),
                     AdvancedModeEvent,
@@ -58,7 +57,7 @@ async def async_setup_entry(
                     SwitchEntityDescription(
                         key="continuous_cleaning",
                         entity_registry_enabled_default=False,
-                        entity_category=ENTITY_CATEGORY_CONFIG,
+                        entity_category=EntityCategory.CONFIG,
                         icon="mdi:refresh-auto",
                     ),
                     ContinuousCleaningEvent,
@@ -69,7 +68,7 @@ async def async_setup_entry(
                     SwitchEntityDescription(
                         key="carpet_auto_fan_speed_boost",
                         entity_registry_enabled_default=False,
-                        entity_category=ENTITY_CATEGORY_CONFIG,
+                        entity_category=EntityCategory.CONFIG,
                         icon="mdi:fan-auto",
                     ),
                     CarpetAutoFanBoostEvent,

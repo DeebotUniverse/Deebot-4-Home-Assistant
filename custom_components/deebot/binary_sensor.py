@@ -9,8 +9,8 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntityDescription,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import ENTITY_CATEGORY_DIAGNOSTIC
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
@@ -42,7 +42,7 @@ class DeebotMopAttachedBinarySensor(DeebotEntity, BinarySensorEntity):  # type: 
     entity_description = BinarySensorEntityDescription(
         key="mop_attached",
         entity_registry_enabled_default=False,
-        entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
+        entity_category=EntityCategory.DIAGNOSTIC,
     )
 
     @property

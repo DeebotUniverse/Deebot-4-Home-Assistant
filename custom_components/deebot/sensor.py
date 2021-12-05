@@ -15,19 +15,19 @@ from deebot_client.events import (
 from deebot_client.events.event_bus import EventListener
 from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.sensor import (
-    STATE_CLASS_TOTAL_INCREASING,
     SensorEntity,
     SensorEntityDescription,
+    SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     AREA_SQUARE_METERS,
     CONF_DESCRIPTION,
-    ENTITY_CATEGORY_DIAGNOSTIC,
     TIME_HOURS,
     TIME_MINUTES,
 )
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import StateType
 
@@ -97,7 +97,7 @@ async def async_setup_entry(
                         icon="mdi:floor-plan",
                         native_unit_of_measurement=AREA_SQUARE_METERS,
                         entity_registry_enabled_default=False,
-                        state_class=STATE_CLASS_TOTAL_INCREASING,
+                        state_class=SensorStateClass.TOTAL_INCREASING,
                     ),
                     TotalStatsEvent,
                     lambda e: e.area,
@@ -109,7 +109,7 @@ async def async_setup_entry(
                         icon="mdi:timer-outline",
                         native_unit_of_measurement=TIME_HOURS,
                         entity_registry_enabled_default=False,
-                        state_class=STATE_CLASS_TOTAL_INCREASING,
+                        state_class=SensorStateClass.TOTAL_INCREASING,
                     ),
                     TotalStatsEvent,
                     lambda e: round(e.time / 3600),
@@ -120,7 +120,7 @@ async def async_setup_entry(
                         key="stats_total_cleanings",
                         icon="mdi:counter",
                         entity_registry_enabled_default=False,
-                        state_class=STATE_CLASS_TOTAL_INCREASING,
+                        state_class=SensorStateClass.TOTAL_INCREASING,
                     ),
                     TotalStatsEvent,
                     lambda e: e.cleanings,
@@ -174,7 +174,7 @@ class LastErrorSensor(DeebotEntity, SensorEntity):  # type: ignore
         key=LAST_ERROR,
         icon="mdi:alert-circle",
         entity_registry_enabled_default=False,
-        entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
+        entity_category=EntityCategory.CONFIG,
     )
 
     async def async_added_to_hass(self) -> None:
@@ -202,7 +202,7 @@ class LifeSpanSensor(DeebotEntity, SensorEntity):  # type: ignore
             icon="mdi:air-filter" if component == LifeSpan.FILTER else "mdi:broom",
             entity_registry_enabled_default=False,
             native_unit_of_measurement="%",
-            entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
+            entity_category=EntityCategory.CONFIG,
         )
         super().__init__(vacuum_bot, entity_description)
         self._component = component
