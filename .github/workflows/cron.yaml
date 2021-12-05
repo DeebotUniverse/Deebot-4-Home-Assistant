@@ -10,8 +10,6 @@ jobs:
     name: Validate
     steps:
       - uses: "actions/checkout@v2"
-        with:
-          ref: "release"
 
       - name: HACS validation
         uses: "hacs/action@main"
