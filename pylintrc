@@ -11,11 +11,11 @@ fail-on=
   useless-suppression,
 
 # Specify a score threshold to be exceeded before program exits with error.
-fail-under=11.0
+fail-under=10.0
 
 # List of plugins (as comma separated values of python module names) to load,
 # usually to register additional checkers.
-load-plugins=pylint_strict_informational
+# load-plugins=
 
 # Pickle collected data for later comparisons.
 persistent=no
