@@ -48,14 +48,13 @@ async def async_setup_entry(
 
     new_devices = []
     for vacbot in hub.vacuum_bots:
+        for component in LifeSpan:
+            new_devices.append(LifeSpanSensor(vacbot, component))
+
         new_devices.extend(
             [
                 LastCleaningJobSensor(vacbot),
                 LastErrorSensor(vacbot),
-                # Life span
-                LifeSpanSensor(vacbot, LifeSpan.BRUSH),
-                LifeSpanSensor(vacbot, LifeSpan.SIDE_BRUSH),
-                LifeSpanSensor(vacbot, LifeSpan.FILTER),
                 # Stats
                 DeebotGenericSensor(
                     vacbot,
@@ -174,7 +173,7 @@ class LastErrorSensor(DeebotEntity, SensorEntity):  # type: ignore
         key=LAST_ERROR,
         icon="mdi:alert-circle",
         entity_registry_enabled_default=False,
-        entity_category=EntityCategory.CONFIG,
+        entity_category=EntityCategory.DIAGNOSTIC,
     )
 
     async def async_added_to_hass(self) -> None:
@@ -202,7 +201,7 @@ class LifeSpanSensor(DeebotEntity, SensorEntity):  # type: ignore
             icon="mdi:air-filter" if component == LifeSpan.FILTER else "mdi:broom",
             entity_registry_enabled_default=False,
             native_unit_of_measurement="%",
-            entity_category=EntityCategory.CONFIG,
+            entity_category=EntityCategory.DIAGNOSTIC,
         )
         super().__init__(vacuum_bot, entity_description)
         self._component = component
