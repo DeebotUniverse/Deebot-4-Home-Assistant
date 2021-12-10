@@ -24,6 +24,7 @@ _LOGGER = logging.getLogger(__name__)
 
 PLATFORMS = [
     "binary_sensor",
+    "button",
     "camera",
     "number",
     "select",
