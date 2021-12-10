@@ -65,7 +65,7 @@ class DeebotHub:
         """Init hub."""
         try:
             if self._mqtt:
-                self.disconnect()
+                await self.disconnect()
 
             await self._mqtt.initialize()
 
@@ -88,9 +88,9 @@ class DeebotHub:
             _LOGGER.error(msg, exc_info=True)
             raise ConfigEntryNotReady(msg) from ex
 
-    def disconnect(self) -> None:
+    async def disconnect(self) -> None:
         """Disconnect hub."""
-        self._mqtt.disconnect()
+        await self._mqtt.disconnect()
 
     @property
     def name(self) -> str:
