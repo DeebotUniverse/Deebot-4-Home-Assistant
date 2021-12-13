@@ -1,7 +1,7 @@
 """Support for Deebot Vaccums."""
 import asyncio
 import logging
-from typing import Any, Dict
+from typing import Any
 
 from awesomeversion import AwesomeVersion
 from homeassistant.config_entries import ConfigEntry
@@ -97,7 +97,7 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
     _LOGGER.debug("Migrating from version %d", config_entry.version)
 
     if config_entry.version == 1:
-        new: Dict[str, Any] = {**config_entry.data, CONF_VERIFY_SSL: True}
+        new: dict[str, Any] = {**config_entry.data, CONF_VERIFY_SSL: True}
 
         device_id = "deviceid"
         devices = new.pop(device_id, {})

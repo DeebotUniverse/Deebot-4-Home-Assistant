@@ -3,7 +3,7 @@ import asyncio
 import logging
 import random
 import string
-from typing import Any, List, Mapping
+from typing import Any, Mapping
 
 import aiohttp
 from deebot_client import Configuration, create_instances
@@ -31,7 +31,7 @@ class DeebotHub:
     def __init__(self, hass: HomeAssistant, config: Mapping[str, Any]):
         self._hass_config: Mapping[str, Any] = config
         self._hass: HomeAssistant = hass
-        self.vacuum_bots: List[VacuumBot] = []
+        self.vacuum_bots: list[VacuumBot] = []
         verify_ssl = config.get(CONF_VERIFY_SSL, True)
         self._session: aiohttp.ClientSession = aiohttp_client.async_get_clientsession(
             self._hass, verify_ssl=verify_ssl

@@ -1,6 +1,6 @@
 """Support for Deebot Vaccums."""
 import logging
-from typing import Any, Dict, List, Mapping, Optional
+from typing import Any, Mapping, Optional
 
 import voluptuous as vol
 from deebot_client.commands import (
@@ -126,7 +126,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
         self._battery: Optional[int] = None
         self._fan_speed: Optional[str] = None
         self._state: Optional[VacuumState] = None
-        self._rooms: List[Room] = []
+        self._rooms: list[Room] = []
         self._last_error: Optional[ErrorEvent] = None
 
     async def async_added_to_hass(self) -> None:
@@ -159,7 +159,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
             self._state = event.state
             self.async_write_ha_state()
 
-        listeners: List[EventListener] = [
+        listeners: list[EventListener] = [
             self._vacuum_bot.events.subscribe(BatteryEvent, on_battery),
             self._vacuum_bot.events.subscribe(CustomCommandEvent, on_custom_command),
             self._vacuum_bot.events.subscribe(ErrorEvent, on_error),
@@ -192,7 +192,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
         return self._fan_speed
 
     @property
-    def fan_speed_list(self) -> List[str]:
+    def fan_speed_list(self) -> list[str]:
         """Get the list of available fan speed steps of the vacuum cleaner."""
         return [level.display_name for level in FanSpeedLevel]
 
@@ -203,8 +203,8 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
         Implemented by platform classes. Convention for attribute names
         is lowercase snake_case.
         """
-        attributes: Dict[str, Any] = {}
-        rooms: Dict[str, Any] = {}
+        attributes: dict[str, Any] = {}
+        rooms: dict[str, Any] = {}
         for room in self._rooms:
             # convert room name to snake_case to meet the convention
             room_name = slugify(room.subtype)
@@ -252,7 +252,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
         await self._vacuum_bot.execute_command(PlaySound())
 
     async def async_send_command(
-        self, command: str, params: Optional[Dict[str, Any]] = None, **kwargs: Any
+        self, command: str, params: Optional[dict[str, Any]] = None, **kwargs: Any
     ) -> None:
         """Send a command to a vacuum cleaner."""
         _LOGGER.debug("async_send_command %s with %s", command, params)

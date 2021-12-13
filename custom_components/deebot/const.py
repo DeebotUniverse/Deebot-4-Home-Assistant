@@ -1,5 +1,5 @@
 """Const module."""
-from typing import Mapping, Type
+from typing import Mapping
 
 from deebot_client.events import (
     BatteryEvent,
@@ -74,7 +74,7 @@ VACUUMSTATE_TO_STATE = {
 LAST_ERROR = "last_error"
 
 
-REFRESH_STR_TO_EVENT_DTO: Mapping[str, Type[Event]] = {
+REFRESH_STR_TO_EVENT_DTO: Mapping[str, type[Event]] = {
     "Battery": BatteryEvent,
     "Clean logs": CleanLogEvent,
     "Error": ErrorEvent,

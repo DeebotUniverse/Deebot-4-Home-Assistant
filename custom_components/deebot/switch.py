@@ -1,6 +1,6 @@
 """Switch module."""
 import logging
-from typing import Any, Type
+from typing import Any
 
 from deebot_client.commands import (
     SetAdvancedMode,
@@ -90,8 +90,8 @@ class DeebotSwitchEntity(DeebotEntity, SwitchEntity):  # type: ignore
         self,
         vacuum_bot: VacuumBot,
         entity_description: EntityDescription,
-        event_type: Type[EnableEvent],
-        set_command: Type[SetEnableCommand],
+        event_type: type[EnableEvent],
+        set_command: type[SetEnableCommand],
     ):
         super().__init__(vacuum_bot, entity_description)
         self._event_type = event_type
