@@ -1,7 +1,7 @@
 """Sensor module."""
 import logging
 from math import floor
-from typing import Callable, Type, TypeVar
+from typing import Callable, TypeVar
 
 from deebot_client.events import (
     CleanLogEvent,
@@ -141,7 +141,7 @@ class DeebotGenericSensor(DeebotEntity, SensorEntity):  # type: ignore
         self,
         vacuum_bot: VacuumBot,
         entity_descrption: SensorEntityDescription,
-        event_type: Type[T],
+        event_type: type[T],
         extract_value: Callable[[T], StateType],
     ):
         """Initialize the Sensor."""

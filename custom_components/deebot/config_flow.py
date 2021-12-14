@@ -2,7 +2,7 @@
 import logging
 import random
 import string
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
@@ -56,13 +56,13 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore
     CONNECTION_CLASS = config_entries.CONN_CLASS_CLOUD_POLL
 
     def __init__(self) -> None:
-        self._data: Dict[str, Any] = {}
-        self._robot_list: List[DeviceInfo] = []
+        self._data: dict[str, Any] = {}
+        self._robot_list: list[DeviceInfo] = []
         self._mode: Optional[str] = None
 
     async def _async_retrieve_bots(
-        self, domain_config: Dict[str, Any]
-    ) -> List[DeviceInfo]:
+        self, domain_config: dict[str, Any]
+    ) -> list[DeviceInfo]:
         verify_ssl = domain_config.get(CONF_VERIFY_SSL, True)
         deebot_config = Configuration(
             aiohttp_client.async_get_clientsession(self.hass, verify_ssl=verify_ssl),
@@ -81,7 +81,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore
         return await api_client.get_devices()
 
     async def async_step_user(
-        self, user_input: Optional[Dict[str, Any]] = None
+        self, user_input: Optional[dict[str, Any]] = None
     ) -> FlowResult:
         """Handle the initial step."""
         errors = {}
@@ -117,7 +117,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore
         )
 
     async def async_step_user_advanced(
-        self, user_input: Optional[Dict[str, Any]] = None
+        self, user_input: Optional[dict[str, Any]] = None
     ) -> FlowResult:
         """Handle an advanced mode flow initialized by the user."""
         if user_input is not None:
@@ -142,7 +142,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore
         return self.async_show_form(step_id="user_advanced", data_schema=data_schema)
 
     async def async_step_robots(
-        self, user_input: Optional[Dict[str, Any]] = None
+        self, user_input: Optional[dict[str, Any]] = None
     ) -> FlowResult:
         """Handle the robots selection step."""
 
