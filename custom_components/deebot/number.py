@@ -68,7 +68,7 @@ class VolumeEntity(DeebotEntity, NumberEntity):  # type: ignore
     def icon(self) -> Optional[str]:
         """Return the icon to use in the frontend, if any."""
         if self._attr_value is not None:
-            arrays = array_split(  # type: ignore
+            arrays = array_split(
                 range(self._attr_min_value + 1, self._attr_max_value + 1), 3
             )
             if self._attr_value == self._attr_min_value:
