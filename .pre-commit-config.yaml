@@ -10,7 +10,7 @@ repos:
       - id: pyupgrade
         args: [--py39-plus]
   - repo: https://github.com/psf/black
-    rev: 21.12b0
+    rev: 22.1.0
     hooks:
       - id: black
         args:
@@ -37,7 +37,7 @@ repos:
         <<: &python-files
           files: ^(custom_components/.+)?[^/]+\.py$
   - repo: https://github.com/PyCQA/bandit
-    rev: 1.7.1
+    rev: 1.7.2
     hooks:
       - id: bandit
         args:
