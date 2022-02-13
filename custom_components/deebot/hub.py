@@ -33,10 +33,6 @@ class DeebotHub:
         self._hass: HomeAssistant = hass
         self.vacuum_bots: list[VacuumBot] = []
         verify_ssl = config.get(CONF_VERIFY_SSL, True)
-        self._session: aiohttp.ClientSession = aiohttp_client.async_get_clientsession(
-            self._hass, verify_ssl=verify_ssl
-        )
-
         device_id = config.get(CONF_CLIENT_DEVICE_ID)
 
         if not device_id:
@@ -74,7 +70,7 @@ class DeebotHub:
             # CREATE VACBOT FOR EACH DEVICE
             for device in devices:
                 if device["name"] in self._hass_config.get(CONF_DEVICES, []):
-                    vacbot = VacuumBot(self._session, device, self._api_client)
+                    vacbot = VacuumBot(device, self._api_client)
 
                     await self._mqtt.subscribe(vacbot)
                     _LOGGER.debug("New vacbot found: %s", device["name"])
