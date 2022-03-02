@@ -17,7 +17,7 @@ jobs:
     runs-on: "ubuntu-latest"
     name: Validate with HACS
     steps:
-      - uses: "actions/checkout@v2"
+      - uses: "actions/checkout@v3"
 
       - name: HACS validation
         uses: "hacs/action@main"
@@ -28,7 +28,7 @@ jobs:
     runs-on: "ubuntu-latest"
     name: Validate with Hassfest
     steps:
-      - uses: "actions/checkout@v2"
+      - uses: "actions/checkout@v3"
 
       - name: Hassfest validation
         uses: "home-assistant/actions/hassfest@master"
@@ -37,7 +37,7 @@ jobs:
     runs-on: "ubuntu-latest"
     name: Check code quality
     steps:
-      - uses: "actions/checkout@v2"
+      - uses: "actions/checkout@v3"
       - name: Set up Python ${{ env.DEFAULT_PYTHON }}
         id: python
         uses: actions/setup-python@v2.3.2
