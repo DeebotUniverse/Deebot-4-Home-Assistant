@@ -13,11 +13,13 @@ Github is used to host code, to track issues and feature requests, as well as ac
 
 Pull requests are the best way to propose changes to the codebase.
 
-1. Fork the repo and create your branch from `master`.
-2. If you've changed something, update the documentation.
-3. Make sure your code lints (using black).
-4. Test you contribution.
-5. Issue that pull request!
+1. Fork the repo and create your branch from `dev`.
+2. Run `pip install -r requirements.txt` to install all requirements
+3. Run `pre-commit install --install-hooks` to setup up pre-commit (used for code quality checks)
+4. If you've changed something, update the documentation.
+5. Make sure your code lints (using pre-commit).
+6. Test you contribution.
+7. Issue that pull request!
 
 ## Any contributions you make will be under project license
 
