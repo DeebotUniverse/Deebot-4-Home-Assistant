@@ -55,12 +55,12 @@ class DeebotEntity(Entity):  # type: ignore # lgtm [py/missing-equals]
     def device_info(self) -> Optional[DeviceInfo]:
         """Return device specific attributes."""
         device = self._vacuum_bot.device_info
-        info = {
-            "default_name": "Deebot vacuum",
-            "identifiers": {(DOMAIN, device.did)},
-            "manufacturer": "Ecovacs",
-            "sw_version": self._vacuum_bot.fw_version,
-        }
+        info = DeviceInfo(
+            default_name="Deebot vacuum",
+            identifiers={(DOMAIN, device.did)},
+            manufacturer="Ecovacs",
+            sw_version=self._vacuum_bot.fw_version,
+        )
 
         if "nick" in device:
             info["name"] = device["nick"]
