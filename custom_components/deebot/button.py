@@ -1,7 +1,7 @@
 """Binary sensor module."""
 import logging
 
-from deebot_client.commands import ResetLifeSpan
+from deebot_client.commands import ResetLifeSpan, SetRelocationState
 from deebot_client.events import LifeSpan
 from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
@@ -29,13 +29,14 @@ async def async_setup_entry(
     for vacbot in hub.vacuum_bots:
         for component in LifeSpan:
             new_devices.append(DeebotResetLifeSpanButtonEntity(vacbot, component))
+        new_devices.append(DeebotRelocateButtonEntity(vacbot))
 
     if new_devices:
         async_add_entities(new_devices)
 
 
 class DeebotResetLifeSpanButtonEntity(DeebotEntity, ButtonEntity):  # type: ignore
-    """Deebot reset lofe span button entity."""
+    """Deebot reset life span button entity."""
 
     def __init__(self, vacuum_bot: VacuumBot, component: LifeSpan):
         entity_description = ButtonEntityDescription(
@@ -50,3 +51,18 @@ class DeebotResetLifeSpanButtonEntity(DeebotEntity, ButtonEntity):  # type: igno
     async def async_press(self) -> None:
         """Press the button."""
         await self._vacuum_bot.execute_command(ResetLifeSpan(self._component))
+
+
+class DeebotRelocateButtonEntity(DeebotEntity, ButtonEntity):  # type: ignore
+    """Deebot relocate button entity."""
+
+    entity_description = ButtonEntityDescription(
+        key="relocate",
+        icon="mdi:map-marker-question",
+        entity_registry_enabled_default=True,  # Can be enabled as they don't poll data
+        entity_category=EntityCategory.DIAGNOSTIC,
+    )
+
+    async def async_press(self) -> None:
+        """Press the button."""
+        await self._vacuum_bot.execute_command(SetRelocationState())
