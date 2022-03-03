@@ -258,6 +258,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
         _LOGGER.debug("async_send_command %s with %s", command, params)
 
         if command in ["relocate", SetRelocationState.name]:
+            _LOGGER.warning("DEPRECATED! Please use relocate button entity instead.")
             await self._vacuum_bot.execute_command(SetRelocationState())
         elif command == "auto_clean":
             clean_type = params.get("type", "auto") if params else "auto"
@@ -285,9 +286,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
                     )
                 )
             elif command == "set_water":
-                _LOGGER.warning(
-                    'DEPRECATED! Please use "select.select_option" instead.'
-                )
+                _LOGGER.warning("DEPRECATED! Please use water select entity instead.")
                 await self._vacuum_bot.execute_command(SetWaterInfo(params["amount"]))
         else:
             await self._vacuum_bot.execute_command(CustomCommand(command, params))
