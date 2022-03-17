@@ -53,7 +53,6 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore
     """Handle a config flow for Deebot."""
 
     VERSION = 3
-    CONNECTION_CLASS = config_entries.CONN_CLASS_CLOUD_POLL
 
     def __init__(self) -> None:
         self._data: dict[str, Any] = {}
@@ -86,6 +85,8 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore
         """Handle the initial step."""
         errors = {}
         if user_input is not None:
+            self._async_abort_entries_match({CONF_USERNAME: user_input[CONF_USERNAME]})
+
             if len(user_input[CONF_COUNTRY]) != 2:
                 errors[CONF_COUNTRY] = "invalid_country"
 
