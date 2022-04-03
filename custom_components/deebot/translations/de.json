@@ -1,15 +1,17 @@
 {
   "config": {
     "abort": {
-      "already_configured": "Bereits konfiguriert"
+      "already_configured": "Bereits konfiguriert",
+      "reauth_successful": "Die erneute Authentifizierung war erfolgreich"
     },
     "error": {
-      "cannot_connect": "Verbindung fehlgeschlagen",
+      "cannot_connect": "Verbindung fehlgeschlagen. Weitere Infos in den Logs",
       "invalid_auth": "Ung\u00fcltige Authentifizierung",
-      "unknown": "Unerwarteter Fehler",
+      "unknown": "Unerwarteter Fehler. Weitere Infos in den Logs",
       "invalid_country": "Ung\u00fcltiges Land! L\u00e4ndercode sollte aus 2 Zeichen bestehen! Bsp.: de, it, us, ...",
       "invalid_continent": "Ung\u00fcltiger Kontinent! Code sollte aus 2 Zeichen bestehen! Bsp.: ww, eu, ...",
-      "select_robots": "Bitte w\u00e4hlen Sie mindestens 1 Roboter aus"
+      "select_robots": "Bitte w\u00e4hlen Sie mindestens 1 Roboter aus",
+      "no_supported_devices_found": "Keine unterstützten Geräte gefunden"
     },
     "step": {
       "user": {
