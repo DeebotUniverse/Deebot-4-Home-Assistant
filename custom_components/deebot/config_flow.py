@@ -11,8 +11,7 @@ from deebot_client import create_instances
 from deebot_client.exceptions import InvalidAuthenticationError
 from deebot_client.models import Configuration, DeviceInfo
 from deebot_client.util import md5
-from homeassistant import config_entries
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.config_entries import ConfigEntry, ConfigFlow
 from homeassistant.const import (
     CONF_DEVICES,
     CONF_MODE,
@@ -42,7 +41,7 @@ DEEBOT_API_DEVICEID = "".join(
 )
 
 
-class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):  # type: ignore
+class DeebotConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore
     """Handle a config flow for Deebot."""
 
     VERSION = 3
