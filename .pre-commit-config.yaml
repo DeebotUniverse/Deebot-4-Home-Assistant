@@ -3,6 +3,9 @@ ci:
     - mypy
     - pylint
 
+default_language_version:
+  python: python3.10
+
 repos:
   - repo: https://github.com/asottile/pyupgrade
     rev: v2.31.1
@@ -83,3 +86,8 @@ repos:
         language: script
         types: [python]
         <<: *python-files
+
+  - repo: https://github.com/pre-commit-ci/pre-commit-ci-config
+    rev: v1.5.1
+    hooks:
+      - id: check-pre-commit-ci-config
