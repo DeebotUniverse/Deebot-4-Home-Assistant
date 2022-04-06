@@ -20,7 +20,7 @@ from homeassistant.const import (
     CONF_VERIFY_SSL,
 )
 from homeassistant.data_entry_flow import FlowResult
-from homeassistant.helpers import aiohttp_client
+from homeassistant.helpers import aiohttp_client, selector
 
 from . import get_bumper_device_id
 from .const import (
@@ -130,16 +130,18 @@ class DeebotConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore
                     vol.Required(
                         CONF_USERNAME,
                         default=data.get(CONF_USERNAME, vol.UNDEFINED),
-                    ): str,
-                    vol.Required(CONF_PASSWORD): str,
+                    ): selector.selector({"text": {}}),
+                    vol.Required(CONF_PASSWORD): selector.selector(
+                        {"text": {"type": "password"}}
+                    ),
                     vol.Required(
                         CONF_COUNTRY,
                         default=data.get(CONF_COUNTRY, vol.UNDEFINED),
-                    ): str,
+                    ): selector.selector({"text": {}}),
                     vol.Required(
                         CONF_CONTINENT,
                         default=data.get(CONF_CONTINENT, vol.UNDEFINED),
-                    ): str,
+                    ): selector.selector({"text": {}}),
                 }
             ),
             errors=errors,

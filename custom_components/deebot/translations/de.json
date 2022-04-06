@@ -8,8 +8,8 @@
       "cannot_connect": "Verbindung fehlgeschlagen. Weitere Infos in den Logs",
       "invalid_auth": "Ung\u00fcltige Authentifizierung",
       "unknown": "Unerwarteter Fehler. Weitere Infos in den Logs",
-      "invalid_country": "Ung\u00fcltiges Land! L\u00e4ndercode sollte aus 2 Zeichen bestehen! Bsp.: de, it, us, ...",
-      "invalid_continent": "Ung\u00fcltiger Kontinent! Code sollte aus 2 Zeichen bestehen! Bsp.: ww, eu, ...",
+      "invalid_country": "Ung\u00fcltiges Land! L\u00e4ndercode muss aus 2 Zeichen bestehen!",
+      "invalid_continent": "Ung\u00fcltiger Kontinent! Code muss aus 2 Zeichen bestehen!",
       "select_robots": "Bitte w\u00e4hlen Sie mindestens 1 Roboter aus",
       "no_supported_devices_found": "Keine unterstützten Geräte gefunden"
     },
@@ -20,6 +20,10 @@
           "username": "E-mail oder ShortID",
           "country": "Land",
           "continent": "Kontinent"
+        },
+        "data_description": {
+          "country": "2-stelliger Ländercode. Bsp.: de, it, uk",
+          "continent": "2-stelliger Kontinentcode Bsp.: eu, ww. Wenn der Kontinentcode nicht funktioniert, verwende ww"
         }
       },
       "robots": {
