@@ -80,7 +80,6 @@ class DeebotConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore
         data = {}
 
         if user_input is not None:
-            self._async_abort_entries_match({CONF_USERNAME: user_input[CONF_USERNAME]})
             data.update(user_input)
             if len(data[CONF_COUNTRY]) != 2:
                 errors[CONF_COUNTRY] = "invalid_country"
@@ -108,6 +107,10 @@ class DeebotConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore
                         self.hass.config_entries.async_reload(self._entry.entry_id)
                     )
                     return self.async_abort(reason="reauth_successful")
+
+                self._async_abort_entries_match(
+                    {CONF_USERNAME: user_input[CONF_USERNAME]}
+                )
 
                 if len(self._robot_list) == 0:
                     return self.async_abort(reason="no_supported_devices_found")
