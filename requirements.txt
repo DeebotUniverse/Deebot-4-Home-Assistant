@@ -1,8 +1,8 @@
 # if code from specifix branch is needed
 # git+https://github.com/DeebotUniverse/client.py@main#deebot-client==0.0.1b1
-deebot-client==1.2.2
+deebot-client==1.3.0
 
-homeassistant>=2022.2.0.b0
+homeassistant>=2022.4.0.b0
 mypy==0.942
 
 numpy>=1.21.2

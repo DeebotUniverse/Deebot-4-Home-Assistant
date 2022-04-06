@@ -1,15 +1,17 @@
 {
   "config": {
     "abort": {
-      "already_configured": "Already configured"
+      "already_configured": "Already configured",
+      "reauth_successful": "Re-authentication was successful"
     },
     "error": {
-      "cannot_connect": "Can't connect to the ecovacs API",
+      "cannot_connect": "Can't connect to the ecovacs API. Please check the logs",
       "invalid_auth": "Invalid username or password",
-      "unknown": "Unknown error",
+      "unknown": "Unknown error. Please check the logs",
       "invalid_country": "Country code should be two letter code, ex: us, uk, etc ",
       "invalid_continent": "Continent code should be two letter code, ex: ww, eu, etc ",
-      "select_robots": "Please select at least 1 robot"
+      "select_robots": "Please select at least 1 robot",
+      "no_supported_devices_found": "No supported devices found"
     },
     "step": {
       "user": {

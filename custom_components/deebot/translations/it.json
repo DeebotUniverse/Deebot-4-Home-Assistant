@@ -13,12 +13,6 @@
     },
     "step": {
       "user": {
-        "data": {
-          "password": "Password",
-          "username": "E-mail o ShortID",
-          "country": "Country",
-          "continent": "Continent"
-        },
         "robots": {
           "devices": "Dispositivi"
         }

@@ -7,6 +7,7 @@ from typing import Any, Mapping
 
 import aiohttp
 from deebot_client import Configuration, create_instances
+from deebot_client.exceptions import InvalidAuthenticationError
 from deebot_client.mqtt_client import MqttClient
 from deebot_client.util import md5
 from deebot_client.vacuum_bot import VacuumBot
@@ -17,7 +18,7 @@ from homeassistant.const import (
     CONF_VERIFY_SSL,
 )
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import ConfigEntryNotReady
+from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
 from homeassistant.helpers import aiohttp_client
 
 from .const import CONF_CLIENT_DEVICE_ID, CONF_CONTINENT, CONF_COUNTRY
@@ -79,6 +80,8 @@ class DeebotHub:
             asyncio.create_task(self._check_status_task())
 
             _LOGGER.debug("Hub setup complete")
+        except InvalidAuthenticationError as ex:
+            raise ConfigEntryAuthFailed from ex
         except Exception as ex:
             msg = "Error during setup"
             _LOGGER.error(msg, exc_info=True)
