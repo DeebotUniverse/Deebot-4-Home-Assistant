@@ -8,8 +8,8 @@
       "cannot_connect": "Can't connect to the ecovacs API. Please check the logs",
       "invalid_auth": "Invalid username or password",
       "unknown": "Unknown error. Please check the logs",
-      "invalid_country": "Country code should be two letter code, ex: us, uk, etc ",
-      "invalid_continent": "Continent code should be two letter code, ex: ww, eu, etc ",
+      "invalid_country": "Country code should be two letter code",
+      "invalid_continent": "Continent code should be two letter code",
       "select_robots": "Please select at least 1 robot",
       "no_supported_devices_found": "No supported devices found"
     },
@@ -20,6 +20,10 @@
           "username": "E-mail or ShortID",
           "country": "Country",
           "continent": "Continent"
+        },
+        "data_description": {
+          "country": "The two letter country code. Ex.: us, uk",
+          "continent": "The two letter continent code. Ex.: ww, eu. If your country code is not working try ww"
         }
       },
       "robots": {

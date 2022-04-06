@@ -4,6 +4,6 @@
   "zip_release": true,
   "filename": "deebot.zip",
   "domain": ["binary_sensor", "camera", "select", "sensor", "vacuum"],
-  "homeassistant": "2021.12.0b0",
+  "homeassistant": "2022.4.0b0",
   "render_readme": true
 }
