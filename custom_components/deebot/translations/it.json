@@ -1,7 +1,7 @@
 {
   "config": {
     "abort": {
-      "already_configured": "Già configurato"
+      "already_configured": "Già configurato",
       "reauth_successful": "Ri-autenticazione avvenuta con successo"
     },
     "error": {
