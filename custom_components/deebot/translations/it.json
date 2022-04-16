@@ -16,7 +16,6 @@
     "step": {
       "user": {
         "data": {
-          "password": "Password",
           "username": "E-mail o ShortID",
           "country": "Paese",
           "continent": "Continente"
