@@ -1,21 +1,37 @@
 {
   "config": {
     "abort": {
-      "already_configured": "Già configurato"
+      "already_configured": "Già configurato",
+      "reauth_successful": "Ri-autenticazione avvenuta con successo"
     },
     "error": {
-      "cannot_connect": "Non riesco a connettermi con ecovacs API",
-      "invalid_auth": "Username o password errate",
+      "cannot_connect": "Non riesco a connettermi con le API di ecovacs",
+      "invalid_auth": "Utente o password errati",
       "unknown": "Errore sconosciuto",
-      "invalid_country": "Il country code deve essere di due lettere, es: it, us, uk etc ",
-      "invalid_continent": "Il Continent code deve essere di due lettere, es: eu, ww etc ",
-      "select_robots": "Seleziona almeno 1 robot"
+      "invalid_country": "La sigla paese code deve essere di due lettere, es: it, us, uk ecc...",
+      "invalid_continent": "La sigla contiente code deve essere di due lettere, es: eu, ww ecc...",
+      "select_robots": "Seleziona almeno 1 robot",
+      "no_supported_devices_found": "Non sono stati trovati dispositivi supportati"
     },
     "step": {
       "user": {
-        "robots": {
+        "data": {
+          "username": "E-mail o ShortID",
+          "country": "Paese",
+          "continent": "Continente"
+        },
+        "data_description": {
+          "country": "Sigla del paese. Es.: it, us, uk",
+          "continent": "Sigla del continente. Ex.: eu, ww. Se la tua sigla paese non funziona prova con ww"
+        }
+      },
+      "robots": {
+        "data": {
           "devices": "Dispositivi"
         }
+      },
+      "user_advanced": {
+        "description": "Seleziona \"Bumper\" SOLO se hai già un'istanza Bumper. Altrimenti, seleziona \"Cloud\"."
       }
     }
   }
