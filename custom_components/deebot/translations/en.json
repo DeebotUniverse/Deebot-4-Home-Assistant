@@ -7,28 +7,28 @@
     "error": {
       "cannot_connect": "Can't connect to the ecovacs API. Please check the logs",
       "invalid_auth": "Invalid username or password",
-      "unknown": "Unknown error. Please check the logs",
-      "invalid_country": "Country code should be two letter code",
       "invalid_continent": "Continent code should be two letter code",
+      "invalid_country": "Country code should be two letter code",
+      "no_supported_devices_found": "No supported devices found",
       "select_robots": "Please select at least 1 robot",
-      "no_supported_devices_found": "No supported devices found"
+      "unknown": "Unknown error. Please check the logs"
     },
     "step": {
-      "user": {
-        "data": {
-          "password": "Password",
-          "username": "E-mail or ShortID",
-          "country": "Country",
-          "continent": "Continent"
-        },
-        "data_description": {
-          "country": "The two letter country code. Ex.: us, uk",
-          "continent": "The two letter continent code. Ex.: ww, eu. If your country code is not working try ww"
-        }
-      },
       "robots": {
         "data": {
           "devices": "Devices"
+        }
+      },
+      "user": {
+        "data": {
+          "continent": "Continent",
+          "country": "Country",
+          "password": "Password",
+          "username": "E-mail or ShortID"
+        },
+        "data_description": {
+          "continent": "The two letter continent code. Ex.: ww, eu. If your country code is not working try ww",
+          "country": "The two letter country code. Ex.: us, uk"
         }
       },
       "user_advanced": {

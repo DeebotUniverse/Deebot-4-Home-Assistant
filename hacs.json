@@ -1,9 +1,15 @@
 {
   "name": "Deebot 4 Home Assistant",
-  "iot_class": "Cloud Polling",
-  "zip_release": true,
+  "domain": [
+    "binary_sensor",
+    "camera",
+    "select",
+    "sensor",
+    "vacuum"
+  ],
   "filename": "deebot.zip",
-  "domain": ["binary_sensor", "camera", "select", "sensor", "vacuum"],
   "homeassistant": "2022.4.0b0",
-  "render_readme": true
+  "iot_class": "Cloud Polling",
+  "render_readme": true,
+  "zip_release": true
 }

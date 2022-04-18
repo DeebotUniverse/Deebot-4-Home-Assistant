@@ -6,23 +6,23 @@
     "error": {
       "cannot_connect": "Connection impossible à l'API ecovacs",
       "invalid_auth": "Nom d’utilisateur ou mot de passe incorrect",
-      "unknown": "Erreur inconnue",
-      "invalid_country": "Le code du pays doit être en deux lettres, ex: fr, be, us, etc ",
       "invalid_continent": "Le code du continent doit être en deux lettres, ex: eu, ww, etc ",
-      "select_robots": "Sélectionnez au moins 1 robot"
+      "invalid_country": "Le code du pays doit être en deux lettres, ex: fr, be, us, etc ",
+      "select_robots": "Sélectionnez au moins 1 robot",
+      "unknown": "Erreur inconnue"
     },
     "step": {
-      "user": {
-        "data": {
-          "password": "Mot de passe",
-          "username": "E-mail ou Ecovacs ID",
-          "country": "Pays",
-          "continent": "Continent"
-        }
-      },
       "robots": {
         "data": {
           "devices": "Appareils"
+        }
+      },
+      "user": {
+        "data": {
+          "continent": "Continent",
+          "country": "Pays",
+          "password": "Mot de passe",
+          "username": "E-mail ou Ecovacs ID"
         }
       },
       "user_advanced": {

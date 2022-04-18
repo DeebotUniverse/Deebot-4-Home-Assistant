@@ -6,29 +6,29 @@
     },
     "error": {
       "cannot_connect": "Verbindung fehlgeschlagen. Weitere Infos in den Logs",
-      "invalid_auth": "Ung\u00fcltige Authentifizierung",
-      "unknown": "Unerwarteter Fehler. Weitere Infos in den Logs",
-      "invalid_country": "Ung\u00fcltiges Land! L\u00e4ndercode muss aus 2 Zeichen bestehen!",
-      "invalid_continent": "Ung\u00fcltiger Kontinent! Code muss aus 2 Zeichen bestehen!",
-      "select_robots": "Bitte w\u00e4hlen Sie mindestens 1 Roboter aus",
-      "no_supported_devices_found": "Keine unterstützten Geräte gefunden"
+      "invalid_auth": "Ungültige Authentifizierung",
+      "invalid_continent": "Ungültiger Kontinent! Code muss aus 2 Zeichen bestehen!",
+      "invalid_country": "Ungültiges Land! Ländercode muss aus 2 Zeichen bestehen!",
+      "no_supported_devices_found": "Keine unterstützten Geräte gefunden",
+      "select_robots": "Bitte wählen Sie mindestens 1 Roboter aus",
+      "unknown": "Unerwarteter Fehler. Weitere Infos in den Logs"
     },
     "step": {
-      "user": {
-        "data": {
-          "password": "Passwort",
-          "username": "E-mail oder ShortID",
-          "country": "Land",
-          "continent": "Kontinent"
-        },
-        "data_description": {
-          "country": "2-stelliger Ländercode. Bsp.: de, it, uk",
-          "continent": "2-stelliger Kontinentcode Bsp.: eu, ww. Wenn der Kontinentcode nicht funktioniert, verwende ww"
-        }
-      },
       "robots": {
         "data": {
           "devices": "Geräte"
+        }
+      },
+      "user": {
+        "data": {
+          "continent": "Kontinent",
+          "country": "Land",
+          "password": "Passwort",
+          "username": "E-mail oder ShortID"
+        },
+        "data_description": {
+          "continent": "2-stelliger Kontinentcode Bsp.: eu, ww. Wenn der Kontinentcode nicht funktioniert, verwende ww",
+          "country": "2-stelliger Ländercode. Bsp.: de, it, uk"
         }
       },
       "user_advanced": {

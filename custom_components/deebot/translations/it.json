@@ -7,27 +7,27 @@
     "error": {
       "cannot_connect": "Non riesco a connettermi con le API di ecovacs",
       "invalid_auth": "Utente o password errati",
-      "unknown": "Errore sconosciuto",
-      "invalid_country": "La sigla paese code deve essere di due lettere, es: it, us, uk ecc...",
       "invalid_continent": "La sigla contiente code deve essere di due lettere, es: eu, ww ecc...",
+      "invalid_country": "La sigla paese code deve essere di due lettere, es: it, us, uk ecc...",
+      "no_supported_devices_found": "Non sono stati trovati dispositivi supportati",
       "select_robots": "Seleziona almeno 1 robot",
-      "no_supported_devices_found": "Non sono stati trovati dispositivi supportati"
+      "unknown": "Errore sconosciuto"
     },
     "step": {
-      "user": {
-        "data": {
-          "username": "E-mail o ShortID",
-          "country": "Paese",
-          "continent": "Continente"
-        },
-        "data_description": {
-          "country": "Sigla del paese. Es.: it, us, uk",
-          "continent": "Sigla del continente. Ex.: eu, ww. Se la tua sigla paese non funziona prova con ww"
-        }
-      },
       "robots": {
         "data": {
           "devices": "Dispositivi"
+        }
+      },
+      "user": {
+        "data": {
+          "continent": "Continente",
+          "country": "Paese",
+          "username": "E-mail o ShortID"
+        },
+        "data_description": {
+          "continent": "Sigla del continente. Ex.: eu, ww. Se la tua sigla paese non funziona prova con ww",
+          "country": "Sigla del paese. Es.: it, us, uk"
         }
       },
       "user_advanced": {
