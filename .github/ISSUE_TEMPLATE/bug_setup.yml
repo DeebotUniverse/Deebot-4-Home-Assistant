@@ -1,12 +1,13 @@
-name: Report an issue
-description: Report an issue
+name: Report an issue/bug during during installation or configuration
+description: Report a issue/bug during installation or configuration
 labels: [bug]
 body:
   - type: markdown
     attributes:
       value: |
-        This issue form is for reporting bugs only!
+        This issue form is for reporting setup/install bugs only!
 
+        If you have successfully configured your robot, please use the other issue form.
         If you have a feature request or a question, please use discussions.
   - type: checkboxes
     attributes:
@@ -18,7 +19,7 @@ body:
           required: true
         - label: I have checked the [documentation](https://deebot.readthedocs.io/integrations/home-assistant)
           required: true
-        - label: I have installed the latest version
+        - label: I have installed/try to install the latest version
           required: true
 
   - type: textarea
@@ -81,8 +82,6 @@ body:
         # Configuration
   - type: input
     id: country
-    validations:
-      required: true
     attributes:
       label: Country
       placeholder: it
@@ -90,8 +89,6 @@ body:
         Which country did you input during the setup of the integration?
   - type: input
     id: continent
-    validations:
-      required: true
     attributes:
       label: Continent
       placeholder: eu

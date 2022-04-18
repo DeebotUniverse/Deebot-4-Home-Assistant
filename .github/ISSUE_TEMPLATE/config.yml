@@ -1,8 +1,1 @@
 blank_issues_enabled: false
-contact_links:
-  - name: "❓ Ask a Question"
-    url: https://github.com/DeebotUniverse/Deebot-4-Home-Assistant/discussions/new
-    about: For asking a question please select the category "Q&A"
-  - name: "💡 Suggest an feature/idea"
-    url: https://github.com/DeebotUniverse/Deebot-4-Home-Assistant/discussions/new
-    about: For feature request please select the category "Ideas"

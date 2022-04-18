@@ -1,0 +1,66 @@
+name: Report an issue/bug
+description: Report a issue/bug
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This issue form is for reporting bugs only!
+
+        If you have a feature request or a question, please use discussions.
+  - type: checkboxes
+    attributes:
+      label: Checks
+      options:
+        - label: I have searched the existing issues and no issue is describing my issue
+          required: true
+        - label: I have checked the [FAQ](https://deebot.readthedocs.io/home/faq/)
+          required: true
+        - label: I have checked the [documentation](https://deebot.readthedocs.io/integrations/home-assistant)
+          required: true
+        - label: I have installed the latest version
+          required: true
+
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: The problem
+      description: >-
+        Describe the issue you are experiencing here to communicate to the
+        maintainers. Tell us what you were trying to do and what happened.
+
+        Provide a clear and concise description of what the problem is.
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Environment
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Diagnostics information
+      description: >-
+        Download the diagnostic data for the device you are having issues with (found on the device page),
+        and drag-and-drop that file into the textbox below.
+
+  - type: markdown
+    attributes:
+      value: |
+        # Details
+  - type: textarea
+    attributes:
+      label: Anything in the logs that might be useful for us?
+      description: >
+        For example, error message, or stack traces.
+
+        Please refer to the [documentation](https://deebot.readthedocs.io/integrations/home-assistant/issues/).
+      render: txt
+  - type: textarea
+    attributes:
+      label: Additional information
+      description: >
+        If you have any additional information for us, use the field below.
+        Please note, you can attach screenshots or screen recordings here, by
+        dragging and dropping files in the field below.
