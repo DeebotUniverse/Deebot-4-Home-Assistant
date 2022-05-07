@@ -27,18 +27,9 @@ from deebot_client.events.event_bus import EventListener
 from deebot_client.models import Room, VacuumState
 from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.vacuum import (
-    SUPPORT_BATTERY,
-    SUPPORT_FAN_SPEED,
-    SUPPORT_LOCATE,
-    SUPPORT_MAP,
-    SUPPORT_PAUSE,
-    SUPPORT_RETURN_HOME,
-    SUPPORT_SEND_COMMAND,
-    SUPPORT_START,
-    SUPPORT_STATE,
-    SUPPORT_STOP,
     StateVacuumEntity,
     StateVacuumEntityDescription,
+    VacuumEntityFeature,
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -62,18 +53,6 @@ from .util import dataclass_to_dict, unsubscribe_listeners
 
 _LOGGER = logging.getLogger(__name__)
 
-SUPPORT_DEEBOT: int = (
-    SUPPORT_PAUSE
-    | SUPPORT_STOP
-    | SUPPORT_RETURN_HOME
-    | SUPPORT_FAN_SPEED
-    | SUPPORT_BATTERY
-    | SUPPORT_SEND_COMMAND
-    | SUPPORT_LOCATE
-    | SUPPORT_MAP
-    | SUPPORT_STATE
-    | SUPPORT_START
-)
 
 # Must be kept in sync with services.yaml
 SERVICE_REFRESH = "refresh"
@@ -111,6 +90,19 @@ async def async_setup_entry(
 
 class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
     """Deebot Vacuum."""
+
+    _attr_supported_features = (
+        VacuumEntityFeature.PAUSE
+        | VacuumEntityFeature.STOP
+        | VacuumEntityFeature.RETURN_HOME
+        | VacuumEntityFeature.FAN_SPEED
+        | VacuumEntityFeature.BATTERY
+        | VacuumEntityFeature.SEND_COMMAND
+        | VacuumEntityFeature.LOCATE
+        | VacuumEntityFeature.MAP
+        | VacuumEntityFeature.STATE
+        | VacuumEntityFeature.START
+    )
 
     def __init__(self, vacuum_bot: VacuumBot):
         """Initialize the Deebot Vacuum."""
@@ -169,11 +161,6 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
             self._vacuum_bot.events.subscribe(StatusEvent, on_status),
         ]
         self.async_on_remove(lambda: unsubscribe_listeners(listeners))
-
-    @property
-    def supported_features(self) -> int:
-        """Flag vacuum cleaner robot features that are supported."""
-        return SUPPORT_DEEBOT
 
     @property
     def state(self) -> StateType:
