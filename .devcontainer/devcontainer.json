@@ -1,7 +1,7 @@
 // See https://aka.ms/vscode-remote/devcontainer.json for format details.
 {
   "name": "Deebot 4 HA development",
-  "image": "ghcr.io/ludeeus/devcontainer/integration:stable",
+  "image": "ghcr.io/ludeeus/devcontainer/integration",
   "postCreateCommand": "container install && pip install --ignore-installed -r requirements.txt",
   "appPort": [
     "9123:8123"

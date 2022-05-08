@@ -194,7 +194,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
         rooms: dict[str, Any] = {}
         for room in self._rooms:
             # convert room name to snake_case to meet the convention
-            room_name = slugify(room.subtype)
+            room_name = slugify(room.name)
             room_values = rooms.get(room_name)
             if room_values is None:
                 rooms[room_name] = room.id
