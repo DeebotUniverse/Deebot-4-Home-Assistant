@@ -1,5 +1,4 @@
 {
-  "domain": ["binary_sensor", "camera", "select", "sensor", "vacuum"],
   "filename": "deebot.zip",
   "homeassistant": "2022.5.0b0",
   "iot_class": "Cloud Polling",
