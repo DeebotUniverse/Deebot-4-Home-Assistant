@@ -72,7 +72,7 @@ repos:
     hooks:
       - id: prettier
         additional_dependencies:
-          - prettier@2.6.2
+          - prettier@2.7.1
           - prettier-plugin-sort-json@0.0.2
         exclude_types:
           - python
