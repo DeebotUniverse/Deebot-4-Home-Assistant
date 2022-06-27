@@ -3,7 +3,7 @@
 deebot-client==1.4.1
 
 homeassistant>=2022.5.0.b0
-mypy==0.960
+mypy==0.961
 
 numpy>=1.21.2
 pre-commit==2.19.0
