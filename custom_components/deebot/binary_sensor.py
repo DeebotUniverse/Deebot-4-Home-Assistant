@@ -1,6 +1,5 @@
 """Binary sensor module."""
 import logging
-from typing import Optional
 
 from deebot_client.events import WaterInfoEvent
 from deebot_client.events.event_bus import EventListener
@@ -46,7 +45,7 @@ class DeebotMopAttachedBinarySensor(DeebotEntity, BinarySensorEntity):  # type: 
     )
 
     @property
-    def icon(self) -> Optional[str]:
+    def icon(self) -> str | None:
         """Return the icon to use in the frontend, if any."""
         return "mdi:water" if self.is_on else "mdi:water-off"
 

@@ -1,6 +1,5 @@
 """Select module."""
 import logging
-from typing import Optional
 
 from deebot_client.commands import SetWaterInfo
 from deebot_client.events import WaterAmount, WaterInfoEvent
@@ -45,7 +44,7 @@ class WaterInfoSelect(DeebotEntity, SelectEntity):  # type: ignore
     )
 
     _attr_options = [amount.display_name for amount in WaterAmount]
-    _attr_current_option: Optional[str] = None
+    _attr_current_option: str | None = None
 
     async def async_added_to_hass(self) -> None:
         """Set up the event listeners now that hass is ready."""

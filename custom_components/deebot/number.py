@@ -1,6 +1,4 @@
 """Number module."""
-from typing import Optional
-
 from deebot_client.commands import SetVolume
 from deebot_client.events import VolumeEvent
 from deebot_client.events.event_bus import EventListener
@@ -62,7 +60,7 @@ class VolumeEntity(DeebotEntity, NumberEntity):  # type: ignore
         self.async_on_remove(listener.unsubscribe)
 
     @property
-    def icon(self) -> Optional[str]:
+    def icon(self) -> str | None:
         """Return the icon to use in the frontend, if any."""
         if self._attr_native_value is not None:
             arrays = array_split(

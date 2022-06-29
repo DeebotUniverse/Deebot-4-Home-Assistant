@@ -1,6 +1,4 @@
 """Deebot entity module."""
-from typing import Optional
-
 from deebot_client.events import StatusEvent
 from deebot_client.events.event_bus import EventListener
 from deebot_client.vacuum_bot import VacuumBot
@@ -18,7 +16,7 @@ class DeebotEntity(Entity):  # type: ignore # lgtm [py/missing-equals]
     def __init__(
         self,
         vacuum_bot: VacuumBot,
-        entity_description: Optional[EntityDescription] = None,
+        entity_description: EntityDescription | None = None,
     ):
         """Initialize the Sensor."""
         super().__init__()
@@ -52,7 +50,7 @@ class DeebotEntity(Entity):  # type: ignore # lgtm [py/missing-equals]
         )
 
     @property
-    def device_info(self) -> Optional[DeviceInfo]:
+    def device_info(self) -> DeviceInfo | None:
         """Return device specific attributes."""
         device = self._vacuum_bot.device_info
         info = DeviceInfo(

@@ -2,7 +2,7 @@
 import logging
 import random
 import string
-from typing import Any, Optional
+from typing import Any
 
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
@@ -49,8 +49,8 @@ class DeebotConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore
     def __init__(self) -> None:
         self._data: dict[str, Any] = {}
         self._robot_list: list[DeviceInfo] = []
-        self._mode: Optional[str] = None
-        self._entry: Optional[ConfigEntry] = None
+        self._mode: str | None = None
+        self._entry: ConfigEntry | None = None
 
     async def _async_retrieve_bots(
         self, domain_config: dict[str, Any]
@@ -73,7 +73,7 @@ class DeebotConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore
         return await api_client.get_devices()
 
     async def async_step_user(
-        self, user_input: Optional[dict[str, Any]] = None
+        self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         """Handle the initial step."""
         errors = {}
@@ -148,7 +148,7 @@ class DeebotConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore
         )
 
     async def async_step_user_advanced(
-        self, user_input: Optional[dict[str, Any]] = None
+        self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         """Handle an advanced mode flow initialized by the user."""
         if user_input is not None:
@@ -173,7 +173,7 @@ class DeebotConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore
         return self.async_show_form(step_id="user_advanced", data_schema=data_schema)
 
     async def async_step_robots(
-        self, user_input: Optional[dict[str, Any]] = None
+        self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         """Handle the robots selection step."""
 

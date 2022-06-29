@@ -1,6 +1,6 @@
 """Support for Deebot Vaccums."""
 import logging
-from typing import Any, Mapping, Optional
+from typing import Any, Mapping
 
 import voluptuous as vol
 from deebot_client.commands import (
@@ -115,11 +115,11 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
 
         super().__init__(vacuum_bot, StateVacuumEntityDescription(key="", name=name))
 
-        self._battery: Optional[int] = None
-        self._fan_speed: Optional[str] = None
-        self._state: Optional[VacuumState] = None
+        self._battery: int | None = None
+        self._fan_speed: str | None = None
+        self._state: VacuumState | None = None
         self._rooms: list[Room] = []
-        self._last_error: Optional[ErrorEvent] = None
+        self._last_error: ErrorEvent | None = None
 
     async def async_added_to_hass(self) -> None:
         """Set up the event listeners now that hass is ready."""
@@ -169,12 +169,12 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
             return VACUUMSTATE_TO_STATE[self._state]
 
     @property
-    def battery_level(self) -> Optional[int]:
+    def battery_level(self) -> int | None:
         """Return the battery level of the vacuum cleaner."""
         return self._battery
 
     @property
-    def fan_speed(self) -> Optional[str]:
+    def fan_speed(self) -> str | None:
         """Return the fan speed of the vacuum cleaner."""
         return self._fan_speed
 
@@ -184,7 +184,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
         return [level.display_name for level in FanSpeedLevel]
 
     @property
-    def extra_state_attributes(self) -> Optional[Mapping[str, Any]]:
+    def extra_state_attributes(self) -> Mapping[str, Any] | None:
         """Return entity specific state attributes.
 
         Implemented by platform classes. Convention for attribute names
@@ -239,7 +239,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
         await self._vacuum_bot.execute_command(PlaySound())
 
     async def async_send_command(
-        self, command: str, params: Optional[dict[str, Any]] = None, **kwargs: Any
+        self, command: str, params: dict[str, Any] | None = None, **kwargs: Any
     ) -> None:
         """Send a command to a vacuum cleaner."""
         _LOGGER.debug("async_send_command %s with %s", command, params)
