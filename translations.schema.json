@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "config": {
+      "additionalProperties": false,
+      "properties": {
+        "abort": {
+          "additionalProperties": false,
+          "properties": {
+            "already_configured": {
+              "type": "string"
+            },
+            "reauth_successful": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "error": {
+          "additionalProperties": false,
+          "properties": {
+            "cannot_connect": {
+              "type": "string"
+            },
+            "invalid_auth": {
+              "type": "string"
+            },
+            "invalid_continent": {
+              "type": "string"
+            },
+            "invalid_country": {
+              "type": "string"
+            },
+            "no_supported_devices_found": {
+              "type": "string"
+            },
+            "select_robots": {
+              "type": "string"
+            },
+            "unknown": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "step": {
+          "additionalProperties": false,
+          "properties": {
+            "robots": {
+              "additionalProperties": false,
+              "properties": {
+                "data": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "devices": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            },
+            "user": {
+              "additionalProperties": false,
+              "properties": {
+                "data": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "continent": {
+                      "type": "string"
+                    },
+                    "country": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    },
+                    "username": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "data_description": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "continent": {
+                      "type": "string"
+                    },
+                    "country": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            },
+            "user_advanced": {
+              "additionalProperties": false,
+              "properties": {
+                "description": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "type": "object"
+}

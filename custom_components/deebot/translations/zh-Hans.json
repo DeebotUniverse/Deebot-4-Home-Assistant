@@ -16,9 +16,7 @@
         "data": {
           "continent": "地区",
           "country": "国家",
-          "live_map": "启用动态地图",
           "password": "密码",
-          "show_color_rooms": "显示房间的颜色 [BETA]",
           "username": "电子邮件地址或科沃斯ID"
         }
       }

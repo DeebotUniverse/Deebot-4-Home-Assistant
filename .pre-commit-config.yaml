@@ -103,3 +103,17 @@ repos:
     rev: v1.5.1
     hooks:
       - id: check-pre-commit-ci-config
+
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.16.2
+    hooks:
+      - id: check-github-workflows
+      - id: check-dependabot
+      - id: check-jsonschema
+        name: Check translations files
+        files: ^custom_components/deebot/translations/
+        types:
+          - json
+        args:
+          - --schemafile
+          - translations.schema.json
