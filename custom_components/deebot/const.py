@@ -27,7 +27,7 @@ from homeassistant.const import CONF_PASSWORD, CONF_USERNAME, CONF_VERIFY_SSL
 ################################
 # Do not change! Will be set by release workflow
 INTEGRATION_VERSION = "main"  # git tag will be used
-MIN_REQUIRED_HA_VERSION = "2022.5.0b0"  # set min required version in hacs.json
+MIN_REQUIRED_HA_VERSION = "2022.7.0b0"  # set min required version in hacs.json
 ################################
 
 # Values below can be changed
