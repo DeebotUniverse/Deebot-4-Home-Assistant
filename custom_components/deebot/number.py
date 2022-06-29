@@ -1,5 +1,4 @@
 """Number module."""
-import logging
 from typing import Optional
 
 from deebot_client.commands import SetVolume
@@ -15,8 +14,6 @@ from numpy import array_split
 from .const import DOMAIN
 from .entity import DeebotEntity
 from .hub import DeebotHub
-
-_LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(
@@ -44,10 +41,10 @@ class VolumeEntity(DeebotEntity, NumberEntity):  # type: ignore
         entity_category=EntityCategory.CONFIG,
     )
 
-    _attr_min_value = 0
-    _attr_max_value = 10
-    _attr_step = 1.0
-    _attr_value = None
+    _attr_native_min_value = 0
+    _attr_native_max_value = 10
+    _attr_native_step = 1.0
+    _attr_native_value: float | None = None
 
     async def async_added_to_hass(self) -> None:
         """Set up the event listeners now that hass is ready."""
@@ -56,7 +53,7 @@ class VolumeEntity(DeebotEntity, NumberEntity):  # type: ignore
         async def on_volume(event: VolumeEvent) -> None:
             if event.maximum is not None:
                 self._attr_max_value = event.maximum
-            self._attr_value = event.volume
+            self._attr_native_value = event.volume
             self.async_write_ha_state()
 
         listener: EventListener = self._vacuum_bot.events.subscribe(
@@ -67,21 +64,22 @@ class VolumeEntity(DeebotEntity, NumberEntity):  # type: ignore
     @property
     def icon(self) -> Optional[str]:
         """Return the icon to use in the frontend, if any."""
-        if self._attr_value is not None:
+        if self._attr_native_value is not None:
             arrays = array_split(
-                range(self._attr_min_value + 1, self._attr_max_value + 1), 3
+                range(self._attr_native_min_value + 1, self._attr_native_max_value + 1),
+                3,
             )
-            if self._attr_value == self._attr_min_value:
+            if self._attr_native_value == self._attr_native_min_value:
                 return "mdi:volume-off"
-            if self._attr_value in arrays[0]:
+            if self._attr_native_value in arrays[0]:
                 return "mdi:volume-low"
-            if self._attr_value in arrays[1]:
+            if self._attr_native_value in arrays[1]:
                 return "mdi:volume-medium"
-            if self._attr_value in arrays[2]:
+            if self._attr_native_value in arrays[2]:
                 return "mdi:volume-high"
 
         return "mdi:volume-medium"
 
-    async def async_set_value(self, value: float) -> None:
+    async def async_set_native_value(self, value: float) -> None:
         """Set new value."""
         await self._vacuum_bot.execute_command(SetVolume(int(value)))
