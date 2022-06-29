@@ -52,7 +52,7 @@ class VolumeEntity(DeebotEntity, NumberEntity):  # type: ignore
 
         async def on_volume(event: VolumeEvent) -> None:
             if event.maximum is not None:
-                self._attr_max_value = event.maximum
+                self._attr_native_max_value = event.maximum
             self._attr_native_value = event.volume
             self.async_write_ha_state()
 
