@@ -1,7 +1,6 @@
 """Support for Deebot Vaccums."""
 import base64
 import logging
-from typing import Optional
 
 from homeassistant.components.camera import Camera
 from homeassistant.config_entries import ConfigEntry
@@ -43,8 +42,8 @@ class DeeboLiveCamera(DeebotEntity, Camera):  # type: ignore
     _attr_should_poll = True
 
     async def async_camera_image(
-        self, width: Optional[int] = None, height: Optional[int] = None
-    ) -> Optional[bytes]:
+        self, width: int | None = None, height: int | None = None
+    ) -> bytes | None:
         """Return a still image response from the camera.
 
         Integrations may choose to ignore the height parameter in order to preserve aspect ratio
