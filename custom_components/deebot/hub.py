@@ -3,7 +3,8 @@ import asyncio
 import logging
 import random
 import string
-from typing import Any, Mapping
+from collections.abc import Mapping
+from typing import Any
 
 import aiohttp
 from deebot_client import Configuration, create_instances
