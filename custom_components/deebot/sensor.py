@@ -1,7 +1,8 @@
 """Sensor module."""
 import logging
+from collections.abc import Callable
 from math import floor
-from typing import Callable, TypeVar
+from typing import TypeVar
 
 from deebot_client.events import (
     CleanLogEvent,
