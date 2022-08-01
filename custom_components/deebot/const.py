@@ -1,5 +1,5 @@
 """Const module."""
-from typing import Mapping
+from collections.abc import Mapping
 
 from deebot_client.events import (
     BatteryEvent,
