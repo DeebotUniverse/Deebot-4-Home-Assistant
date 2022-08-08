@@ -8,7 +8,7 @@ default_language_version:
 
 repos:
   - repo: https://github.com/asottile/pyupgrade
-    rev: v2.34.0
+    rev: v2.37.3
     hooks:
       - id: pyupgrade
         args: [--py310-plus]
@@ -31,7 +31,7 @@ repos:
           - --quiet-level=2
         exclude_types: [csv, json]
   - repo: https://github.com/PyCQA/flake8
-    rev: 4.0.1
+    rev: 5.0.2
     hooks:
       - id: flake8
         additional_dependencies:
@@ -77,7 +77,7 @@ repos:
         exclude_types:
           - python
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.26.3
+    rev: v1.27.1
     hooks:
       - id: yamllint
   - repo: local
@@ -105,7 +105,7 @@ repos:
       - id: check-pre-commit-ci-config
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.16.2
+    rev: 0.17.1
     hooks:
       - id: check-github-workflows
       - id: check-dependabot
