@@ -11,6 +11,9 @@
             "already_configured": {
               "type": "string"
             },
+            "no_supported_devices_found": {
+              "type": "string"
+            },
             "reauth_successful": {
               "type": "string"
             }
@@ -30,9 +33,6 @@
               "type": "string"
             },
             "invalid_country": {
-              "type": "string"
-            },
-            "no_supported_devices_found": {
               "type": "string"
             },
             "select_robots": {

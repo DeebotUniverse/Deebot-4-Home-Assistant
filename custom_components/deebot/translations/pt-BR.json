@@ -2,6 +2,7 @@
   "config": {
     "abort": {
       "already_configured": "Já está configurado",
+      "no_supported_devices_found": "Nenhum dispositivo compatível encontrado",
       "reauth_successful": "A reautenticação foi bem-sucedida"
     },
     "error": {
@@ -9,7 +10,6 @@
       "invalid_auth": "nome de usuário ou senha inválidos",
       "invalid_continent": "O código do continente deve ser um código de duas letras",
       "invalid_country": "O código do país deve ser um código de duas letras",
-      "no_supported_devices_found": "Nenhum dispositivo compatível encontrado",
       "select_robots": "Selecione pelo menos 1 robô",
       "unknown": "Erro desconhecido. Por favor, verifique os registros"
     },

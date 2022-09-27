@@ -2,6 +2,7 @@
   "config": {
     "abort": {
       "already_configured": "Already configured",
+      "no_supported_devices_found": "No supported devices found",
       "reauth_successful": "Re-authentication was successful"
     },
     "error": {
@@ -9,7 +10,6 @@
       "invalid_auth": "Invalid username or password",
       "invalid_continent": "Continent code should be two letter code",
       "invalid_country": "Country code should be two letter code",
-      "no_supported_devices_found": "No supported devices found",
       "select_robots": "Please select at least 1 robot",
       "unknown": "Unknown error. Please check the logs"
     },
