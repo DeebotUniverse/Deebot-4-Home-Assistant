@@ -1,8 +1,5 @@
 // See https://aka.ms/vscode-remote/devcontainer.json for format details.
 {
-  "name": "Deebot 4 HA development",
-  "image": "ghcr.io/ludeeus/devcontainer/integration",
-  "postCreateCommand": "container install && pip install --ignore-installed -r requirements.txt",
   "appPort": ["9123:8123"],
   "context": "..",
   "extensions": [
@@ -11,6 +8,9 @@
     "ryanluker.vscode-coverage-gutters",
     "ms-python.vscode-pylance"
   ],
+  "image": "ghcr.io/ludeeus/devcontainer/integration",
+  "name": "Deebot 4 HA development",
+  "postCreateCommand": "container install && pip install --ignore-installed -r requirements.txt",
   "settings": {
     "editor.formatOnPaste": false,
     "editor.formatOnSave": true,

@@ -1,11 +1,19 @@
 """Support for Deebot Vaccums."""
+import sys
+
+if sys.version_info < (3, 10):
+    raise RuntimeError(
+        f"This component requires at least python 3.10! You are running {sys.version}"
+    )
+
+# pylint: disable=wrong-import-position
 import asyncio
 import logging
 from typing import Any
 
 from awesomeversion import AwesomeVersion
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_DEVICES, CONF_USERNAME, CONF_VERIFY_SSL
+from homeassistant.const import CONF_DEVICES, CONF_USERNAME, CONF_VERIFY_SSL, Platform
 from homeassistant.const import __version__ as HA_VERSION
 from homeassistant.core import HomeAssistant
 
@@ -20,17 +28,19 @@ from .const import (
 )
 from .util import get_bumper_device_id
 
+# pylint: enable=wrong-import-position
+
 _LOGGER = logging.getLogger(__name__)
 
 PLATFORMS = [
-    "binary_sensor",
-    "button",
-    "camera",
-    "number",
-    "select",
-    "sensor",
-    "switch",
-    "vacuum",
+    Platform.BINARY_SENSOR,
+    Platform.BUTTON,
+    Platform.CAMERA,
+    Platform.NUMBER,
+    Platform.SELECT,
+    Platform.SENSOR,
+    Platform.SWITCH,
+    Platform.VACUUM,
 ]
 
 
@@ -65,7 +75,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await deebot_hub.async_setup()
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = deebot_hub
-    hass.config_entries.async_setup_platforms(entry, PLATFORMS)
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
 
 

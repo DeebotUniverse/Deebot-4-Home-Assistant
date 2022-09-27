@@ -12,8 +12,8 @@ from homeassistant.helpers.device_registry import DeviceEntry
 from . import DOMAIN
 from .hub import DeebotHub
 
-REDACT_CONFIG = {CONF_USERNAME, CONF_PASSWORD, CONF_DEVICES}
-REDACT_DEVICE = {"did", "name"}
+REDACT_CONFIG = {CONF_USERNAME, CONF_PASSWORD, CONF_DEVICES, "title"}
+REDACT_DEVICE = {"did", "name", "homeId"}
 
 
 async def async_get_device_diagnostics(

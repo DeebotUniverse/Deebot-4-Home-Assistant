@@ -1,9 +1,9 @@
-# if code from specifix branch is needed
+# if code from specific branch is needed
 # git+https://github.com/DeebotUniverse/client.py@main#deebot-client==0.0.1b1
 deebot-client==1.5.1
 
-homeassistant>=2022.7.0.b0
-mypy==0.971
+homeassistant>=2022.8.0.b0
+mypy==0.981
 
 numpy>=1.21.2
 pre-commit==2.20.0

@@ -2,6 +2,7 @@
   "config": {
     "abort": {
       "already_configured": "Bereits konfiguriert",
+      "no_supported_devices_found": "Keine unterstützten Geräte gefunden",
       "reauth_successful": "Die erneute Authentifizierung war erfolgreich"
     },
     "error": {
@@ -9,7 +10,6 @@
       "invalid_auth": "Ungültige Authentifizierung",
       "invalid_continent": "Ungültiger Kontinent! Code muss aus 2 Zeichen bestehen!",
       "invalid_country": "Ungültiges Land! Ländercode muss aus 2 Zeichen bestehen!",
-      "no_supported_devices_found": "Keine unterstützten Geräte gefunden",
       "select_robots": "Bitte wählen Sie mindestens 1 Roboter aus",
       "unknown": "Unerwarteter Fehler. Weitere Infos in den Logs"
     },
