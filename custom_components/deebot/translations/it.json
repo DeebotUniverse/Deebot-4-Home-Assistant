@@ -14,7 +14,7 @@
       "unknown": "Errore sconosciuto"
     },
     "step": {
-      "robots": {
+      "options": {
         "data": {
           "devices": "Dispositivi"
         }

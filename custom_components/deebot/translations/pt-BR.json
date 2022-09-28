@@ -14,7 +14,7 @@
       "unknown": "Erro desconhecido. Por favor, verifique os registros"
     },
     "step": {
-      "robots": {
+      "options": {
         "data": {
           "devices": "Dispositivos"
         }

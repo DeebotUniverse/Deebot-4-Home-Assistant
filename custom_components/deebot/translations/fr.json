@@ -12,7 +12,7 @@
       "unknown": "Erreur inconnue"
     },
     "step": {
-      "robots": {
+      "options": {
         "data": {
           "devices": "Appareils"
         }

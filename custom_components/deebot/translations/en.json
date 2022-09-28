@@ -14,9 +14,12 @@
       "unknown": "Unknown error. Please check the logs"
     },
     "step": {
-      "robots": {
+      "options": {
         "data": {
           "devices": "Devices"
+        },
+        "data_description": {
+          "devices": "Please select all devices, which you want use in HA."
         }
       },
       "user": {
@@ -33,6 +36,28 @@
       },
       "user_advanced": {
         "description": "Please select \"Bumper\" ONLY if you have a working bumper instance already. Otherwise, select \"Cloud\" please."
+      }
+    }
+  },
+  "options": {
+    "abort": {
+      "cannot_connect": "Can't connect to the ecovacs API. Please check the logs",
+      "invalid_auth": "Invalid username or password",
+      "no_supported_devices_found": "No supported devices found",
+      "unknown_get_devices": "Unknown error on getting all devices. Please check the logs"
+    },
+    "error": {
+      "select_robots": "Please select at least 1 robot",
+      "unknown": "Unknown error. Please check the logs"
+    },
+    "step": {
+      "init": {
+        "data": {
+          "devices": "Devices"
+        },
+        "data_description": {
+          "devices": "Please select all devices, which you want use in HA."
+        }
       }
     }
   }
