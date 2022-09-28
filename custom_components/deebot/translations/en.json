@@ -42,7 +42,7 @@
   "options": {
     "abort": {
       "cannot_connect": "Can't connect to the ecovacs API. Please check the logs",
-      "invalid_auth": "Invalid username or password",
+      "invalid_auth": "Authentication failed. Please reauthenticate first",
       "no_supported_devices_found": "No supported devices found",
       "unknown_get_devices": "Unknown error on getting all devices. Please check the logs"
     },

@@ -39,7 +39,7 @@
   "options": {
     "abort": {
       "cannot_connect": "Verbindung fehlgeschlagen. Weitere Infos in den Logs",
-      "invalid_auth": "Ungültige Authentifizierung",
+      "invalid_auth": "Ungültige Authentifizierung. Bitte vorher neu konfigurieren",
       "no_supported_devices_found": "Keine unterstützten Geräte gefunden",
       "unknown_get_devices": "Unerwarteter Fehler beim Abholen aller Geräte. Weitere Infos in den Logs"
     },

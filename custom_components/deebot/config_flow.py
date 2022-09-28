@@ -45,7 +45,7 @@ DEEBOT_API_DEVICEID = "".join(
 class DeebotConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore
     """Handle a config flow for Deebot."""
 
-    VERSION = 3
+    VERSION = 4
 
     def __init__(self) -> None:
         self._data: dict[str, Any] = {}
