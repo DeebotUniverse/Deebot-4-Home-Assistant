@@ -128,6 +128,15 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
         config_entry.data = {**new}
         config_entry.version = 3
 
+    if config_entry.version == 3:
+        new = {**config_entry.data}
+
+        devices = new.pop(CONF_DEVICES)
+
+        config_entry.data = {**new}
+        config_entry.options = {CONF_DEVICES: devices}
+        config_entry.version = 4
+
     _LOGGER.info("Migration to version %d successful", config_entry.version)
 
     return True

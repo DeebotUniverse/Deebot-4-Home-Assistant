@@ -2,16 +2,16 @@
 import logging
 import random
 import string
+from types import MappingProxyType
 from typing import Any
 
-import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from aiohttp import ClientError
 from deebot_client import create_instances
 from deebot_client.exceptions import InvalidAuthenticationError
 from deebot_client.models import Configuration, DeviceInfo
 from deebot_client.util import md5
-from homeassistant.config_entries import ConfigEntry, ConfigFlow
+from homeassistant.config_entries import ConfigEntry, ConfigFlow, OptionsFlow
 from homeassistant.const import (
     CONF_DEVICES,
     CONF_MODE,
@@ -19,6 +19,7 @@ from homeassistant.const import (
     CONF_USERNAME,
     CONF_VERIFY_SSL,
 )
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers import aiohttp_client, selector
 
@@ -44,33 +45,21 @@ DEEBOT_API_DEVICEID = "".join(
 class DeebotConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore
     """Handle a config flow for Deebot."""
 
-    VERSION = 3
+    VERSION = 4
 
     def __init__(self) -> None:
         self._data: dict[str, Any] = {}
-        self._robot_list: list[DeviceInfo] = []
+        self._robots_list: list[DeviceInfo] = []
         self._mode: str | None = None
         self._entry: ConfigEntry | None = None
 
-    async def _async_retrieve_bots(
-        self, domain_config: dict[str, Any]
-    ) -> list[DeviceInfo]:
-        verify_ssl = domain_config.get(CONF_VERIFY_SSL, True)
-        deebot_config = Configuration(
-            aiohttp_client.async_get_clientsession(self.hass, verify_ssl=verify_ssl),
-            device_id=DEEBOT_API_DEVICEID,
-            continent=domain_config[CONF_CONTINENT],
-            country=domain_config[CONF_COUNTRY],
-            verify_ssl=verify_ssl,
-        )
-
-        (_, api_client) = create_instances(
-            deebot_config,
-            domain_config[CONF_USERNAME],
-            md5(domain_config[CONF_PASSWORD]),
-        )
-
-        return await api_client.get_devices()
+    @staticmethod
+    @callback  # type: ignore[misc]
+    def async_get_options_flow(
+        config_entry: ConfigEntry,
+    ) -> "DeebotOptionsFlowHandler":
+        """Get the options flow for this handler."""
+        return DeebotOptionsFlowHandler(config_entry)
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
@@ -89,7 +78,7 @@ class DeebotConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore
 
             if not errors:
                 try:
-                    self._robot_list = await self._async_retrieve_bots(data)
+                    self._robots_list = await _async_retrieve_bots(self.hass, data)
                 except ClientError:
                     _LOGGER.debug("Cannot connect", exc_info=True)
                     errors["base"] = "cannot_connect"
@@ -112,11 +101,11 @@ class DeebotConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore
                     {CONF_USERNAME: user_input[CONF_USERNAME]}
                 )
 
-                if len(self._robot_list) == 0:
+                if len(self._robots_list) == 0:
                     return self.async_abort(reason="no_supported_devices_found")
 
                 self._data.update(data)
-                return await self.async_step_robots()
+                return await self.async_step_options()
 
         if self._entry:
             data.update(self._entry.data)
@@ -130,18 +119,26 @@ class DeebotConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore
                     vol.Required(
                         CONF_USERNAME,
                         default=data.get(CONF_USERNAME, vol.UNDEFINED),
-                    ): selector.selector({"text": {}}),
-                    vol.Required(CONF_PASSWORD): selector.selector(
-                        {"text": {"type": "password"}}
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(type=selector.TextSelectorType.TEXT)
+                    ),
+                    vol.Required(CONF_PASSWORD): selector.TextSelector(
+                        selector.TextSelectorConfig(
+                            type=selector.TextSelectorType.PASSWORD
+                        )
                     ),
                     vol.Required(
                         CONF_COUNTRY,
                         default=data.get(CONF_COUNTRY, vol.UNDEFINED),
-                    ): selector.selector({"text": {}}),
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(type=selector.TextSelectorType.TEXT)
+                    ),
                     vol.Required(
                         CONF_CONTINENT,
                         default=data.get(CONF_CONTINENT, vol.UNDEFINED),
-                    ): selector.selector({"text": {}}),
+                    ): selector.TextSelector(
+                        selector.TextSelectorConfig(type=selector.TextSelectorType.TEXT)
+                    ),
                 }
             ),
             errors=errors,
@@ -162,52 +159,149 @@ class DeebotConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore
 
             return await self.async_step_user()
 
-        data_schema = vol.Schema(
-            {
-                vol.Required(CONF_MODE, default=CONF_MODE_CLOUD): vol.In(
-                    [CONF_MODE_CLOUD, CONF_MODE_BUMPER]
-                )
-            }
+        return self.async_show_form(
+            step_id="user_advanced",
+            data_schema=vol.Schema(
+                {
+                    vol.Required(
+                        CONF_MODE, default=CONF_MODE_CLOUD
+                    ): selector.SelectSelector(
+                        selector.SelectSelectorConfig(
+                            options=[
+                                CONF_MODE_CLOUD,
+                                CONF_MODE_BUMPER,
+                            ]
+                        )
+                    )
+                }
+            ),
         )
 
-        return self.async_show_form(step_id="user_advanced", data_schema=data_schema)
-
-    async def async_step_robots(
+    async def async_step_options(
         self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
-        """Handle the robots selection step."""
+        """Handle the options step."""
 
         errors = {}
         if user_input is not None:
             try:
                 if len(user_input[CONF_DEVICES]) < 1:
-                    errors["base"] = "select_robots"
+                    errors[CONF_DEVICES] = "select_robots"
                 else:
-                    self._data.update(user_input)
                     return self.async_create_entry(
-                        title=self._data[CONF_USERNAME], data=self._data
+                        title=self._data[CONF_USERNAME],
+                        data=self._data,
+                        options=user_input,
                     )
             except Exception:  # pylint: disable=broad-except
                 _LOGGER.error("Unexpected exception", exc_info=True)
                 errors["base"] = "unknown"
 
         # If there is no user input or there were errors, show the form again, including any errors that were found with the input.
-        robot_list_dict = {
-            e["name"]: e.get("nick", e["name"]) for e in self._robot_list
-        }
-        options_schema = vol.Schema(
-            {
-                vol.Required(
-                    CONF_DEVICES, default=list(robot_list_dict.keys())
-                ): cv.multi_select(robot_list_dict)
-            }
-        )
-
         return self.async_show_form(
-            step_id="robots", data_schema=options_schema, errors=errors
+            step_id="options",
+            data_schema=_get_options_schema(self._robots_list, {}),
+            errors=errors,
         )
 
     async def async_step_reauth(self, data: dict[str, Any]) -> FlowResult:
         """Handle initiation of re-authentication."""
         self._entry = self.hass.config_entries.async_get_entry(self.context["entry_id"])
         return await self.async_step_user(data)
+
+
+def _get_options_schema(
+    robot_list: list[DeviceInfo], defaults: dict[str, Any] | MappingProxyType[str, Any]
+) -> vol.Schema:
+    """Return options schema."""
+    robot_list = [
+        selector.SelectOptionDict(value=e["name"], label=e.get("nick", e["name"]))
+        for e in robot_list
+    ]
+
+    return vol.Schema(
+        {
+            vol.Required(
+                CONF_DEVICES, default=defaults.get(CONF_DEVICES, vol.UNDEFINED)
+            ): selector.SelectSelector(
+                selector.SelectSelectorConfig(
+                    options=robot_list,
+                    multiple=True,
+                )
+            )
+        }
+    )
+
+
+async def _async_retrieve_bots(
+    hass: HomeAssistant, domain_config: dict[str, Any]
+) -> list[DeviceInfo]:
+    verify_ssl = domain_config.get(CONF_VERIFY_SSL, True)
+    deebot_config = Configuration(
+        aiohttp_client.async_get_clientsession(hass, verify_ssl=verify_ssl),
+        device_id=DEEBOT_API_DEVICEID,
+        continent=domain_config[CONF_CONTINENT],
+        country=domain_config[CONF_COUNTRY],
+        verify_ssl=verify_ssl,
+    )
+
+    (_, api_client) = create_instances(
+        deebot_config,
+        domain_config[CONF_USERNAME],
+        md5(domain_config[CONF_PASSWORD]),
+    )
+
+    return await api_client.get_devices()
+
+
+class DeebotOptionsFlowHandler(OptionsFlow):  # type: ignore[misc]
+    """Handle deebot options."""
+
+    def __init__(self, config_entry: ConfigEntry) -> None:
+        """Initialize options flow."""
+        self._config_entry = config_entry
+        self._robots_list: list[DeviceInfo] | None = None
+
+    async def async_step_init(
+        self, user_input: dict[str, Any] | None = None
+    ) -> FlowResult:
+        """Manage options."""
+        errors = {}
+        if user_input is not None:
+            try:
+                if len(user_input[CONF_DEVICES]) < 1:
+                    errors[CONF_DEVICES] = "select_robots"
+                else:
+                    return self.async_create_entry(
+                        title=self._config_entry.title,
+                        data=user_input,
+                    )
+            except Exception:  # pylint: disable=broad-except
+                _LOGGER.error("Unexpected exception", exc_info=True)
+                errors["base"] = "unknown"
+
+        if user_input is None:
+            user_input = self._config_entry.options
+
+        if not self._robots_list:
+            try:
+                self._robots_list = await _async_retrieve_bots(
+                    self.hass, self._config_entry.data
+                )
+            except ClientError:
+                _LOGGER.debug("Cannot connect", exc_info=True)
+                return self.async_abort(reason="cannot_connect")
+            except InvalidAuthenticationError:
+                return self.async_abort(reason="invalid_auth")
+            except Exception:  # pylint: disable=broad-except
+                _LOGGER.error("Unexpected exception on getting devices", exc_info=True)
+                return self.async_abort(reason="unknown_get_devices")
+
+            if len(self._robots_list) == 0:
+                return self.async_abort(reason="no_supported_devices_found")
+
+        return self.async_show_form(
+            step_id="init",
+            data_schema=_get_options_schema(self._robots_list, user_input),
+            errors=errors,
+        )
