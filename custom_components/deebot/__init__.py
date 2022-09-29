@@ -71,11 +71,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # Store an instance of the "connecting" class that does the work of speaking
     # with your actual devices.
-    deebot_hub = hub.DeebotHub(hass, entry.data)
+    deebot_hub = hub.DeebotHub(hass, {**entry.data, **entry.options})
     await deebot_hub.async_setup()
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = deebot_hub
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    # Reload entry when its updated.
+    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
     return True
 
 
@@ -100,6 +102,11 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             hass.data.pop(DOMAIN)
 
     return unload_ok
+
+
+async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Reload the config entry when it changed."""
+    await hass.config_entries.async_reload(entry.entry_id)
 
 
 async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:

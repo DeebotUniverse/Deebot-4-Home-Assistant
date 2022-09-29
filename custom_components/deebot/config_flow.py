@@ -49,7 +49,7 @@ class DeebotConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore
 
     def __init__(self) -> None:
         self._data: dict[str, Any] = {}
-        self._robots_list: list[DeviceInfo] = []
+        self._devices: list[DeviceInfo] = []
         self._mode: str | None = None
         self._entry: ConfigEntry | None = None
 
@@ -78,7 +78,7 @@ class DeebotConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore
 
             if not errors:
                 try:
-                    self._robots_list = await _async_retrieve_bots(self.hass, data)
+                    self._devices = await _retrieve_devices(self.hass, data)
                 except ClientError:
                     _LOGGER.debug("Cannot connect", exc_info=True)
                     errors["base"] = "cannot_connect"
@@ -101,7 +101,7 @@ class DeebotConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore
                     {CONF_USERNAME: user_input[CONF_USERNAME]}
                 )
 
-                if len(self._robots_list) == 0:
+                if len(self._devices) == 0:
                     return self.async_abort(reason="no_supported_devices_found")
 
                 self._data.update(data)
@@ -200,7 +200,7 @@ class DeebotConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore
         # If there is no user input or there were errors, show the form again, including any errors that were found with the input.
         return self.async_show_form(
             step_id="options",
-            data_schema=_get_options_schema(self._robots_list, {}),
+            data_schema=_get_options_schema(self._devices, {}),
             errors=errors,
         )
 
@@ -211,12 +211,12 @@ class DeebotConfigFlow(ConfigFlow, domain=DOMAIN):  # type: ignore
 
 
 def _get_options_schema(
-    robot_list: list[DeviceInfo], defaults: dict[str, Any] | MappingProxyType[str, Any]
+    devices: list[DeviceInfo], defaults: dict[str, Any] | MappingProxyType[str, Any]
 ) -> vol.Schema:
     """Return options schema."""
-    robot_list = [
+    select_options = [
         selector.SelectOptionDict(value=e["name"], label=e.get("nick", e["name"]))
-        for e in robot_list
+        for e in devices
     ]
 
     return vol.Schema(
@@ -225,7 +225,7 @@ def _get_options_schema(
                 CONF_DEVICES, default=defaults.get(CONF_DEVICES, vol.UNDEFINED)
             ): selector.SelectSelector(
                 selector.SelectSelectorConfig(
-                    options=robot_list,
+                    options=select_options,
                     multiple=True,
                 )
             )
@@ -233,7 +233,7 @@ def _get_options_schema(
     )
 
 
-async def _async_retrieve_bots(
+async def _retrieve_devices(
     hass: HomeAssistant, domain_config: dict[str, Any]
 ) -> list[DeviceInfo]:
     verify_ssl = domain_config.get(CONF_VERIFY_SSL, True)
@@ -260,7 +260,7 @@ class DeebotOptionsFlowHandler(OptionsFlow):  # type: ignore[misc]
     def __init__(self, config_entry: ConfigEntry) -> None:
         """Initialize options flow."""
         self._config_entry = config_entry
-        self._robots_list: list[DeviceInfo] | None = None
+        self._devices: list[DeviceInfo] | None = None
 
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
@@ -283,9 +283,9 @@ class DeebotOptionsFlowHandler(OptionsFlow):  # type: ignore[misc]
         if user_input is None:
             user_input = self._config_entry.options
 
-        if not self._robots_list:
+        if not self._devices:
             try:
-                self._robots_list = await _async_retrieve_bots(
+                self._devices = await _retrieve_devices(
                     self.hass, self._config_entry.data
                 )
             except ClientError:
@@ -297,11 +297,11 @@ class DeebotOptionsFlowHandler(OptionsFlow):  # type: ignore[misc]
                 _LOGGER.error("Unexpected exception on getting devices", exc_info=True)
                 return self.async_abort(reason="unknown_get_devices")
 
-            if len(self._robots_list) == 0:
+            if len(self._devices) == 0:
                 return self.async_abort(reason="no_supported_devices_found")
 
         return self.async_show_form(
             step_id="init",
-            data_schema=_get_options_schema(self._robots_list, user_input),
+            data_schema=_get_options_schema(self._devices, user_input),
             errors=errors,
         )
