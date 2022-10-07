@@ -1,6 +1,6 @@
 """Number module."""
-from deebot_client.commands import SetVolume, SetCleanCount
-from deebot_client.events import VolumeEvent, CleanCountEvent
+from deebot_client.commands import SetCleanCount, SetVolume
+from deebot_client.events import CleanCountEvent, VolumeEvent
 from deebot_client.events.event_bus import EventListener
 from homeassistant.components.number import NumberEntity, NumberEntityDescription
 from homeassistant.config_entries import ConfigEntry
