@@ -4,13 +4,15 @@
   "context": "..",
   "extensions": [
     "ms-python.python",
+    "ms-python.vscode-pylance",
     "github.vscode-pull-request-github",
     "ryanluker.vscode-coverage-gutters",
-    "ms-python.vscode-pylance"
+    "visualstudioexptteam.vscodeintellicode",
+    "esbenp.prettier-vscode"
   ],
   "image": "ghcr.io/ludeeus/devcontainer/integration",
   "name": "Deebot 4 HA development",
-  "postCreateCommand": "container install && pip install --ignore-installed -r requirements.txt",
+  "postCreateCommand": "container install && pip install --ignore-installed -r requirements.txt && pre-commit install --install-hooks",
   "settings": {
     "editor.formatOnPaste": false,
     "editor.formatOnSave": true,
@@ -20,7 +22,9 @@
     "files.trimTrailingWhitespace": true,
     "python.analysis.autoSearchPaths": false,
     "python.formatting.provider": "black",
+    "python.languageServer": "Pylance",
     "python.linting.enabled": true,
+    "python.linting.mypyEnabled": true,
     "python.linting.pylintArgs": ["--disable", "import-error"],
     "python.linting.pylintEnabled": true,
     "python.pythonPath": "/usr/local/python/bin/python",
