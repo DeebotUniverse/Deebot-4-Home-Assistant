@@ -17,7 +17,6 @@ repos:
     hooks:
       - id: black
         args:
-          - --safe
           - --quiet
         <<: &python-files-with-tests
           files: ^((custom_components|tests)/.+)?[^/]+\.py$
