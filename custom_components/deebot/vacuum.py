@@ -107,14 +107,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
 
     def __init__(self, vacuum_bot: VacuumBot):
         """Initialize the Deebot Vacuum."""
-        device_info = vacuum_bot.device_info
-        if device_info.nick is not None:
-            name: str = device_info.nick
-        else:
-            # In case there is no nickname defined, use the device id
-            name = device_info.did
-
-        super().__init__(vacuum_bot, StateVacuumEntityDescription(key="", name=name))
+        super().__init__(vacuum_bot, StateVacuumEntityDescription(key=""))
 
         self._battery: int | None = None
         self._fan_speed: str | None = None
