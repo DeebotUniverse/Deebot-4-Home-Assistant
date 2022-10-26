@@ -12,6 +12,7 @@ class DeebotEntity(Entity):  # type: ignore # lgtm [py/missing-equals]
 
     _attr_should_poll = False
     _always_available: bool = False
+    _attr_has_entity_name = True
 
     def __init__(
         self,
@@ -39,15 +40,8 @@ class DeebotEntity(Entity):  # type: ignore # lgtm [py/missing-equals]
             # Name provided, using the provided one
             return
 
-        if device_info.nick is not None:
-            device_name: str = device_info.nick
-        else:
-            # In case there is no nickname defined, use the device id
-            device_name = device_info.did
-
-        self._attr_name = (
-            f"{device_name} {self.entity_description.key.replace('_', ' ')}"
-        )
+        if self.entity_description.key != "":
+            self._attr_name = self.entity_description.key.replace("_", " ").capitalize()
 
     @property
     def device_info(self) -> DeviceInfo | None:

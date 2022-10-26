@@ -1,11 +1,19 @@
 """Support for Deebot Vaccums."""
+import sys
+
+if sys.version_info < (3, 10):
+    raise RuntimeError(
+        f"This component requires at least python 3.10! You are running {sys.version}"
+    )
+
+# pylint: disable=wrong-import-position
 import asyncio
 import logging
 from typing import Any
 
 from awesomeversion import AwesomeVersion
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_DEVICES, CONF_USERNAME, CONF_VERIFY_SSL
+from homeassistant.const import CONF_DEVICES, CONF_USERNAME, CONF_VERIFY_SSL, Platform
 from homeassistant.const import __version__ as HA_VERSION
 from homeassistant.core import HomeAssistant
 
@@ -20,17 +28,19 @@ from .const import (
 )
 from .util import get_bumper_device_id
 
+# pylint: enable=wrong-import-position
+
 _LOGGER = logging.getLogger(__name__)
 
 PLATFORMS = [
-    "binary_sensor",
-    "button",
-    "camera",
-    "number",
-    "select",
-    "sensor",
-    "switch",
-    "vacuum",
+    Platform.BINARY_SENSOR,
+    Platform.BUTTON,
+    Platform.CAMERA,
+    Platform.NUMBER,
+    Platform.SELECT,
+    Platform.SENSOR,
+    Platform.SWITCH,
+    Platform.VACUUM,
 ]
 
 
@@ -61,11 +71,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # Store an instance of the "connecting" class that does the work of speaking
     # with your actual devices.
-    deebot_hub = hub.DeebotHub(hass, entry.data)
+    deebot_hub = hub.DeebotHub(hass, {**entry.data, **entry.options})
     await deebot_hub.async_setup()
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = deebot_hub
-    hass.config_entries.async_setup_platforms(entry, PLATFORMS)
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    # Reload entry when its updated.
+    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
     return True
 
 
@@ -90,6 +102,11 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             hass.data.pop(DOMAIN)
 
     return unload_ok
+
+
+async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Reload the config entry when it changed."""
+    await hass.config_entries.async_reload(entry.entry_id)
 
 
 async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
@@ -117,6 +134,15 @@ async def async_migrate_entry(hass: HomeAssistant, config_entry: ConfigEntry) ->
 
         config_entry.data = {**new}
         config_entry.version = 3
+
+    if config_entry.version == 3:
+        new = {**config_entry.data}
+
+        devices = new.pop(CONF_DEVICES)
+
+        config_entry.data = {**new}
+        config_entry.options = {CONF_DEVICES: devices}
+        config_entry.version = 4
 
     _LOGGER.info("Migration to version %d successful", config_entry.version)
 

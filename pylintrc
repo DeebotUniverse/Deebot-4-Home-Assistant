@@ -42,7 +42,6 @@ good-names=i,j,k,ex,_,T,x,y,id
 # wrong-import-order - isort guards this
 disable=
   format,
-  abstract-class-little-used,
   abstract-method,
   cyclic-import,
   duplicate-code,

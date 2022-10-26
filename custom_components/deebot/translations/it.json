@@ -2,6 +2,7 @@
   "config": {
     "abort": {
       "already_configured": "Già configurato",
+      "no_supported_devices_found": "Non sono stati trovati dispositivi supportati",
       "reauth_successful": "Ri-autenticazione avvenuta con successo"
     },
     "error": {
@@ -9,12 +10,11 @@
       "invalid_auth": "Utente o password errati",
       "invalid_continent": "La sigla contiente code deve essere di due lettere, es: eu, ww ecc...",
       "invalid_country": "La sigla paese code deve essere di due lettere, es: it, us, uk ecc...",
-      "no_supported_devices_found": "Non sono stati trovati dispositivi supportati",
       "select_robots": "Seleziona almeno 1 robot",
       "unknown": "Errore sconosciuto"
     },
     "step": {
-      "robots": {
+      "options": {
         "data": {
           "devices": "Dispositivi"
         }

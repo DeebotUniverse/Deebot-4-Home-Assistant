@@ -1,6 +1,6 @@
 {
   "filename": "deebot.zip",
-  "homeassistant": "2022.7.0b0",
+  "homeassistant": "2022.10.0b0",
   "name": "Deebot 4 Home Assistant",
   "render_readme": true,
   "zip_release": true

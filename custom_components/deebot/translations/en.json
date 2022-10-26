@@ -2,6 +2,7 @@
   "config": {
     "abort": {
       "already_configured": "Already configured",
+      "no_supported_devices_found": "No supported devices found",
       "reauth_successful": "Re-authentication was successful"
     },
     "error": {
@@ -9,14 +10,16 @@
       "invalid_auth": "Invalid username or password",
       "invalid_continent": "Continent code should be two letter code",
       "invalid_country": "Country code should be two letter code",
-      "no_supported_devices_found": "No supported devices found",
       "select_robots": "Please select at least 1 robot",
       "unknown": "Unknown error. Please check the logs"
     },
     "step": {
-      "robots": {
+      "options": {
         "data": {
           "devices": "Devices"
+        },
+        "data_description": {
+          "devices": "Please select all devices, which you want use in HA."
         }
       },
       "user": {
@@ -33,6 +36,28 @@
       },
       "user_advanced": {
         "description": "Please select \"Bumper\" ONLY if you have a working bumper instance already. Otherwise, select \"Cloud\" please."
+      }
+    }
+  },
+  "options": {
+    "abort": {
+      "cannot_connect": "Can't connect to the ecovacs API. Please check the logs",
+      "invalid_auth": "Authentication failed. Please reauthenticate first",
+      "no_supported_devices_found": "No supported devices found",
+      "unknown_get_devices": "Unknown error on getting all devices. Please check the logs"
+    },
+    "error": {
+      "select_robots": "Please select at least 1 robot",
+      "unknown": "Unknown error. Please check the logs"
+    },
+    "step": {
+      "init": {
+        "data": {
+          "devices": "Devices"
+        },
+        "data_description": {
+          "devices": "Please select all devices, which you want use in HA."
+        }
       }
     }
   }

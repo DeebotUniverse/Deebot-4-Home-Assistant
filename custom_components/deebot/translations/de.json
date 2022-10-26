@@ -2,6 +2,7 @@
   "config": {
     "abort": {
       "already_configured": "Bereits konfiguriert",
+      "no_supported_devices_found": "Keine unterstützten Geräte gefunden",
       "reauth_successful": "Die erneute Authentifizierung war erfolgreich"
     },
     "error": {
@@ -9,12 +10,11 @@
       "invalid_auth": "Ungültige Authentifizierung",
       "invalid_continent": "Ungültiger Kontinent! Code muss aus 2 Zeichen bestehen!",
       "invalid_country": "Ungültiges Land! Ländercode muss aus 2 Zeichen bestehen!",
-      "no_supported_devices_found": "Keine unterstützten Geräte gefunden",
-      "select_robots": "Bitte wählen Sie mindestens 1 Roboter aus",
+      "select_robots": "Bitte wähle mindestens 1 Roboter aus",
       "unknown": "Unerwarteter Fehler. Weitere Infos in den Logs"
     },
     "step": {
-      "robots": {
+      "options": {
         "data": {
           "devices": "Geräte"
         }
@@ -32,7 +32,29 @@
         }
       },
       "user_advanced": {
-        "description": "Wählen Sie \"Bumper\" nur, falls Sie eine funktionierende Bumper-Instanz haben. Sonst wählen Sie bitte die empfohlene Variante \"Cloud\"."
+        "description": "Wähle \"Bumper\" nur, falls du eine funktionierende Bumper-Instanz hast. Ansonsten wähle bitte die empfohlene Variante \"Cloud\"."
+      }
+    }
+  },
+  "options": {
+    "abort": {
+      "cannot_connect": "Verbindung fehlgeschlagen. Weitere Infos in den Logs",
+      "invalid_auth": "Ungültige Authentifizierung. Bitte vorher neu konfigurieren",
+      "no_supported_devices_found": "Keine unterstützten Geräte gefunden",
+      "unknown_get_devices": "Unerwarteter Fehler beim Abholen aller Geräte. Weitere Infos in den Logs"
+    },
+    "error": {
+      "select_robots": "Bitte wähle mindestens 1 Roboter aus",
+      "unknown": "Unerwarteter Fehler. Weitere Infos in den Logs"
+    },
+    "step": {
+      "init": {
+        "data": {
+          "devices": "Geräte"
+        },
+        "data_description": {
+          "devices": "Bitte wähle alle Geräte aus, welche du im HA verwenden willst."
+        }
       }
     }
   }

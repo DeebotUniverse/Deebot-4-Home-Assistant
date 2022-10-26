@@ -1,0 +1,39 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "Já está configurado",
+      "no_supported_devices_found": "Nenhum dispositivo compatível encontrado",
+      "reauth_successful": "A reautenticação foi bem-sucedida"
+    },
+    "error": {
+      "cannot_connect": "Não é possível conectar à API ecovacs. Por favor, verifique os registros",
+      "invalid_auth": "nome de usuário ou senha inválidos",
+      "invalid_continent": "O código do continente deve ser um código de duas letras",
+      "invalid_country": "O código do país deve ser um código de duas letras",
+      "select_robots": "Selecione pelo menos 1 robô",
+      "unknown": "Erro desconhecido. Por favor, verifique os registros"
+    },
+    "step": {
+      "options": {
+        "data": {
+          "devices": "Dispositivos"
+        }
+      },
+      "user": {
+        "data": {
+          "continent": "Continente",
+          "country": "País",
+          "password": "Senha",
+          "username": "E-mail ou ShortID"
+        },
+        "data_description": {
+          "continent": "O código do continente de duas letras. Ex.: ww, eu. Se o código do seu país não estiver funcionando, tente ww",
+          "country": "O código do país de duas letras. Ex.: us, uk"
+        }
+      },
+      "user_advanced": {
+        "description": "Selecione \"Bumper\" SOMENTE se você já tiver uma instância de bumper em funcionamento. Caso contrário, selecione \"Cloud\" por favor."
+      }
+    }
+  }
+}

@@ -11,6 +11,9 @@
             "already_configured": {
               "type": "string"
             },
+            "no_supported_devices_found": {
+              "type": "string"
+            },
             "reauth_successful": {
               "type": "string"
             }
@@ -32,9 +35,6 @@
             "invalid_country": {
               "type": "string"
             },
-            "no_supported_devices_found": {
-              "type": "string"
-            },
             "select_robots": {
               "type": "string"
             },
@@ -47,10 +47,19 @@
         "step": {
           "additionalProperties": false,
           "properties": {
-            "robots": {
+            "options": {
               "additionalProperties": false,
               "properties": {
                 "data": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "devices": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "data_description": {
                   "additionalProperties": false,
                   "properties": {
                     "devices": {
@@ -103,6 +112,72 @@
               "properties": {
                 "description": {
                   "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "options": {
+      "additionalProperties": false,
+      "properties": {
+        "abort": {
+          "additionalProperties": false,
+          "properties": {
+            "cannot_connect": {
+              "type": "string"
+            },
+            "invalid_auth": {
+              "type": "string"
+            },
+            "no_supported_devices_found": {
+              "type": "string"
+            },
+            "unknown_get_devices": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "error": {
+          "additionalProperties": false,
+          "properties": {
+            "select_robots": {
+              "type": "string"
+            },
+            "unknown": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "step": {
+          "additionalProperties": false,
+          "properties": {
+            "init": {
+              "additionalProperties": false,
+              "properties": {
+                "data": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "devices": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "data_description": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "devices": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
                 }
               },
               "type": "object"

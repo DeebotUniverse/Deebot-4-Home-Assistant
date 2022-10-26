@@ -1,5 +1,5 @@
 """Const module."""
-from typing import Mapping
+from collections.abc import Mapping
 
 from deebot_client.events import (
     BatteryEvent,
@@ -26,8 +26,8 @@ from homeassistant.const import CONF_PASSWORD, CONF_USERNAME, CONF_VERIFY_SSL
 
 ################################
 # Do not change! Will be set by release workflow
-INTEGRATION_VERSION = "main"  # git tag will be used
-MIN_REQUIRED_HA_VERSION = "2022.7.0b0"  # set min required version in hacs.json
+INTEGRATION_VERSION = "dev"  # git tag will be used
+MIN_REQUIRED_HA_VERSION = "2022.10.0b0"  # set min required version in hacs.json
 ################################
 
 # Values below can be changed
