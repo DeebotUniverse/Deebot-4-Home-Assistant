@@ -5,14 +5,18 @@ from typing import Any
 from deebot_client.commands import (
     SetAdvancedMode,
     SetCarpetAutoFanBoost,
+    SetCleanPreference,
     SetContinuousCleaning,
+    SetTrueDetect,
 )
 from deebot_client.commands.common import SetEnableCommand
 from deebot_client.events import (
     AdvancedModeEvent,
     CarpetAutoFanBoostEvent,
+    CleanPreferenceEvent,
     ContinuousCleaningEvent,
     EnableEvent,
+    TrueDetectEvent,
 )
 from deebot_client.events.event_bus import EventListener
 from deebot_client.vacuum_bot import VacuumBot
@@ -73,6 +77,28 @@ async def async_setup_entry(
                     ),
                     CarpetAutoFanBoostEvent,
                     SetCarpetAutoFanBoost,
+                ),
+                DeebotSwitchEntity(
+                    vacbot,
+                    SwitchEntityDescription(
+                        key="clean_preference",
+                        entity_registry_enabled_default=False,
+                        entity_category=EntityCategory.CONFIG,
+                        icon="mdi:broom",
+                    ),
+                    CleanPreferenceEvent,
+                    SetCleanPreference,
+                ),
+                DeebotSwitchEntity(
+                    vacbot,
+                    SwitchEntityDescription(
+                        key="true_detect",
+                        entity_registry_enabled_default=False,
+                        entity_category=EntityCategory.CONFIG,
+                        icon="mdi:laser-pointer",
+                    ),
+                    TrueDetectEvent,
+                    SetTrueDetect,
                 ),
             ]
         )

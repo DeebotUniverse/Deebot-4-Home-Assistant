@@ -1,6 +1,6 @@
 """Number module."""
-from deebot_client.commands import SetVolume
-from deebot_client.events import VolumeEvent
+from deebot_client.commands import SetCleanCount, SetVolume
+from deebot_client.events import CleanCountEvent, VolumeEvent
 from deebot_client.events.event_bus import EventListener
 from homeassistant.components.number import NumberEntity, NumberEntityDescription
 from homeassistant.config_entries import ConfigEntry
@@ -25,6 +25,7 @@ async def async_setup_entry(
     new_devices = []
     for vacbot in hub.vacuum_bots:
         new_devices.append(VolumeEntity(vacbot))
+        new_devices.append(CleanCountEntity(vacbot))
 
     if new_devices:
         async_add_entities(new_devices)
@@ -81,3 +82,36 @@ class VolumeEntity(DeebotEntity, NumberEntity):  # type: ignore
     async def async_set_native_value(self, value: float) -> None:
         """Set new value."""
         await self._vacuum_bot.execute_command(SetVolume(int(value)))
+
+
+class CleanCountEntity(DeebotEntity, NumberEntity):  # type: ignore
+    """Clean count number entity."""
+
+    entity_description = NumberEntityDescription(
+        key="clean_count",
+        entity_registry_enabled_default=False,
+        entity_category=EntityCategory.CONFIG,
+    )
+
+    _attr_native_min_value = 1
+    _attr_native_max_value = 4
+    _attr_native_step = 1.0
+    _attr_native_value: float | None = None
+    _attr_icon = "mdi:counter"
+
+    async def async_added_to_hass(self) -> None:
+        """Set up the event listeners now that hass is ready."""
+        await super().async_added_to_hass()
+
+        async def on_clean_count(event: CleanCountEvent) -> None:
+            self._attr_native_value = event.count
+            self.async_write_ha_state()
+
+        listener: EventListener = self._vacuum_bot.events.subscribe(
+            CleanCountEvent, on_clean_count
+        )
+        self.async_on_remove(listener.unsubscribe)
+
+    async def async_set_native_value(self, value: float) -> None:
+        """Set new value."""
+        await self._vacuum_bot.execute_command(SetCleanCount(int(value)))
