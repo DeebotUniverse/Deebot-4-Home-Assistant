@@ -214,10 +214,15 @@ def _get_options_schema(
     devices: list[DeviceInfo], defaults: dict[str, Any] | MappingProxyType[str, Any]
 ) -> vol.Schema:
     """Return options schema."""
-    select_options = [
-        selector.SelectOptionDict(value=e["name"], label=e.get("nick", e["name"]))
-        for e in devices
-    ]
+    select_options = []
+
+    for entry in devices:
+        label = entry.get("nick", entry["name"])
+        if not label:
+            label = entry["name"]
+        select_options.append(
+            selector.SelectOptionDict(value=entry["name"], label=label)
+        )
 
     return vol.Schema(
         {
