@@ -6,7 +6,7 @@ homeassistant>=2022.10.0b0
 mypy==0.991
 
 numpy>=1.21.2
-pre-commit==2.21.0
+pre-commit==3.0.4
 pylint==2.15.9
 
 #pytest-homeassistant-custom-component==0.4.4
