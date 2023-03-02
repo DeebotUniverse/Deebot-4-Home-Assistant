@@ -70,7 +70,7 @@ repos:
         args:
           - --autofix
           - --no-ensure-ascii
-          - --top-keys=name,domain
+          - --top-keys=domain,name
         files: manifest\.json$
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: v3.0.0-alpha.4

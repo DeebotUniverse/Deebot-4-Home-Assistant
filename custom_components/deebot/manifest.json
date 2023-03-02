@@ -1,6 +1,6 @@
 {
-  "name": "Deebot 4 Home Assistant",
   "domain": "deebot",
+  "name": "Deebot 4 Home Assistant",
   "codeowners": [
     "@DeebotUniverse",
     "@edenhaus"
