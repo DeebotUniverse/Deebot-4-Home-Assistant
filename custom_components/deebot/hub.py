@@ -7,9 +7,11 @@ from collections.abc import Mapping
 from typing import Any
 
 import aiohttp
-from deebot_client import Configuration, create_instances
+from deebot_client.api_client import ApiClient
+from deebot_client.authentication import Authenticator
 from deebot_client.exceptions import InvalidAuthenticationError
-from deebot_client.mqtt_client import MqttClient
+from deebot_client.models import Configuration
+from deebot_client.mqtt_client import MqttClient, MqttConfiguration
 from deebot_client.util import md5
 from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.const import (
@@ -51,13 +53,15 @@ class DeebotHub:
             verify_ssl=config.get(CONF_VERIFY_SSL, True),
         )
 
-        (authenticator, self._api_client) = create_instances(
+        self._authenticator = Authenticator(
             deebot_config,
             config.get(CONF_USERNAME, ""),
             md5(config.get(CONF_PASSWORD, "")),
         )
+        self._api_client = ApiClient(self._authenticator)
 
-        self._mqtt: MqttClient = MqttClient(deebot_config, authenticator)
+        mqtt_config = MqttConfiguration(config=deebot_config)
+        self._mqtt: MqttClient = MqttClient(mqtt_config, self._authenticator)
 
     async def async_setup(self) -> None:
         """Init hub."""
@@ -65,14 +69,14 @@ class DeebotHub:
             if self._mqtt:
                 await self.disconnect()
 
-            await self._mqtt.initialize()
+            await self._mqtt.connect()
 
             devices = await self._api_client.get_devices()
 
             # CREATE VACBOT FOR EACH DEVICE
             for device in devices:
                 if device["name"] in self._hass_config.get(CONF_DEVICES, []):
-                    vacbot = VacuumBot(device, self._api_client)
+                    vacbot = VacuumBot(device, self._authenticator)
 
                     await self._mqtt.subscribe(vacbot)
                     _LOGGER.debug("New vacbot found: %s", device["name"])
