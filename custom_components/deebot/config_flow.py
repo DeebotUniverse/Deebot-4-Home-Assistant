@@ -7,7 +7,8 @@ from typing import Any
 
 import voluptuous as vol
 from aiohttp import ClientError
-from deebot_client import create_instances
+from deebot_client.api_client import ApiClient
+from deebot_client.authentication import Authenticator
 from deebot_client.exceptions import InvalidAuthenticationError
 from deebot_client.models import Configuration, DeviceInfo
 from deebot_client.util import md5
@@ -250,11 +251,12 @@ async def _retrieve_devices(
         verify_ssl=verify_ssl,
     )
 
-    (_, api_client) = create_instances(
+    authenticator = Authenticator(
         deebot_config,
         domain_config[CONF_USERNAME],
         md5(domain_config[CONF_PASSWORD]),
     )
+    api_client = ApiClient(authenticator)
 
     return await api_client.get_devices()
 
