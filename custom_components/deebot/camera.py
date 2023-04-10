@@ -1,7 +1,12 @@
 """Support for Deebot Vaccums."""
 import base64
 import logging
+from collections.abc import MutableMapping
+from typing import Any
 
+from deebot_client.events.event_bus import EventListener
+from deebot_client.events.map import CachedMapInfoEvent
+from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.camera import Camera
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -11,6 +16,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .const import DOMAIN
 from .entity import DeebotEntity
 from .hub import DeebotHub
+from .util import unsubscribe_listeners
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -41,6 +47,12 @@ class DeeboLiveCamera(DeebotEntity, Camera):  # type: ignore
 
     _attr_should_poll = True
 
+    def __init__(
+        self, vacuum_bot: VacuumBot, entity_description: EntityDescription | None = None
+    ):
+        super().__init__(vacuum_bot, entity_description)
+        self._attr_extra_state_attributes: MutableMapping[str, Any] = {}
+
     async def async_camera_image(
         self, width: int | None = None, height: int | None = None
     ) -> bytes | None:
@@ -57,7 +69,15 @@ class DeeboLiveCamera(DeebotEntity, Camera):  # type: ignore
 
         self._vacuum_bot.map.enable()
 
-        def disable() -> None:
+        async def on_info(event: CachedMapInfoEvent) -> None:
+            self._attr_extra_state_attributes["map_name"] = event.name
+
+        listeners: list[EventListener] = [
+            self._vacuum_bot.events.subscribe(CachedMapInfoEvent, on_info),
+        ]
+
+        def on_remove() -> None:
+            unsubscribe_listeners(listeners)
             self._vacuum_bot.map.disable()
 
-        self.async_on_remove(disable)
+        self.async_on_remove(on_remove)
