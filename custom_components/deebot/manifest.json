@@ -15,7 +15,7 @@
     "gmqtt"
   ],
   "requirements": [
-    "git+https://github.com/DeebotUniverse/client.py@main#deebot-client==2.0.0b1",
+    "deebot-client==2.0.0b1",
     "numpy>=1.21.2"
   ],
   "version": "v0.0.0"
