@@ -1,23 +1,62 @@
 {
   "config": {
     "abort": {
-      "already_configured": "已存在现有配置"
+      "already_configured": "已存在现有配置",
+      "no_supported_devices_found": "未找到支持的设备",
+      "reauth_successful": "重新认证成功"
     },
     "error": {
-      "cannot_connect": "无法连接科沃斯服务器",
+      "cannot_connect": "无法连接科沃斯API，请检查日志",
       "invalid_auth": "用户名或密码错误",
-      "invalid_continent": "请输入正确的地区代码, 例如: ww, eu, as ",
-      "invalid_country": "请输入正确的国家代码, 例如: us, uk, cn ",
-      "select_robots": "最少需要勾选一个机器人",
-      "unknown": "未知错误"
+      "invalid_continent": "地区代码应是两个字母组成",
+      "invalid_country": "国家代码应是两个字母组成",
+      "select_robots": "请至少选择1个机器人",
+      "unknown": "未知错误。请检查日志"
     },
     "step": {
+      "options": {
+        "data": {
+          "devices": "设备"
+        },
+        "data_description": {
+          "devices": "请选择您要在 HA 中使用的所有设备。"
+        }
+      },
       "user": {
         "data": {
           "continent": "地区",
           "country": "国家",
           "password": "密码",
           "username": "电子邮件地址或科沃斯ID"
+        },
+        "data_description": {
+          "continent": "2位地区代码。例如: ww, eu, as.如果您的国家代码不起作用请尝试使用 ww",
+          "country": "2位地区代码。例如: us, uk, cn"
+        }
+      },
+      "user_advanced": {
+        "description": "只有当你有一个有效的缓冲器实例时，才推荐选择\"Bumper\" 。否则，请选择\"Cloud\"。"
+      }
+    }
+  },
+  "options": {
+    "abort": {
+      "cannot_connect": "无法连接科沃斯API。 请检查日志",
+      "invalid_auth": "认证失败。 请先重新认证",
+      "no_supported_devices_found": "未找到支持的设备",
+      "unknown_get_devices": "获取所有设备时出现未知错误。 请检查日志"
+    },
+    "error": {
+      "select_robots": "请至少选择1个机器人",
+      "unknown": "未知错误。请检查日志"
+    },
+    "step": {
+      "init": {
+        "data": {
+          "devices": "设备"
+        },
+        "data_description": {
+          "devices": "请选择您要在 HA 中使用的所有设备。"
         }
       }
     }
