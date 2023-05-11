@@ -8,7 +8,7 @@ default_language_version:
 
 repos:
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.3.1
+    rev: v3.4.0
     hooks:
       - id: pyupgrade
         args: [--py310-plus]
@@ -73,7 +73,7 @@ repos:
           - --top-keys=domain,name
         files: manifest\.json$
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.0.0-alpha.6
+    rev: v3.0.0-alpha.9-for-vscode
     hooks:
       - id: prettier
         additional_dependencies:
@@ -83,7 +83,7 @@ repos:
           - python
         exclude: manifest\.json$
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.30.0
+    rev: v1.31.0
     hooks:
       - id: yamllint
   - repo: local
@@ -111,7 +111,7 @@ repos:
       - id: check-pre-commit-ci-config
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
-    rev: 0.22.0
+    rev: 0.23.0
     hooks:
       - id: check-github-workflows
       - id: check-dependabot
