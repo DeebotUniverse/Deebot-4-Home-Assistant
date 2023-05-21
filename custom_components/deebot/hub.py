@@ -1,12 +1,10 @@
 """Hub module."""
-import asyncio
 import logging
 import random
 import string
 from collections.abc import Mapping
 from typing import Any
 
-import aiohttp
 from deebot_client.api_client import ApiClient
 from deebot_client.authentication import Authenticator
 from deebot_client.exceptions import InvalidAuthenticationError
@@ -66,23 +64,18 @@ class DeebotHub:
     async def async_setup(self) -> None:
         """Init hub."""
         try:
-            if self._mqtt:
-                await self.disconnect()
-
-            await self._mqtt.connect()
+            await self.teardown()
 
             devices = await self._api_client.get_devices()
 
-            # CREATE VACBOT FOR EACH DEVICE
+            await self._mqtt.connect()
+
             for device in devices:
                 if device["name"] in self._hass_config.get(CONF_DEVICES, []):
-                    vacbot = VacuumBot(device, self._authenticator)
-
-                    await self._mqtt.subscribe(vacbot)
+                    bot = VacuumBot(device, self._authenticator)
                     _LOGGER.debug("New vacbot found: %s", device["name"])
-                    self.vacuum_bots.append(vacbot)
-
-            asyncio.create_task(self._check_status_task())
+                    await bot.initialize(self._mqtt)
+                    self.vacuum_bots.append(bot)
 
             _LOGGER.debug("Hub setup complete")
         except InvalidAuthenticationError as ex:
@@ -92,32 +85,14 @@ class DeebotHub:
             _LOGGER.error(msg, exc_info=True)
             raise ConfigEntryNotReady(msg) from ex
 
-    async def disconnect(self) -> None:
+    async def teardown(self) -> None:
         """Disconnect hub."""
+        for bot in self.vacuum_bots:
+            await bot.teardown()
         await self._mqtt.disconnect()
+        await self._authenticator.teardown()
 
     @property
     def name(self) -> str:
         """Return the name of the hub."""
         return "Deebot Hub"
-
-    async def _check_status_task(self) -> None:
-        while True:
-            try:
-                await asyncio.sleep(60)
-                await self._check_status_function()
-            except aiohttp.ClientError as ex:
-                _LOGGER.warning(
-                    "A client error occurred, probably the ecovacs servers are unstable: %s",
-                    ex,
-                )
-            except Exception as ex:  # pylint: disable=broad-except
-                _LOGGER.error(ex, exc_info=True)
-
-    async def _check_status_function(self) -> None:
-        devices = await self._api_client.get_devices()
-        for device in devices:
-            bot: VacuumBot
-            for bot in self.vacuum_bots:
-                if device.did == bot.device_info.did:
-                    bot.set_available(device.status == 1)
