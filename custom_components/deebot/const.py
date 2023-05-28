@@ -9,8 +9,8 @@ from deebot_client.events import (
     FanSpeedEvent,
     LifeSpanEvent,
     RoomsEvent,
+    StateEvent,
     StatsEvent,
-    StatusEvent,
     WaterInfoEvent,
 )
 from deebot_client.models import VacuumState
@@ -82,7 +82,7 @@ REFRESH_STR_TO_EVENT_DTO: Mapping[str, type[Event]] = {
     "Life spans": LifeSpanEvent,
     "Rooms": RoomsEvent,
     "Stats": StatsEvent,
-    "Status": StatusEvent,
+    "Status": StateEvent,
     "Water": WaterInfoEvent,
 }
 REFRESH_MAP = "Map"

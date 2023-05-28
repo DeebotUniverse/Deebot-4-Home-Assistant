@@ -22,7 +22,7 @@ from deebot_client.events import (
     FanSpeedEvent,
     ReportStatsEvent,
     RoomsEvent,
-    StatusEvent,
+    StateEvent,
 )
 from deebot_client.events.event_bus import EventListener
 from deebot_client.models import Room, VacuumState
@@ -141,7 +141,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
             self._rooms = event.rooms
             self.async_write_ha_state()
 
-        async def on_status(event: StatusEvent) -> None:
+        async def on_status(event: StateEvent) -> None:
             self._state = event.state
             self.async_write_ha_state()
 
@@ -152,7 +152,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
             self._vacuum_bot.events.subscribe(FanSpeedEvent, on_fan_speed),
             self._vacuum_bot.events.subscribe(ReportStatsEvent, on_report_stats),
             self._vacuum_bot.events.subscribe(RoomsEvent, on_rooms),
-            self._vacuum_bot.events.subscribe(StatusEvent, on_status),
+            self._vacuum_bot.events.subscribe(StateEvent, on_status),
         ]
         self.async_on_remove(lambda: unsubscribe_listeners(listeners))
 
