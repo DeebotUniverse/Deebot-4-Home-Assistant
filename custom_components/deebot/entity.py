@@ -1,5 +1,5 @@
 """Deebot entity module."""
-from deebot_client.events import StatusEvent
+from deebot_client.events import AvailabilityEvent
 from deebot_client.events.event_bus import EventListener
 from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.helpers.entity import DeviceInfo, Entity, EntityDescription
@@ -68,11 +68,11 @@ class DeebotEntity(Entity):  # type: ignore # lgtm [py/missing-equals]
 
         if not self._always_available:
 
-            async def on_status(event: StatusEvent) -> None:
+            async def on_available(event: AvailabilityEvent) -> None:
                 self._attr_available = event.available
                 self.async_write_ha_state()
 
             listener: EventListener = self._vacuum_bot.events.subscribe(
-                StatusEvent, on_status
+                AvailabilityEvent, on_available
             )
             self.async_on_remove(listener.unsubscribe)
