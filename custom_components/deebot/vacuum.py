@@ -107,7 +107,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
 
     def __init__(self, vacuum_bot: VacuumBot):
         """Initialize the Deebot Vacuum."""
-        super().__init__(vacuum_bot, StateVacuumEntityDescription(key=""))
+        super().__init__(vacuum_bot, StateVacuumEntityDescription(key="", name=None))
 
         self._battery: int | None = None
         self._fan_speed: str | None = None

@@ -2,7 +2,12 @@
 from deebot_client.events import AvailabilityEvent
 from deebot_client.events.event_bus import EventListener
 from deebot_client.vacuum_bot import VacuumBot
-from homeassistant.helpers.entity import DeviceInfo, Entity, EntityDescription
+from homeassistant.helpers.entity import (
+    UNDEFINED,
+    DeviceInfo,
+    Entity,
+    EntityDescription,
+)
 
 from . import DOMAIN
 
@@ -36,11 +41,8 @@ class DeebotEntity(Entity):  # type: ignore # lgtm [py/missing-equals]
         if self.entity_description.key:
             self._attr_unique_id += f"_{self.entity_description.key}"
 
-        if self.entity_description.name:
-            # Name provided, using the provided one
-            return
-
-        if self.entity_description.key != "":
+        if self.entity_description.name == UNDEFINED:
+            # Name not provided... get it from the key
             self._attr_name = self.entity_description.key.replace("_", " ").capitalize()
 
     @property
