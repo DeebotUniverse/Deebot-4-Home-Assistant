@@ -1,7 +1,6 @@
 """Number module."""
 from deebot_client.commands import SetCleanCount, SetVolume
 from deebot_client.events import CleanCountEvent, VolumeEvent
-from deebot_client.events.event_bus import EventListener
 from homeassistant.components.number import NumberEntity, NumberEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -55,10 +54,7 @@ class VolumeEntity(DeebotEntity, NumberEntity):  # type: ignore
             self._attr_native_value = event.volume
             self.async_write_ha_state()
 
-        listener: EventListener = self._vacuum_bot.events.subscribe(
-            VolumeEvent, on_volume
-        )
-        self.async_on_remove(listener.unsubscribe)
+        self.async_on_remove(self._vacuum_bot.events.subscribe(VolumeEvent, on_volume))
 
     @property
     def icon(self) -> str | None:
@@ -107,10 +103,9 @@ class CleanCountEntity(DeebotEntity, NumberEntity):  # type: ignore
             self._attr_native_value = event.count
             self.async_write_ha_state()
 
-        listener: EventListener = self._vacuum_bot.events.subscribe(
-            CleanCountEvent, on_clean_count
+        self.async_on_remove(
+            self._vacuum_bot.events.subscribe(CleanCountEvent, on_clean_count)
         )
-        self.async_on_remove(listener.unsubscribe)
 
     async def async_set_native_value(self, value: float) -> None:
         """Set new value."""

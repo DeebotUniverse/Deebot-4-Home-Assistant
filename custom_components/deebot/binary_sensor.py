@@ -1,8 +1,7 @@
 """Binary sensor module."""
 import logging
 
-from deebot_client.events import WaterInfoEvent
-from deebot_client.events.event_bus import EventListener
+from deebot_client.events.water_info import WaterInfoEvent
 from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
     BinarySensorEntityDescription,
@@ -57,7 +56,6 @@ class DeebotMopAttachedBinarySensor(DeebotEntity, BinarySensorEntity):  # type: 
             self._attr_is_on = event.mop_attached
             self.async_write_ha_state()
 
-        listener: EventListener = self._vacuum_bot.events.subscribe(
-            WaterInfoEvent, on_event
+        self.async_on_remove(
+            self._vacuum_bot.events.subscribe(WaterInfoEvent, on_event)
         )
-        self.async_on_remove(listener.unsubscribe)

@@ -24,7 +24,6 @@ from deebot_client.events import (
     RoomsEvent,
     StateEvent,
 )
-from deebot_client.events.event_bus import EventListener
 from deebot_client.models import Room, VacuumState
 from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.vacuum import (
@@ -50,7 +49,7 @@ from .const import (
 )
 from .entity import DeebotEntity
 from .hub import DeebotHub
-from .util import dataclass_to_dict, unsubscribe_listeners
+from .util import dataclass_to_dict
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -145,7 +144,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
             self._state = event.state
             self.async_write_ha_state()
 
-        listeners: list[EventListener] = [
+        subscriptions = [
             self._vacuum_bot.events.subscribe(BatteryEvent, on_battery),
             self._vacuum_bot.events.subscribe(CustomCommandEvent, on_custom_command),
             self._vacuum_bot.events.subscribe(ErrorEvent, on_error),
@@ -154,7 +153,12 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
             self._vacuum_bot.events.subscribe(RoomsEvent, on_rooms),
             self._vacuum_bot.events.subscribe(StateEvent, on_status),
         ]
-        self.async_on_remove(lambda: unsubscribe_listeners(listeners))
+
+        def unsubscribe() -> None:
+            for sub in subscriptions:
+                sub()
+
+        self.async_on_remove(unsubscribe)
 
     @property
     def state(self) -> StateType:

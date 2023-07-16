@@ -13,7 +13,6 @@ from deebot_client.events import (
     StatsEvent,
     TotalStatsEvent,
 )
-from deebot_client.events.event_bus import EventListener
 from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.sensor import (
     SensorEntity,
@@ -160,10 +159,9 @@ class DeebotGenericSensor(DeebotEntity, SensorEntity):  # type: ignore
                 self._attr_native_value = value
                 self.async_write_ha_state()
 
-        listener: EventListener = self._vacuum_bot.events.subscribe(
-            self._event_type, on_event
+        self.async_on_remove(
+            self._vacuum_bot.events.subscribe(self._event_type, on_event)
         )
-        self.async_on_remove(listener.unsubscribe)
 
 
 class LastErrorSensor(DeebotEntity, SensorEntity):  # type: ignore
@@ -186,10 +184,7 @@ class LastErrorSensor(DeebotEntity, SensorEntity):  # type: ignore
             self._attr_extra_state_attributes = {CONF_DESCRIPTION: event.description}
             self.async_write_ha_state()
 
-        listener: EventListener = self._vacuum_bot.events.subscribe(
-            ErrorEvent, on_event
-        )
-        self.async_on_remove(listener.unsubscribe)
+        self.async_on_remove(self._vacuum_bot.events.subscribe(ErrorEvent, on_event))
 
 
 class LifeSpanSensor(DeebotEntity, SensorEntity):  # type: ignore
@@ -219,10 +214,7 @@ class LifeSpanSensor(DeebotEntity, SensorEntity):  # type: ignore
                 }
                 self.async_write_ha_state()
 
-        listener: EventListener = self._vacuum_bot.events.subscribe(
-            LifeSpanEvent, on_event
-        )
-        self.async_on_remove(listener.unsubscribe)
+        self.async_on_remove(self._vacuum_bot.events.subscribe(LifeSpanEvent, on_event))
 
 
 class LastCleaningJobSensor(DeebotEntity, SensorEntity):  # type: ignore
@@ -252,7 +244,4 @@ class LastCleaningJobSensor(DeebotEntity, SensorEntity):  # type: ignore
                 }
                 self.async_write_ha_state()
 
-        listener: EventListener = self._vacuum_bot.events.subscribe(
-            CleanLogEvent, on_event
-        )
-        self.async_on_remove(listener.unsubscribe)
+        self.async_on_remove(self._vacuum_bot.events.subscribe(CleanLogEvent, on_event))
