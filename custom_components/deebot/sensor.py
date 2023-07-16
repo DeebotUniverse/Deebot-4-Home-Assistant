@@ -5,6 +5,7 @@ from math import floor
 from typing import TypeVar
 
 from deebot_client.events import (
+    BatteryEvent,
     CleanLogEvent,
     ErrorEvent,
     Event,
@@ -16,6 +17,7 @@ from deebot_client.events import (
 from deebot_client.events.event_bus import EventListener
 from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.sensor import (
+    SensorDeviceClass,
     SensorEntity,
     SensorEntityDescription,
     SensorStateClass,
@@ -23,12 +25,14 @@ from homeassistant.components.sensor import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     AREA_SQUARE_METERS,
+    ATTR_BATTERY_LEVEL,
     CONF_DESCRIPTION,
+    PERCENTAGE,
     TIME_HOURS,
     TIME_MINUTES,
+    EntityCategory,
 )
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import StateType
 
@@ -124,6 +128,17 @@ async def async_setup_entry(
                     ),
                     TotalStatsEvent,
                     lambda e: e.cleanings,
+                ),
+                DeebotGenericSensor(
+                    vacbot,
+                    SensorEntityDescription(
+                        key=ATTR_BATTERY_LEVEL,
+                        native_unit_of_measurement=PERCENTAGE,
+                        device_class=SensorDeviceClass.BATTERY,
+                        entity_category=EntityCategory.DIAGNOSTIC,
+                    ),
+                    BatteryEvent,
+                    lambda b: b.value,
                 ),
             ]
         )
