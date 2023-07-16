@@ -24,7 +24,7 @@ from deebot_client.events import (
     RoomsEvent,
     StateEvent,
 )
-from deebot_client.models import Room, VacuumState
+from deebot_client.models import Room
 from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.vacuum import (
     StateVacuumEntity,
@@ -35,7 +35,6 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_platform
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.typing import StateType
 from homeassistant.util import slugify
 
 from .const import (
@@ -99,18 +98,15 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
         | VacuumEntityFeature.BATTERY
         | VacuumEntityFeature.SEND_COMMAND
         | VacuumEntityFeature.LOCATE
-        | VacuumEntityFeature.MAP
         | VacuumEntityFeature.STATE
         | VacuumEntityFeature.START
     )
+    _attr_fan_speed_list = [level.display_name for level in FanSpeedLevel]
 
     def __init__(self, vacuum_bot: VacuumBot):
         """Initialize the Deebot Vacuum."""
         super().__init__(vacuum_bot, StateVacuumEntityDescription(key="", name=None))
 
-        self._battery: int | None = None
-        self._fan_speed: str | None = None
-        self._state: VacuumState | None = None
         self._rooms: list[Room] = []
         self._last_error: ErrorEvent | None = None
 
@@ -119,7 +115,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
         await super().async_added_to_hass()
 
         async def on_battery(event: BatteryEvent) -> None:
-            self._battery = event.value
+            self._attr_battery_level = event.value
             self.async_write_ha_state()
 
         async def on_custom_command(event: CustomCommandEvent) -> None:
@@ -130,7 +126,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
             self.async_write_ha_state()
 
         async def on_fan_speed(event: FanSpeedEvent) -> None:
-            self._fan_speed = event.speed
+            self._attr_fan_speed = event.speed
             self.async_write_ha_state()
 
         async def on_report_stats(event: ReportStatsEvent) -> None:
@@ -141,7 +137,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
             self.async_write_ha_state()
 
         async def on_status(event: StateEvent) -> None:
-            self._state = event.state
+            self._attr_state = VACUUMSTATE_TO_STATE[event.state]
             self.async_write_ha_state()
 
         subscriptions = [
@@ -159,27 +155,6 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
                 sub()
 
         self.async_on_remove(unsubscribe)
-
-    @property
-    def state(self) -> StateType:
-        """Return the state of the vacuum cleaner."""
-        if self._state is not None and self.available:
-            return VACUUMSTATE_TO_STATE[self._state]
-
-    @property
-    def battery_level(self) -> int | None:
-        """Return the battery level of the vacuum cleaner."""
-        return self._battery
-
-    @property
-    def fan_speed(self) -> str | None:
-        """Return the fan speed of the vacuum cleaner."""
-        return self._fan_speed
-
-    @property
-    def fan_speed_list(self) -> list[str]:
-        """Get the list of available fan speed steps of the vacuum cleaner."""
-        return [level.display_name for level in FanSpeedLevel]
 
     @property
     def extra_state_attributes(self) -> Mapping[str, Any] | None:
