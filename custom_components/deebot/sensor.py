@@ -65,6 +65,7 @@ async def async_setup_entry(
                     vacbot,
                     SensorEntityDescription(
                         key="stats_area",
+                        translation_key="stats_area",
                         icon="mdi:floor-plan",
                         native_unit_of_measurement=AREA_SQUARE_METERS,
                         entity_registry_enabled_default=False,
@@ -76,6 +77,7 @@ async def async_setup_entry(
                     vacbot,
                     SensorEntityDescription(
                         key="stats_time",
+                        translation_key="stats_time",
                         icon="mdi:timer-outline",
                         native_unit_of_measurement=TIME_MINUTES,
                         entity_registry_enabled_default=False,
@@ -87,6 +89,7 @@ async def async_setup_entry(
                     vacbot,
                     SensorEntityDescription(
                         key="stats_type",
+                        translation_key="stats_type",
                         icon="mdi:cog",
                         entity_registry_enabled_default=False,
                     ),
@@ -98,6 +101,7 @@ async def async_setup_entry(
                     vacbot,
                     SensorEntityDescription(
                         key="stats_total_area",
+                        translation_key="stats_total_area",
                         icon="mdi:floor-plan",
                         native_unit_of_measurement=AREA_SQUARE_METERS,
                         entity_registry_enabled_default=False,
@@ -110,6 +114,7 @@ async def async_setup_entry(
                     vacbot,
                     SensorEntityDescription(
                         key="stats_total_time",
+                        translation_key="stats_total_time",
                         icon="mdi:timer-outline",
                         native_unit_of_measurement=TIME_HOURS,
                         entity_registry_enabled_default=False,
@@ -122,6 +127,7 @@ async def async_setup_entry(
                     vacbot,
                     SensorEntityDescription(
                         key="stats_total_cleanings",
+                        translation_key="stats_total_cleanings",
                         icon="mdi:counter",
                         entity_registry_enabled_default=False,
                         state_class=SensorStateClass.TOTAL_INCREASING,
@@ -133,6 +139,7 @@ async def async_setup_entry(
                     vacbot,
                     SensorEntityDescription(
                         key=ATTR_BATTERY_LEVEL,
+                        translation_key=ATTR_BATTERY_LEVEL,
                         native_unit_of_measurement=PERCENTAGE,
                         device_class=SensorDeviceClass.BATTERY,
                         entity_category=EntityCategory.DIAGNOSTIC,
@@ -187,6 +194,7 @@ class LastErrorSensor(DeebotEntity, SensorEntity):  # type: ignore
     _always_available = True
     entity_description = SensorEntityDescription(
         key=LAST_ERROR,
+        translation_key=LAST_ERROR,
         icon="mdi:alert-circle",
         entity_registry_enabled_default=False,
         entity_category=EntityCategory.DIAGNOSTIC,
@@ -212,8 +220,10 @@ class LifeSpanSensor(DeebotEntity, SensorEntity):  # type: ignore
 
     def __init__(self, vacuum_bot: VacuumBot, component: LifeSpan):
         """Initialize the Sensor."""
+        key = f"life_span_{component.name.lower()}"
         entity_description = SensorEntityDescription(
-            key=f"life_span_{component.name.lower()}",
+            key=key,
+            translation_key=key,
             icon="mdi:air-filter" if component == LifeSpan.FILTER else "mdi:broom",
             entity_registry_enabled_default=False,
             native_unit_of_measurement="%",
@@ -246,6 +256,7 @@ class LastCleaningJobSensor(DeebotEntity, SensorEntity):  # type: ignore
     _always_available = True
     entity_description = SensorEntityDescription(
         key="last_cleaning",
+        translation_key="last_cleaning",
         icon="mdi:history",
         entity_registry_enabled_default=False,
     )

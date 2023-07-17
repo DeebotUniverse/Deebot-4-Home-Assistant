@@ -19,7 +19,7 @@
           "devices": "Devices"
         },
         "data_description": {
-          "devices": "Please select all devices, which you want use in HA."
+          "devices": "Please select all devices, which you want to use in HA."
         }
       },
       "user": {
@@ -35,7 +35,127 @@
         }
       },
       "user_advanced": {
-        "description": "Please select \"Bumper\" ONLY if you have a working bumper instance already. Otherwise, select \"Cloud\" please."
+        "description": "Please select \"Bumper\" ONLY if you already have a working bumper instance. Otherwise, select \"Cloud\" please."
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "mop_attached": {
+        "name": "Mop attached"
+      }
+    },
+    "button": {
+      "life_span_brush_reset": {
+        "name": "Reset brush"
+      },
+      "life_span_filter_reset": {
+        "name": "Reset filter"
+      },
+      "life_span_side_brush_reset": {
+        "name": "Reset side brush"
+      },
+      "relocate": {
+        "name": "Relocate"
+      }
+    },
+    "camera": {
+      "live_map": {
+        "name": "Live map"
+      }
+    },
+    "number": {
+      "clean_count": {
+        "name": "Clean count"
+      },
+      "volume": {
+        "name": "Volume"
+      }
+    },
+    "select": {
+      "water_amount": {
+        "name": "Water amount",
+        "state": {
+          "high": "high",
+          "low": "low",
+          "medium": "medium",
+          "ultrahigh": "ultrahigh"
+        }
+      }
+    },
+    "sensor": {
+      "battery_level": {
+        "name": "Battery level"
+      },
+      "last_cleaning": {
+        "name": "Last cleaning"
+      },
+      "last_error": {
+        "name": "Last error"
+      },
+      "life_span_brush": {
+        "name": "Brush"
+      },
+      "life_span_filter": {
+        "name": "Filter"
+      },
+      "life_span_side_brush": {
+        "name": "Side brush"
+      },
+      "stats_area": {
+        "name": "Stats area"
+      },
+      "stats_time": {
+        "name": "Stats time"
+      },
+      "stats_total_area": {
+        "name": "Stats total area"
+      },
+      "stats_total_cleanings": {
+        "name": "Stats total cleanings"
+      },
+      "stats_total_time": {
+        "name": "Stats total time"
+      },
+      "stats_type": {
+        "name": "Stats type"
+      }
+    },
+    "switch": {
+      "advanced_mode": {
+        "name": "Advanced mode"
+      },
+      "carpet_auto_fan_speed_boost": {
+        "name": "Carpet auto fan speed boost"
+      },
+      "clean_preference": {
+        "name": "Clean preference"
+      },
+      "continuous_cleaning": {
+        "name": "Continuous cleaning"
+      },
+      "true_detect": {
+        "name": "True detect"
+      }
+    },
+    "vacuum": {
+      "bot": {
+        "state_attributes": {
+          "fan_speed": {
+            "state": {
+              "max": "Max",
+              "max+": "Max+",
+              "normal": "Normal",
+              "quiet": "Quiet"
+            }
+          },
+          "last_error": {
+            "name": "Last error"
+          },
+          "rooms": {
+            "name": "Rooms"
+          }
+        }
       }
     }
   },
@@ -56,7 +176,7 @@
           "devices": "Devices"
         },
         "data_description": {
-          "devices": "Please select all devices, which you want use in HA."
+          "devices": "Please select all devices, which you want to use in HA."
         }
       }
     }

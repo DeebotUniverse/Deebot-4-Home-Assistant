@@ -42,7 +42,9 @@ class DeeboLiveCamera(DeebotEntity, Camera):  # type: ignore
     """Deebot Live Camera."""
 
     entity_description = EntityDescription(
-        key="live_map", entity_registry_enabled_default=False
+        key="live_map",
+        translation_key="live_map",
+        entity_registry_enabled_default=False,
     )
 
     _attr_should_poll = True

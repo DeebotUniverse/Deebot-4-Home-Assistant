@@ -40,6 +40,7 @@ class DeebotMopAttachedBinarySensor(DeebotEntity, BinarySensorEntity):  # type: 
 
     entity_description = BinarySensorEntityDescription(
         key="mop_attached",
+        translation_key="mop_attached",
         entity_registry_enabled_default=False,
         entity_category=EntityCategory.DIAGNOSTIC,
     )
