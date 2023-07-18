@@ -59,9 +59,9 @@
         "name": "Relocate"
       }
     },
-    "camera": {
-      "live_map": {
-        "name": "Live map"
+    "image": {
+      "map": {
+        "name": "Map"
       }
     },
     "number": {

@@ -163,10 +163,10 @@
           },
           "type": "object"
         },
-        "camera": {
+        "image": {
           "additionalProperties": false,
           "properties": {
-            "live_map": {
+            "map": {
               "$ref": "#/definitions/translation_name"
             }
           },
