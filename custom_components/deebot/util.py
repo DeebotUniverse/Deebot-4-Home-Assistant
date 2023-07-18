@@ -3,16 +3,9 @@ import dataclasses
 from enum import Enum
 from typing import Any
 
-from deebot_client.events.event_bus import EventListener
 from deebot_client.util import DisplayNameIntEnum
 from homeassistant.core import HomeAssistant
 from homeassistant.util import uuid
-
-
-def unsubscribe_listeners(listeners: list[EventListener]) -> None:
-    """Unsubscribe from all listeners."""
-    for listener in listeners:
-        listener.unsubscribe()
 
 
 def get_bumper_device_id(hass: HomeAssistant) -> str:

@@ -18,7 +18,6 @@ from deebot_client.events import (
     EnableEvent,
     TrueDetectEvent,
 )
-from deebot_client.events.event_bus import EventListener
 from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
 from homeassistant.config_entries import ConfigEntry
@@ -136,10 +135,9 @@ class DeebotSwitchEntity(DeebotEntity, SwitchEntity):  # type: ignore
             self._attr_is_on = event.enable
             self.async_write_ha_state()
 
-        listener: EventListener = self._vacuum_bot.events.subscribe(
-            self._event_type, on_enable
+        self.async_on_remove(
+            self._vacuum_bot.events.subscribe(self._event_type, on_enable)
         )
-        self.async_on_remove(listener.unsubscribe)
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn the entity on."""
