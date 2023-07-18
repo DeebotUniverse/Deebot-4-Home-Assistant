@@ -68,6 +68,7 @@ class DeebotMap(DeebotEntity, ImageEntity):  # type: ignore
 
         async def on_changed(event: MapChangedEvent) -> None:
             self._attr_image_last_updated = event.when
+            self.async_write_ha_state()
 
         subscriptions = [
             self._vacuum_bot.events.subscribe(CachedMapInfoEvent, on_info),
