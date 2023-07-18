@@ -4,10 +4,9 @@ import logging
 from collections.abc import MutableMapping
 from typing import Any
 
-from deebot_client.events.event_bus import EventListener
-from deebot_client.events.map import CachedMapInfoEvent
+from deebot_client.events.map import CachedMapInfoEvent, MapChangedEvent
 from deebot_client.vacuum_bot import VacuumBot
-from homeassistant.components.camera import Camera
+from homeassistant.components.image import ImageEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityDescription
@@ -16,7 +15,6 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .const import DOMAIN
 from .entity import DeebotEntity
 from .hub import DeebotHub
-from .util import unsubscribe_listeners
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -32,14 +30,14 @@ async def async_setup_entry(
     new_devices = []
 
     for vacbot in hub.vacuum_bots:
-        new_devices.append(DeeboLiveCamera(vacbot))
+        new_devices.append(DeebotMap(hass, vacbot))
 
     if new_devices:
         async_add_entities(new_devices)
 
 
-class DeeboLiveCamera(DeebotEntity, Camera):  # type: ignore
-    """Deebot Live Camera."""
+class DeebotMap(DeebotEntity, ImageEntity):  # type: ignore
+    """Deebot map."""
 
     entity_description = EntityDescription(
         key="live_map", entity_registry_enabled_default=False
@@ -48,20 +46,16 @@ class DeeboLiveCamera(DeebotEntity, Camera):  # type: ignore
     _attr_should_poll = True
 
     def __init__(
-        self, vacuum_bot: VacuumBot, entity_description: EntityDescription | None = None
+        self,
+        hass: HomeAssistant,
+        vacuum_bot: VacuumBot,
     ):
-        super().__init__(vacuum_bot, entity_description)
+        super().__init__(vacuum_bot, hass=hass)
         self._attr_extra_state_attributes: MutableMapping[str, Any] = {}
 
-    async def async_camera_image(
-        self, width: int | None = None, height: int | None = None
-    ) -> bytes | None:
-        """Return a still image response from the camera.
-
-        Integrations may choose to ignore the height parameter in order to preserve aspect ratio
-        """
-
-        return base64.decodebytes(self._vacuum_bot.map.get_base64_map(width))
+    def image(self) -> bytes | None:
+        """Return bytes of image."""
+        return base64.decodebytes(self._vacuum_bot.map.get_base64_map())
 
     async def async_added_to_hass(self) -> None:
         """Set up the event listeners now that hass is ready."""
@@ -72,12 +66,18 @@ class DeeboLiveCamera(DeebotEntity, Camera):  # type: ignore
         async def on_info(event: CachedMapInfoEvent) -> None:
             self._attr_extra_state_attributes["map_name"] = event.name
 
-        listeners: list[EventListener] = [
+        async def on_changed(event: MapChangedEvent) -> None:
+            self._attr_image_last_updated = event.when
+            self.async_write_ha_state()
+
+        subscriptions = [
             self._vacuum_bot.events.subscribe(CachedMapInfoEvent, on_info),
+            self._vacuum_bot.events.subscribe(MapChangedEvent, on_changed),
         ]
 
         def on_remove() -> None:
-            unsubscribe_listeners(listeners)
+            for unsubscribe in subscriptions:
+                unsubscribe()
             self._vacuum_bot.map.disable()
 
         self.async_on_remove(on_remove)

@@ -1,6 +1,7 @@
 """Deebot entity module."""
+from typing import Any
+
 from deebot_client.events import AvailabilityEvent
-from deebot_client.events.event_bus import EventListener
 from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.helpers.entity import (
     UNDEFINED,
@@ -23,9 +24,10 @@ class DeebotEntity(Entity):  # type: ignore # lgtm [py/missing-equals]
         self,
         vacuum_bot: VacuumBot,
         entity_description: EntityDescription | None = None,
+        **kwargs: Any,
     ):
         """Initialize the Sensor."""
-        super().__init__()
+        super().__init__(**kwargs)
         if entity_description:
             self.entity_description = entity_description
         elif not hasattr(self, "entity_description"):
@@ -74,7 +76,6 @@ class DeebotEntity(Entity):  # type: ignore # lgtm [py/missing-equals]
                 self._attr_available = event.available
                 self.async_write_ha_state()
 
-            listener: EventListener = self._vacuum_bot.events.subscribe(
-                AvailabilityEvent, on_available
+            self.async_on_remove(
+                self._vacuum_bot.events.subscribe(AvailabilityEvent, on_available)
             )
-            self.async_on_remove(listener.unsubscribe)
