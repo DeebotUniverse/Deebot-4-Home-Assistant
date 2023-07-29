@@ -129,7 +129,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
             self.async_write_ha_state()
 
         async def on_fan_speed(event: FanSpeedEvent) -> None:
-            self._attr_fan_speed = event.speed
+            self._attr_fan_speed = event.speed.display_name
             self.async_write_ha_state()
 
         async def on_report_stats(event: ReportStatsEvent) -> None:

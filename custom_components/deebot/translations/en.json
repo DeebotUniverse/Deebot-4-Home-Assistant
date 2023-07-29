@@ -144,7 +144,7 @@
           "fan_speed": {
             "state": {
               "max": "Max",
-              "max+": "Max+",
+              "max_plus": "Max+",
               "normal": "Normal",
               "quiet": "Quiet"
             }

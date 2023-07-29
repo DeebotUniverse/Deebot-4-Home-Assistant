@@ -298,7 +298,7 @@
                             "max": {
                               "type": "string"
                             },
-                            "max+": {
+                            "max_plus": {
                               "type": "string"
                             },
                             "normal": {
