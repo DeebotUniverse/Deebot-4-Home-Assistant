@@ -57,5 +57,33 @@
         }
       }
     }
+  },
+  "selector": {
+    "refresh_category": {
+      "options": {
+        "battery": "Batterie",
+        "clean_logs": "Reinungsprotokoll",
+        "error": "Fehler",
+        "fan_speed": "Lüftergeschwindigkeit",
+        "life_spans": "Komponentenabnutzung",
+        "map": "Karte",
+        "rooms": "Räume",
+        "stats": "Statistik",
+        "status": "Status",
+        "water": "Wasser"
+      }
+    }
+  },
+  "services": {
+    "refresh": {
+      "description": "Manuelle Aktualisierung der selektierten Kategorie.",
+      "fields": {
+        "category": {
+          "description": "Was soll aktualisiert werden?",
+          "name": "Kategorie"
+        }
+      },
+      "name": "Manuelle Aktualisierung"
+    }
   }
 }
