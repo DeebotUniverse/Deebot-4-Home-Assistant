@@ -34,6 +34,7 @@ from homeassistant.components.vacuum import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_platform
+from homeassistant.helpers.config_validation import make_entity_service_schema
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.util import slugify
 
@@ -55,12 +56,14 @@ _LOGGER = logging.getLogger(__name__)
 
 # Must be kept in sync with services.yaml
 SERVICE_REFRESH = "refresh"
-SERVICE_REFRESH_PART = "part"
-SERVICE_REFRESH_SCHEMA = {
-    vol.Required(SERVICE_REFRESH_PART): vol.In(
-        [*REFRESH_STR_TO_EVENT_DTO.keys(), REFRESH_MAP]
-    )
-}
+SERVICE_REFRESH_CATEGORY = "category"
+SERVICE_REFRESH_SCHEMA = make_entity_service_schema(
+    {
+        vol.Required(SERVICE_REFRESH_CATEGORY): vol.In(
+            [*REFRESH_STR_TO_EVENT_DTO.keys(), REFRESH_MAP]
+        )
+    }
+)
 
 
 async def async_setup_entry(
@@ -83,7 +86,7 @@ async def async_setup_entry(
     platform.async_register_entity_service(
         SERVICE_REFRESH,
         SERVICE_REFRESH_SCHEMA,
-        "_service_refresh",
+        "service_refresh",
     )
 
 
@@ -254,13 +257,15 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
         else:
             await self._vacuum_bot.execute_command(CustomCommand(command, params))
 
-    async def _service_refresh(self, part: str) -> None:
+    async def service_refresh(self, category: str) -> None:
         """Service to manually refresh."""
-        _LOGGER.debug("Manually refresh %s", part)
-        event = REFRESH_STR_TO_EVENT_DTO.get(part, None)
+        _LOGGER.debug("Manually refresh %s", category)
+        event = REFRESH_STR_TO_EVENT_DTO.get(category, None)
         if event:
             self._vacuum_bot.events.request_refresh(event)
-        elif part == REFRESH_MAP:
+        elif category == REFRESH_MAP:
             self._vacuum_bot.map.refresh()
         else:
-            _LOGGER.warning('Service "refresh" called with unknown part: %s', part)
+            _LOGGER.warning(
+                'Service "refresh" called with unknown category: %s', category
+            )

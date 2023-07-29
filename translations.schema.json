@@ -408,6 +408,90 @@
         }
       },
       "type": "object"
+    },
+    "selector": {
+      "additionalProperties": false,
+      "properties": {
+        "refresh_category": {
+          "additionalProperties": false,
+          "properties": {
+            "options": {
+              "additionalProperties": false,
+              "properties": {
+                "battery": {
+                  "type": "string"
+                },
+                "clean_logs": {
+                  "type": "string"
+                },
+                "error": {
+                  "type": "string"
+                },
+                "fan_speed": {
+                  "type": "string"
+                },
+                "life_spans": {
+                  "type": "string"
+                },
+                "map": {
+                  "type": "string"
+                },
+                "rooms": {
+                  "type": "string"
+                },
+                "stats": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "water": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "services": {
+      "additionalProperties": false,
+      "properties": {
+        "refresh": {
+          "additionalProperties": false,
+          "properties": {
+            "description": {
+              "type": "string"
+            },
+            "fields": {
+              "additionalProperties": false,
+              "properties": {
+                "category": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
     }
   },
   "type": "object"
