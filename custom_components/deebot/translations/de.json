@@ -36,6 +36,117 @@
       }
     }
   },
+  "entity": {
+    "binary_sensor": {
+      "mop_attached": {
+        "name": "Wischmopp montiert"
+      }
+    },
+    "button": {
+      "life_span_brush_reset": {
+        "name": "Hauptbürste zurücksetzen"
+      },
+      "life_span_filter_reset": {
+        "name": "Filter zurücksetzen"
+      },
+      "life_span_side_brush_reset": {
+        "name": "Seitenbürsten zurücksetzen"
+      },
+      "relocate": {
+        "name": "Position aktualisieren"
+      }
+    },
+    "image": {
+      "map": {
+        "name": "Karte"
+      }
+    },
+    "number": {
+      "volume": {
+        "name": "Lautstärke"
+      }
+    },
+    "select": {
+      "water_amount": {
+        "name": "Wasserdurchflussrate",
+        "state": {
+          "high": "Hoch",
+          "low": "Niedrig",
+          "medium": "Mittel",
+          "ultrahigh": "Sehr hoch"
+        }
+      }
+    },
+    "sensor": {
+      "battery_level": {
+        "name": "Batterie"
+      },
+      "last_cleaning": {
+        "name": "Letzte Reinigung"
+      },
+      "last_error": {
+        "name": "Letzter Fehler"
+      },
+      "life_span_brush": {
+        "name": "Hauptbürste"
+      },
+      "life_span_filter": {
+        "name": "Filter"
+      },
+      "life_span_side_brush": {
+        "name": "Seitenbürsten"
+      },
+      "stats_area": {
+        "name": "Reinigungsfläche"
+      },
+      "stats_time": {
+        "name": "Reinigungszeit"
+      },
+      "stats_total_area": {
+        "name": "Gesamtreinigungsfläche"
+      },
+      "stats_total_cleanings": {
+        "name": "Gesamtanzahl Reinigunen"
+      },
+      "stats_total_time": {
+        "name": "Gesamtreinigungszeit"
+      },
+      "stats_type": {
+        "name": "Reinigungsmodus"
+      }
+    },
+    "switch": {
+      "advanced_mode": {
+        "name": "Erweiterter Modus"
+      },
+      "carpet_auto_fan_speed_boost": {
+        "name": "Auto-Saugkraftverstärkung"
+      },
+      "continuous_cleaning": {
+        "name": "Wiederaufnahme der Reinigung"
+      }
+    },
+    "vacuum": {
+      "bot": {
+        "state_attributes": {
+          "fan_speed": {
+            "state": {
+              "max": "Maximal",
+              "max_plus": "Maximal+",
+              "normal": "Standard",
+              "quiet": "Leise"
+            }
+          },
+          "last_error": {
+            "name": "Letzter Fehler"
+          },
+          "rooms": {
+            "name": "Räume"
+          }
+        }
+      }
+    }
+  },
   "options": {
     "abort": {
       "cannot_connect": "Verbindung fehlgeschlagen. Weitere Infos in den Logs",
