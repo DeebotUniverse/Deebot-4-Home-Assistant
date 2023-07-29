@@ -48,6 +48,7 @@ async def async_setup_entry(
                     vacbot,
                     SwitchEntityDescription(
                         key="advanced_mode",
+                        translation_key="advanced_mode",
                         entity_registry_enabled_default=False,
                         entity_category=EntityCategory.CONFIG,
                         icon="mdi:tune",
@@ -59,6 +60,7 @@ async def async_setup_entry(
                     vacbot,
                     SwitchEntityDescription(
                         key="continuous_cleaning",
+                        translation_key="continuous_cleaning",
                         entity_registry_enabled_default=False,
                         entity_category=EntityCategory.CONFIG,
                         icon="mdi:refresh-auto",
@@ -70,6 +72,7 @@ async def async_setup_entry(
                     vacbot,
                     SwitchEntityDescription(
                         key="carpet_auto_fan_speed_boost",
+                        translation_key="carpet_auto_fan_speed_boost",
                         entity_registry_enabled_default=False,
                         entity_category=EntityCategory.CONFIG,
                         icon="mdi:fan-auto",
@@ -81,6 +84,7 @@ async def async_setup_entry(
                     vacbot,
                     SwitchEntityDescription(
                         key="clean_preference",
+                        translation_key="clean_preference",
                         entity_registry_enabled_default=False,
                         entity_category=EntityCategory.CONFIG,
                         icon="mdi:broom",
@@ -92,6 +96,7 @@ async def async_setup_entry(
                     vacbot,
                     SwitchEntityDescription(
                         key="true_detect",
+                        translation_key="true_detect",
                         entity_registry_enabled_default=False,
                         entity_category=EntityCategory.CONFIG,
                         icon="mdi:laser-pointer",

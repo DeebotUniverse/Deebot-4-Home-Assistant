@@ -105,7 +105,10 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
 
     def __init__(self, vacuum_bot: VacuumBot):
         """Initialize the Deebot Vacuum."""
-        super().__init__(vacuum_bot, StateVacuumEntityDescription(key="", name=None))
+        super().__init__(
+            vacuum_bot,
+            StateVacuumEntityDescription(key="", translation_key="bot", name=None),
+        )
 
         self._rooms: list[Room] = []
         self._last_error: ErrorEvent | None = None
@@ -126,7 +129,7 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
             self.async_write_ha_state()
 
         async def on_fan_speed(event: FanSpeedEvent) -> None:
-            self._attr_fan_speed = event.speed
+            self._attr_fan_speed = event.speed.display_name
             self.async_write_ha_state()
 
         async def on_report_stats(event: ReportStatsEvent) -> None:

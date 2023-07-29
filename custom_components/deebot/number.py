@@ -35,6 +35,7 @@ class VolumeEntity(DeebotEntity, NumberEntity):  # type: ignore
 
     entity_description = NumberEntityDescription(
         key="volume",
+        translation_key="volume",
         entity_registry_enabled_default=False,
         entity_category=EntityCategory.CONFIG,
     )
@@ -85,6 +86,7 @@ class CleanCountEntity(DeebotEntity, NumberEntity):  # type: ignore
 
     entity_description = NumberEntityDescription(
         key="clean_count",
+        translation_key="clean_count",
         entity_registry_enabled_default=False,
         entity_category=EntityCategory.CONFIG,
     )

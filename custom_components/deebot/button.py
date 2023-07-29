@@ -39,8 +39,10 @@ class DeebotResetLifeSpanButtonEntity(DeebotEntity, ButtonEntity):  # type: igno
     """Deebot reset life span button entity."""
 
     def __init__(self, vacuum_bot: VacuumBot, component: LifeSpan):
+        key = f"life_span_{component.name.lower()}_reset"
         entity_description = ButtonEntityDescription(
-            key=f"life_span_{component.name.lower()}_reset",
+            key=key,
+            translation_key=key,
             icon="mdi:air-filter" if component == LifeSpan.FILTER else "mdi:broom",
             entity_registry_enabled_default=True,  # Can be enabled as they don't poll data
             entity_category=EntityCategory.CONFIG,
@@ -58,6 +60,7 @@ class DeebotRelocateButtonEntity(DeebotEntity, ButtonEntity):  # type: ignore
 
     entity_description = ButtonEntityDescription(
         key="relocate",
+        translation_key="relocate",
         icon="mdi:map-marker-question",
         entity_registry_enabled_default=True,  # Can be enabled as they don't poll data
         entity_category=EntityCategory.DIAGNOSTIC,

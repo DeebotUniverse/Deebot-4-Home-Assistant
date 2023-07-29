@@ -40,7 +40,9 @@ class DeebotMap(DeebotEntity, ImageEntity):  # type: ignore
     """Deebot map."""
 
     entity_description = EntityDescription(
-        key="live_map", entity_registry_enabled_default=False
+        key="map",
+        translation_key="map",
+        entity_registry_enabled_default=False,
     )
 
     _attr_should_poll = True

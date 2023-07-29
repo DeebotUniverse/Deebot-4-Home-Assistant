@@ -37,6 +37,7 @@ class WaterInfoSelect(DeebotEntity, SelectEntity):  # type: ignore
 
     entity_description = SelectEntityDescription(
         key="water_amount",
+        translation_key="water_amount",
         entity_registry_enabled_default=False,
         icon="mdi:water",
         entity_category=EntityCategory.CONFIG,

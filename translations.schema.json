@@ -1,6 +1,17 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "additionalProperties": false,
+  "definitions": {
+    "translation_name": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
   "properties": {
     "config": {
       "additionalProperties": false,
@@ -115,6 +126,216 @@
                 }
               },
               "type": "object"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "entity": {
+      "additionalProperties": false,
+      "properties": {
+        "binary_sensor": {
+          "additionalProperties": false,
+          "properties": {
+            "mop_attached": {
+              "$ref": "#/definitions/translation_name"
+            }
+          },
+          "type": "object"
+        },
+        "button": {
+          "additionalProperties": false,
+          "properties": {
+            "life_span_brush_reset": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "life_span_filter_reset": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "life_span_side_brush_reset": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "relocate": {
+              "$ref": "#/definitions/translation_name"
+            }
+          },
+          "type": "object"
+        },
+        "image": {
+          "additionalProperties": false,
+          "properties": {
+            "map": {
+              "$ref": "#/definitions/translation_name"
+            }
+          },
+          "type": "object"
+        },
+        "number": {
+          "additionalProperties": false,
+          "properties": {
+            "clean_count": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "volume": {
+              "$ref": "#/definitions/translation_name"
+            }
+          },
+          "type": "object"
+        },
+        "select": {
+          "additionalProperties": false,
+          "properties": {
+            "water_amount": {
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "state": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "high": {
+                      "type": "string"
+                    },
+                    "low": {
+                      "type": "string"
+                    },
+                    "medium": {
+                      "type": "string"
+                    },
+                    "ultrahigh": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
+        "sensor": {
+          "additionalProperties": false,
+          "properties": {
+            "battery_level": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "last_cleaning": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "last_error": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "life_span_brush": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "life_span_filter": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "life_span_side_brush": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "stats_area": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "stats_time": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "stats_total_area": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "stats_total_cleanings": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "stats_total_time": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "stats_type": {
+              "$ref": "#/definitions/translation_name"
+            }
+          },
+          "type": "object"
+        },
+        "switch": {
+          "additionalProperties": false,
+          "properties": {
+            "advanced_mode": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "carpet_auto_fan_speed_boost": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "clean_preference": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "continuous_cleaning": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "true_detect": {
+              "$ref": "#/definitions/translation_name"
+            }
+          },
+          "type": "object"
+        },
+        "vacuum": {
+          "additionalProperties": false,
+          "properties": {
+            "bot": {
+              "additionalProperties": false,
+              "properties": {
+                "state_attributes": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "fan_speed": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "state": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "max": {
+                              "type": "string"
+                            },
+                            "max_plus": {
+                              "type": "string"
+                            },
+                            "normal": {
+                              "type": "string"
+                            },
+                            "quiet": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "last_error": {
+                      "$ref": "#/definitions/translation_name"
+                    },
+                    "rooms": {
+                      "$ref": "#/definitions/translation_name"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            },
+            "carpet_auto_fan_speed_boost": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "clean_preference": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "continuous_cleaning": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "true_detect": {
+              "$ref": "#/definitions/translation_name"
             }
           },
           "type": "object"
