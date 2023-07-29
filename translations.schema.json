@@ -412,7 +412,7 @@
     "selector": {
       "additionalProperties": false,
       "properties": {
-        "refresh_part": {
+        "refresh_category": {
           "additionalProperties": false,
           "properties": {
             "options": {
@@ -469,7 +469,7 @@
             "fields": {
               "additionalProperties": false,
               "properties": {
-                "part": {
+                "category": {
                   "additionalProperties": false,
                   "properties": {
                     "description": {

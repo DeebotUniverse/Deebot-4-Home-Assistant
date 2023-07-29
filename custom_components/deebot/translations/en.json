@@ -182,7 +182,7 @@
     }
   },
   "selector": {
-    "refresh_part": {
+    "refresh_category": {
       "options": {
         "battery": "Battery",
         "clean_logs": "Clean logs",
@@ -199,11 +199,11 @@
   },
   "services": {
     "refresh": {
-      "description": "Manually request a refresh for the selected part.",
+      "description": "Manually request a refresh for the selected category.",
       "fields": {
-        "part": {
-          "description": "Which part should be refreshed?",
-          "name": "Part"
+        "category": {
+          "description": "Which category should be refreshed?",
+          "name": "Category"
         }
       },
       "name": "Manually refresh"

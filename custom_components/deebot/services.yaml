@@ -5,14 +5,14 @@ refresh:
       integration: deebot
       domain: vacuum
   fields:
-    part:
+    category:
       required: true
       advanced: false
       example: "status"
       default: "status"
       selector:
         select:
-          translation_key: "refresh_part"
+          translation_key: "refresh_category"
           options:
             - "battery"
             - "clean_logs"
