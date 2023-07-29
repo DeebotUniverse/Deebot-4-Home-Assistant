@@ -180,5 +180,33 @@
         }
       }
     }
+  },
+  "selector": {
+    "refresh_part": {
+      "options": {
+        "battery": "Battery",
+        "clean_logs": "Clean logs",
+        "error": "Error",
+        "fan_speed": "Fan speed",
+        "life_spans": "Life spans",
+        "map": "Map",
+        "rooms": "Rooms",
+        "stats": "Stats",
+        "status": "Status",
+        "water": "Water"
+      }
+    }
+  },
+  "services": {
+    "refresh": {
+      "description": "Manually request a refresh for the selected part.",
+      "fields": {
+        "part": {
+          "description": "Which part should be refreshed?",
+          "name": "Part"
+        }
+      },
+      "name": "Manually refresh"
+    }
   }
 }
