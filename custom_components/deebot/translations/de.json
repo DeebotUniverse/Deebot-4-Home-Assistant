@@ -100,7 +100,7 @@
         "name": "Reinigungsfläche"
       },
       "stats_time": {
-        "name": "Reinigungszeit"
+        "name": "Reinigungsdauer"
       },
       "stats_total_area": {
         "name": "Gesamtreinigungsfläche"
@@ -109,7 +109,7 @@
         "name": "Gesamtanzahl Reinigunen"
       },
       "stats_total_time": {
-        "name": "Gesamtreinigungszeit"
+        "name": "Gesamtreinigungsdauer"
       },
       "stats_type": {
         "name": "Reinigungsmodus"
