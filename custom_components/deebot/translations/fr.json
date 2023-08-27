@@ -1,20 +1,25 @@
 {
   "config": {
     "abort": {
-      "already_configured": "Déjà configuré"
+      "already_configured": "Déjà configuré",
+      "no_supported_devices_found": "Aucun appareil pris en charge trouvé",
+      "reauth_successful": "Réauthentification réussie"
     },
     "error": {
-      "cannot_connect": "Connection impossible à l'API ecovacs",
+      "cannot_connect": "Connection impossible à l'API Ecovacs. Veuillez consulter les journaux.",
       "invalid_auth": "Nom d’utilisateur ou mot de passe incorrect",
-      "invalid_continent": "Le code du continent doit être en deux lettres, ex: eu, ww, etc ",
-      "invalid_country": "Le code du pays doit être en deux lettres, ex: fr, be, us, etc ",
+      "invalid_continent": "Le code du continent doit être en deux lettres, ex: eu, as, na, ww",
+      "invalid_country": "Le code du pays doit être en deux lettres, ex: fr, be, us, ... ",
       "select_robots": "Sélectionnez au moins 1 robot",
-      "unknown": "Erreur inconnue"
+      "unknown": "Erreur inconnue. Veuillez consulter les journaux."
     },
     "step": {
       "options": {
         "data": {
           "devices": "Appareils"
+        },
+        "data_description": {
+          "devices": "Veuillez sélectionner tous les appareils que vous souhaitez utiliser dans HA."
         }
       },
       "user": {
@@ -23,11 +28,185 @@
           "country": "Pays",
           "password": "Mot de passe",
           "username": "E-mail ou Ecovacs ID"
+        },
+        "data_description": {
+          "continent": "Le code à deux lettres du continent. Ex : eu, as, na. Si le code de votre continent ne fonctionne pas, essayez ww",
+          "country": "Le code à deux lettres du pays. Ex : fr, be"
         }
       },
       "user_advanced": {
         "description": "Sélectionnez \"Bumper\" SEULEMENT si vous avez déjà une instance bumper fonctionnelle. Sinon, sélectionnez \"Cloud\" s'il vous plait."
       }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "mop_attached": {
+        "name": "Serpillière attachée"
+      }
+    },
+    "button": {
+      "life_span_brush_reset": {
+        "name": "Réinitialiser rouleau"
+      },
+      "life_span_filter_reset": {
+        "name": "Réinitialiser filtre"
+      },
+      "life_span_side_brush_reset": {
+        "name": "Réinitialiser brosses latérales"
+      },
+      "relocate": {
+        "name": "Relocalisation"
+      }
+    },
+    "image": {
+      "map": {
+        "name": "Carte"
+      }
+    },
+    "number": {
+      "clean_count": {
+        "name": "Compte de nettoyage"
+      },
+      "volume": {
+        "name": "Volume"
+      }
+    },
+    "select": {
+      "water_amount": {
+        "name": "Quantité d'eau",
+        "state": {
+          "high": "haute",
+          "low": "faible",
+          "medium": "moyenne",
+          "ultrahigh": "très élevée"
+        }
+      }
+    },
+    "sensor": {
+      "battery_level": {
+        "name": "Niveau de batterie"
+      },
+      "last_cleaning": {
+        "name": "Dernier nettoyage"
+      },
+      "last_error": {
+        "name": "Dernière erreur"
+      },
+      "life_span_brush": {
+        "name": "Rouleau"
+      },
+      "life_span_filter": {
+        "name": "Filtre"
+      },
+      "life_span_side_brush": {
+        "name": "Brosses latérales"
+      },
+      "stats_area": {
+        "name": "Surface"
+      },
+      "stats_time": {
+        "name": "Durée"
+      },
+      "stats_total_area": {
+        "name": "Surface totale"
+      },
+      "stats_total_cleanings": {
+        "name": "Nombre de nettoyages"
+      },
+      "stats_total_time": {
+        "name": "Durée totale"
+      },
+      "stats_type": {
+        "name": "Mode"
+      }
+    },
+    "switch": {
+      "advanced_mode": {
+        "name": "Mode avancé"
+      },
+      "carpet_auto_fan_speed_boost": {
+        "name": "Vitesse du ventilateur automatique sur moquette"
+      },
+      "clean_preference": {
+        "name": "Preference de nettoyage par pièce"
+      },
+      "continuous_cleaning": {
+        "name": "Nettoyage continu"
+      },
+      "true_detect": {
+        "name": "TrueDetect 3D"
+      }
+    },
+    "vacuum": {
+      "bot": {
+        "state_attributes": {
+          "fan_speed": {
+            "state": {
+              "max": "Fort",
+              "max_plus": "Max+",
+              "normal": "Standard",
+              "quiet": "Silencieux"
+            }
+          },
+          "last_error": {
+            "name": "Dernière erreur"
+          },
+          "rooms": {
+            "name": "Pièces"
+          }
+        }
+      }
+    }
+  },
+  "options": {
+    "abort": {
+      "cannot_connect": "Connection impossible à l'API Ecovacs. Veuillez consulter les journaux.",
+      "invalid_auth": "Echec de l'authentification. Veuillez d'abord vous réauthentifier.",
+      "no_supported_devices_found": "Aucun appareil pris en charge trouvé",
+      "unknown_get_devices": "Erreur inconnue lors de l'obtention des appareils. Veuillez consulter les journaux."
+    },
+    "error": {
+      "select_robots": "Sélectionnez au moins 1 robot",
+      "unknown": "Erreur inconnue. Veuillez consulter les journaux."
+    },
+    "step": {
+      "init": {
+        "data": {
+          "devices": "Appareils"
+        },
+        "data_description": {
+          "devices": "Veuillez sélectionner tous les appareils que vous souhaitez utiliser dans HA."
+        }
+      }
+    }
+  },
+  "selector": {
+    "refresh_category": {
+      "options": {
+        "battery": "Batterie",
+        "clean_logs": "Journal des nettoyages",
+        "error": "Erreur",
+        "fan_speed": "Vitesse d'aspiration",
+        "life_spans": "Durée de vie",
+        "map": "Carte",
+        "rooms": "Pièces",
+        "stats": "Stats",
+        "status": "Statut",
+        "water": "Eau"
+      }
+    }
+  },
+  "services": {
+    "refresh": {
+      "description": "Demander manuellement une actualisation pour la catégorie sélectionnée.",
+      "fields": {
+        "category": {
+          "description": "Quelle catégorie doit être rafraîchie ?",
+          "name": "Catégorie"
+        }
+      },
+      "name": "Actualisation manuelle"
     }
   }
 }
