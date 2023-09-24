@@ -13,6 +13,7 @@ refresh:
       selector:
         select:
           translation_key: "refresh_category"
+          sort: true
           options:
             - "battery"
             - "clean_logs"
