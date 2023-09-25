@@ -31,6 +31,7 @@ jobs:
           echo "::set-output name=name::$name"
           min_ha_version=$(jq -r '.homeassistant' ${{ github.workspace }}/hacs.json)
           echo "::set-output name=min_ha_version::$min_ha_version"
+
       - name: 🖊️ Set version number
         run: |
           sed -i '/INTEGRATION_VERSION = /c\INTEGRATION_VERSION = "${{ steps.version.outputs.version }}"' \
@@ -38,12 +39,19 @@ jobs:
           jq '.version = "${{ steps.version.outputs.version }}"' \
             "${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/manifest.json" > tmp \
             && mv -f tmp "${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/manifest.json"
+
       - name: 🖊️ Set min required HA version
         run: |
           sed -i '/MIN_REQUIRED_HA_VERSION = /c\MIN_REQUIRED_HA_VERSION = "${{ steps.information.outputs.min_ha_version }}"' \
             "${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/const.py"
+
       - name: 👀 Validate data
         run: |
+          echo "Version found :${{ steps.version.outputs.version }}";
+          if [[ '${{ steps.version.outputs.version }}' == '""' ]]; then
+            echo "Did not correctly identify version"
+            exit 1
+          fi
           if ! grep -q 'INTEGRATION_VERSION = "${{ steps.version.outputs.version }}"' ${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/const.py; then
             echo "The version in custom_components/${{ steps.information.outputs.name }}/const.py was not correct"
             cat ${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/const.py | grep INTEGRATION_VERSION
@@ -60,10 +68,12 @@ jobs:
             cat ${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}/const.py | grep MIN_REQUIRED_HA_VERSION
             exit 1
           fi
+
       - name: 📦 Create zip file for the integration
         run: |
           cd "${{ github.workspace }}/custom_components/${{ steps.information.outputs.name }}"
           zip ${{ steps.information.outputs.name }}.zip -r ./
+
       - name: 📤 Upload the zip file as a release asset
         uses: actions/upload-release-asset@v1
         env:
