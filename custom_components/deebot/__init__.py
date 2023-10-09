@@ -1,14 +1,7 @@
 """Support for Deebot Vaccums."""
-import sys
-
-if sys.version_info < (3, 11):
-    raise RuntimeError(
-        f"This component requires at least python 3.11! You are running {sys.version}"
-    )
-
-# pylint: disable=wrong-import-position
 import asyncio
 import logging
+import sys
 from typing import Any
 
 from awesomeversion import AwesomeVersion
