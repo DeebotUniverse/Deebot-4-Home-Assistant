@@ -1,7 +1,6 @@
 """Binary sensor module."""
 import logging
 
-from deebot_client.commands import ResetLifeSpan, SetRelocationState
 from deebot_client.events import LifeSpan
 from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
@@ -27,7 +26,7 @@ async def async_setup_entry(
 
     new_devices = []
     for vacbot in hub.vacuum_bots:
-        for component in LifeSpan:
+        for component in vacbot.capabilities.life_span.types:
             new_devices.append(DeebotResetLifeSpanButtonEntity(vacbot, component))
         new_devices.append(DeebotRelocateButtonEntity(vacbot))
 
@@ -48,11 +47,11 @@ class DeebotResetLifeSpanButtonEntity(DeebotEntity, ButtonEntity):  # type: igno
             entity_category=EntityCategory.CONFIG,
         )
         super().__init__(vacuum_bot, entity_description)
-        self._component = component
+        self._command = vacuum_bot.capabilities.life_span.reset(component)
 
     async def async_press(self) -> None:
         """Press the button."""
-        await self._vacuum_bot.execute_command(ResetLifeSpan(self._component))
+        await self._vacuum_bot.execute_command(self._command)
 
 
 class DeebotRelocateButtonEntity(DeebotEntity, ButtonEntity):  # type: ignore
@@ -68,4 +67,6 @@ class DeebotRelocateButtonEntity(DeebotEntity, ButtonEntity):  # type: ignore
 
     async def async_press(self) -> None:
         """Press the button."""
-        await self._vacuum_bot.execute_command(SetRelocationState())
+        await self._vacuum_bot.execute_command(
+            self._vacuum_bot.capabilities.map.relocation.execute()
+        )

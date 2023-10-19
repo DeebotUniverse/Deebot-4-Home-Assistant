@@ -1,6 +1,7 @@
 """Number module."""
-from deebot_client.commands import SetCleanCount, SetVolume
+from deebot_client.capabilities import CapabilitySet
 from deebot_client.events import CleanCountEvent, VolumeEvent
+from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.number import NumberEntity, NumberEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -23,8 +24,9 @@ async def async_setup_entry(
 
     new_devices = []
     for vacbot in hub.vacuum_bots:
-        new_devices.append(VolumeEntity(vacbot))
-        new_devices.append(CleanCountEntity(vacbot))
+        new_devices.append(VolumeEntity(vacbot, vacbot.capabilities.settings.volume))
+        if count := vacbot.capabilities.clean.count:
+            new_devices.append(CleanCountEntity(vacbot, count))
 
     if new_devices:
         async_add_entities(new_devices)
@@ -45,6 +47,12 @@ class VolumeEntity(DeebotEntity, NumberEntity):  # type: ignore
     _attr_native_step = 1.0
     _attr_native_value: float | None = None
 
+    def __init__(
+        self, vacuum_bot: VacuumBot, capability: CapabilitySet[VolumeEvent, int]
+    ):
+        super().__init__(vacuum_bot)
+        self._capability = capability
+
     async def async_added_to_hass(self) -> None:
         """Set up the event listeners now that hass is ready."""
         await super().async_added_to_hass()
@@ -55,7 +63,9 @@ class VolumeEntity(DeebotEntity, NumberEntity):  # type: ignore
             self._attr_native_value = event.volume
             self.async_write_ha_state()
 
-        self.async_on_remove(self._vacuum_bot.events.subscribe(VolumeEvent, on_volume))
+        self.async_on_remove(
+            self._vacuum_bot.events.subscribe(self._capability.event, on_volume)
+        )
 
     @property
     def icon(self) -> str | None:
@@ -78,7 +88,7 @@ class VolumeEntity(DeebotEntity, NumberEntity):  # type: ignore
 
     async def async_set_native_value(self, value: float) -> None:
         """Set new value."""
-        await self._vacuum_bot.execute_command(SetVolume(int(value)))
+        await self._vacuum_bot.execute_command(self._capability.set(int(value)))
 
 
 class CleanCountEntity(DeebotEntity, NumberEntity):  # type: ignore
@@ -97,6 +107,12 @@ class CleanCountEntity(DeebotEntity, NumberEntity):  # type: ignore
     _attr_native_value: float | None = None
     _attr_icon = "mdi:counter"
 
+    def __init__(
+        self, vacuum_bot: VacuumBot, capability: CapabilitySet[CleanCountEvent, int]
+    ):
+        super().__init__(vacuum_bot)
+        self._capability = capability
+
     async def async_added_to_hass(self) -> None:
         """Set up the event listeners now that hass is ready."""
         await super().async_added_to_hass()
@@ -106,9 +122,9 @@ class CleanCountEntity(DeebotEntity, NumberEntity):  # type: ignore
             self.async_write_ha_state()
 
         self.async_on_remove(
-            self._vacuum_bot.events.subscribe(CleanCountEvent, on_clean_count)
+            self._vacuum_bot.events.subscribe(self._capability.event, on_clean_count)
         )
 
     async def async_set_native_value(self, value: float) -> None:
         """Set new value."""
-        await self._vacuum_bot.execute_command(SetCleanCount(int(value)))
+        await self._vacuum_bot.execute_command(self._capability.set(int(value)))

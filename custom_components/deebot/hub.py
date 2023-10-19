@@ -71,9 +71,13 @@ class DeebotHub:
             await self._mqtt.connect()
 
             for device in devices:
-                if device["name"] in self._hass_config.get(CONF_DEVICES, []):
+                if device.api_device_info["name"] in self._hass_config.get(
+                    CONF_DEVICES, []
+                ):
                     bot = VacuumBot(device, self._authenticator)
-                    _LOGGER.debug("New vacbot found: %s", device["name"])
+                    _LOGGER.debug(
+                        "New vacbot found: %s", device.api_device_info["name"]
+                    )
                     await bot.initialize(self._mqtt)
                     self.vacuum_bots.append(bot)
 

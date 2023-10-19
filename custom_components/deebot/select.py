@@ -1,8 +1,8 @@
 """Select module."""
 import logging
 
-from deebot_client.commands import SetWaterInfo
 from deebot_client.events import WaterAmount, WaterInfoEvent
+from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -43,6 +43,10 @@ class WaterInfoSelect(DeebotEntity, SelectEntity):  # type: ignore
         entity_category=EntityCategory.CONFIG,
     )
 
+    def __init__(self, vacuum_bot: VacuumBot):
+        super().__init__(vacuum_bot)
+        self._capabilities = vacuum_bot.capabilities.water
+
     _attr_options = [amount.display_name for amount in WaterAmount]
     _attr_current_option: str | None = None
 
@@ -55,9 +59,10 @@ class WaterInfoSelect(DeebotEntity, SelectEntity):  # type: ignore
             self.async_write_ha_state()
 
         self.async_on_remove(
-            self._vacuum_bot.events.subscribe(WaterInfoEvent, on_water_info)
+            self._vacuum_bot.events.subscribe(self._capabilities.event, on_water_info)
         )
 
     async def async_select_option(self, option: str) -> None:
         """Change the selected option."""
-        await self._vacuum_bot.execute_command(SetWaterInfo(option))
+        value = WaterAmount.get(option)
+        await self._vacuum_bot.execute_command(self._capabilities.set(value))

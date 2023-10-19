@@ -48,11 +48,11 @@ class DeebotEntity(Entity):  # type: ignore # lgtm [py/missing-equals]
             sw_version=self._vacuum_bot.fw_version,
         )
 
-        if "nick" in device:
-            info["name"] = device["nick"]
+        if nick := device.api_device_info.get("nick"):
+            info["name"] = nick
 
-        if "deviceName" in device:
-            info["model"] = device["deviceName"]
+        if model := device.api_device_info.get("deviceName"):
+            info["model"] = model
 
         return info
 

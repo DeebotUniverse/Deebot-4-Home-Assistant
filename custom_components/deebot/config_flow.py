@@ -218,11 +218,12 @@ def _get_options_schema(
     select_options = []
 
     for entry in devices:
-        label = entry.get("nick", entry["name"])
+        api_info = entry.api_device_info
+        label = api_info.get("nick", api_info["name"])
         if not label:
-            label = entry["name"]
+            label = api_info["name"]
         select_options.append(
-            selector.SelectOptionDict(value=entry["name"], label=label)
+            selector.SelectOptionDict(value=api_info["name"], label=label)
         )
 
     return vol.Schema(
