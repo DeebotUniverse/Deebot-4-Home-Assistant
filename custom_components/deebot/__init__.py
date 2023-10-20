@@ -1,7 +1,6 @@
-"""Support for Deebot Vaccums."""
+"""Support for Deebot Vacuums."""
 import asyncio
 import logging
-import sys
 from typing import Any
 
 from awesomeversion import AwesomeVersion
@@ -20,8 +19,6 @@ from .const import (
     STARTUP_MESSAGE,
 )
 from .util import get_bumper_device_id
-
-# pylint: enable=wrong-import-position
 
 _LOGGER = logging.getLogger(__name__)
 

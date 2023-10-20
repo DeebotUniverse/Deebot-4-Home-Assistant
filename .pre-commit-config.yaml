@@ -13,7 +13,7 @@ repos:
       - id: pyupgrade
         args: [--py311-plus]
   - repo: https://github.com/psf/black
-    rev: 23.9.1
+    rev: 23.10.0
     hooks:
       - id: black
         args:
@@ -77,8 +77,8 @@ repos:
     hooks:
       - id: prettier
         additional_dependencies:
-          - prettier@2.7.1
-          - prettier-plugin-sort-json@0.0.3
+          - prettier@3.0.3
+          - prettier-plugin-sort-json@3.1.0
         exclude_types:
           - python
         exclude: manifest\.json$
