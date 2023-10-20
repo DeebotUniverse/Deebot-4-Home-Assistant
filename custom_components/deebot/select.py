@@ -10,8 +10,8 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
+from .controller import DeebotController
 from .entity import DeebotEntity
-from .hub import DeebotHub
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -22,10 +22,10 @@ async def async_setup_entry(
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Add entities for passed config_entry in HA."""
-    hub: DeebotHub = hass.data[DOMAIN][config_entry.entry_id]
+    controller: DeebotController = hass.data[DOMAIN][config_entry.entry_id]
 
     new_devices = []
-    for vacbot in hub.vacuum_bots:
+    for vacbot in controller.vacuum_bots:
         new_devices.append(WaterInfoSelect(vacbot))
 
     if new_devices:

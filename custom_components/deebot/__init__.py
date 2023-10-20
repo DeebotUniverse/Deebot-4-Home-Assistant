@@ -1,12 +1,4 @@
-"""Support for Deebot Vaccums."""
-import sys
-
-if sys.version_info < (3, 11):
-    raise RuntimeError(
-        f"This component requires at least python 3.11! You are running {sys.version}"
-    )
-
-# pylint: disable=wrong-import-position
+"""Support for Deebot Vacuums."""
 import asyncio
 import logging
 from typing import Any
@@ -17,7 +9,8 @@ from homeassistant.const import CONF_DEVICES, CONF_USERNAME, CONF_VERIFY_SSL, Pl
 from homeassistant.const import __version__ as HA_VERSION
 from homeassistant.core import HomeAssistant
 
-from . import hub
+from custom_components.deebot.controller import DeebotController
+
 from .const import (
     CONF_BUMPER,
     CONF_CLIENT_DEVICE_ID,
@@ -27,8 +20,6 @@ from .const import (
     STARTUP_MESSAGE,
 )
 from .util import get_bumper_device_id
-
-# pylint: enable=wrong-import-position
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -71,10 +62,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     # Store an instance of the "connecting" class that does the work of speaking
     # with your actual devices.
-    deebot_hub = hub.DeebotHub(hass, {**entry.data, **entry.options})
-    await deebot_hub.async_setup()
+    controller = DeebotController(hass, {**entry.data, **entry.options})
+    await controller.initialize()
 
-    hass.data.setdefault(DOMAIN, {})[entry.entry_id] = deebot_hub
+    hass.data.setdefault(DOMAIN, {})[entry.entry_id] = controller
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     # Reload entry when its updated.
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))

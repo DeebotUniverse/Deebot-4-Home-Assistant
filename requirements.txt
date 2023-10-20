@@ -3,11 +3,11 @@ git+https://github.com/DeebotUniverse/client.py@capabilities-2.0#deebot-client==
 #deebot-client==3.0.2
 
 homeassistant>=2023.8.0b0
-mypy==1.6.0
+mypy==1.6.1
 
 numpy>=1.23.2
-pre-commit==3.4.0
-pylint==2.17.5
+pre-commit==3.5.0
+pylint==3.0.1
 
 #pytest-homeassistant-custom-component==0.4.4
 
