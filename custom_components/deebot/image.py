@@ -1,4 +1,4 @@
-"""Support for Deebot Vaccums."""
+"""Support for Deebot Vacuums."""
 import base64
 import logging
 from collections.abc import MutableMapping

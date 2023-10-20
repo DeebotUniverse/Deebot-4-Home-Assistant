@@ -1,12 +1,4 @@
-"""Support for Deebot Vaccums."""
-import sys
-
-if sys.version_info < (3, 11):
-    raise RuntimeError(
-        f"This component requires at least python 3.11! You are running {sys.version}"
-    )
-
-# pylint: disable=wrong-import-position
+"""Support for Deebot Vacuums."""
 import asyncio
 import logging
 from typing import Any
@@ -27,8 +19,6 @@ from .const import (
     STARTUP_MESSAGE,
 )
 from .util import get_bumper_device_id
-
-# pylint: enable=wrong-import-position
 
 _LOGGER = logging.getLogger(__name__)
 
