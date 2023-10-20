@@ -1,4 +1,4 @@
-"""Hub module."""
+"""Controller module."""
 import logging
 import random
 import string
@@ -27,8 +27,8 @@ from .const import CONF_CLIENT_DEVICE_ID, CONF_CONTINENT, CONF_COUNTRY
 _LOGGER = logging.getLogger(__name__)
 
 
-class DeebotHub:
-    """Deebot Hub."""
+class DeebotController:
+    """Deebot Controller."""
 
     def __init__(self, hass: HomeAssistant, config: Mapping[str, Any]):
         self._hass_config: Mapping[str, Any] = config
@@ -61,8 +61,8 @@ class DeebotHub:
         mqtt_config = MqttConfiguration(config=deebot_config)
         self._mqtt: MqttClient = MqttClient(mqtt_config, self._authenticator)
 
-    async def async_setup(self) -> None:
-        """Init hub."""
+    async def initialize(self) -> None:
+        """Init controller."""
         try:
             await self.teardown()
 
@@ -77,7 +77,7 @@ class DeebotHub:
                     await bot.initialize(self._mqtt)
                     self.vacuum_bots.append(bot)
 
-            _LOGGER.debug("Hub setup complete")
+            _LOGGER.debug("Controller initialize complete")
         except InvalidAuthenticationError as ex:
             raise ConfigEntryAuthFailed from ex
         except Exception as ex:
@@ -86,13 +86,8 @@ class DeebotHub:
             raise ConfigEntryNotReady(msg) from ex
 
     async def teardown(self) -> None:
-        """Disconnect hub."""
+        """Disconnect controller."""
         for bot in self.vacuum_bots:
             await bot.teardown()
         await self._mqtt.disconnect()
         await self._authenticator.teardown()
-
-    @property
-    def name(self) -> str:
-        """Return the name of the hub."""
-        return "Deebot Hub"
