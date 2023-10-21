@@ -1,9 +1,9 @@
-"""Support for Deebot Vacuums."""
+"""Support for Deebot image entities."""
 import base64
-import logging
-from collections.abc import MutableMapping
+from collections.abc import MutableMapping, Sequence
 from typing import Any
 
+from deebot_client.capabilities import CapabilityMap
 from deebot_client.events.map import CachedMapInfoEvent, MapChangedEvent
 from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.image import ImageEntity
@@ -16,8 +16,6 @@ from .const import DOMAIN
 from .controller import DeebotController
 from .entity import DeebotEntity
 
-_LOGGER = logging.getLogger(__name__)
-
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -27,32 +25,41 @@ async def async_setup_entry(
     """Add entities for passed config_entry in HA."""
     controller: DeebotController = hass.data[DOMAIN][config_entry.entry_id]
 
-    new_devices = []
+    def image_entity_generator(
+        device: VacuumBot,
+    ) -> Sequence[DeebotMap]:
+        new_entities = []
+        if caps := device.capabilities.map:
+            new_entities.append(DeebotMap(hass, device, caps))
 
-    for vacbot in controller.vacuum_bots:
-        new_devices.append(DeebotMap(hass, vacbot))
+        return new_entities
 
-    if new_devices:
-        async_add_entities(new_devices)
-
-
-class DeebotMap(DeebotEntity, ImageEntity):  # type: ignore
-    """Deebot map."""
-
-    entity_description = EntityDescription(
-        key="map",
-        translation_key="map",
-        entity_registry_enabled_default=False,
+    controller.register_platform_add_entities_generator(
+        async_add_entities, image_entity_generator
     )
+
+
+class DeebotMap(
+    DeebotEntity[CapabilityMap, EntityDescription],
+    ImageEntity,  # type: ignore
+):
+    """Deebot map."""
 
     _attr_should_poll = True
 
     def __init__(
-        self,
-        hass: HomeAssistant,
-        vacuum_bot: VacuumBot,
+        self, hass: HomeAssistant, device: VacuumBot, capability: CapabilityMap
     ):
-        super().__init__(vacuum_bot, hass=hass)
+        super().__init__(
+            device,
+            capability,
+            EntityDescription(
+                key="map",
+                translation_key="map",
+                entity_registry_enabled_default=False,
+            ),
+            hass=hass,
+        )
         self._attr_extra_state_attributes: MutableMapping[str, Any] = {}
 
     def image(self) -> bytes | None:
@@ -73,8 +80,12 @@ class DeebotMap(DeebotEntity, ImageEntity):  # type: ignore
             self.async_write_ha_state()
 
         subscriptions = [
-            self._vacuum_bot.events.subscribe(CachedMapInfoEvent, on_info),
-            self._vacuum_bot.events.subscribe(MapChangedEvent, on_changed),
+            self._vacuum_bot.events.subscribe(
+                self._capability.chached_info.event, on_info
+            ),
+            self._vacuum_bot.events.subscribe(
+                self._capability.changed.event, on_changed
+            ),
         ]
 
         def on_remove() -> None:

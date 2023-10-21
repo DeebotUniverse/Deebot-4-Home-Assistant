@@ -1,6 +1,8 @@
 """Binary sensor module."""
-import logging
+from collections.abc import Sequence
+from dataclasses import dataclass
 
+from deebot_client.capabilities import CapabilityExecute
 from deebot_client.events import LifeSpan
 from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
@@ -11,9 +13,27 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
 from .controller import DeebotController
-from .entity import DeebotEntity
+from .entity import DeebotEntity, DeebotEntityDescription
 
-_LOGGER = logging.getLogger(__name__)
+
+@dataclass
+class DeebotButtonEntityDescription(
+    ButtonEntityDescription,  # type: ignore
+    DeebotEntityDescription,
+):
+    """Class describing debbot button entity."""
+
+
+ENTITY_DESCRIPTIONS: tuple[DeebotButtonEntityDescription, ...] = (
+    DeebotButtonEntityDescription(
+        capability_fn=lambda caps: caps.map.relocation if caps.map else None,
+        key="relocate",
+        translation_key="relocate",
+        icon="mdi:map-marker-question",
+        entity_registry_enabled_default=True,  # Can be enabled as they don't poll data
+        entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+)
 
 
 async def async_setup_entry(
@@ -23,18 +43,27 @@ async def async_setup_entry(
 ) -> None:
     """Add entities for passed config_entry in HA."""
     controller: DeebotController = hass.data[DOMAIN][config_entry.entry_id]
+    controller.register_platform_add_entities(
+        DeebotButtonEntity, ENTITY_DESCRIPTIONS, async_add_entities
+    )
 
-    new_devices = []
-    for vacbot in controller.vacuum_bots:
-        for component in vacbot.capabilities.life_span.types:
-            new_devices.append(DeebotResetLifeSpanButtonEntity(vacbot, component))
-        new_devices.append(DeebotRelocateButtonEntity(vacbot))
+    def generate_reset_life_span(
+        device: VacuumBot,
+    ) -> Sequence[DeebotResetLifeSpanButtonEntity]:
+        return [
+            DeebotResetLifeSpanButtonEntity(device, component)
+            for component in device.capabilities.life_span.types
+        ]
 
-    if new_devices:
-        async_add_entities(new_devices)
+    controller.register_platform_add_entities_generator(
+        async_add_entities, generate_reset_life_span
+    )
 
 
-class DeebotResetLifeSpanButtonEntity(DeebotEntity, ButtonEntity):  # type: ignore
+class DeebotResetLifeSpanButtonEntity(
+    DeebotEntity[None, ButtonEntityDescription],
+    ButtonEntity,  # type: ignore
+):
     """Deebot reset life span button entity."""
 
     def __init__(self, vacuum_bot: VacuumBot, component: LifeSpan):
@@ -46,7 +75,7 @@ class DeebotResetLifeSpanButtonEntity(DeebotEntity, ButtonEntity):  # type: igno
             entity_registry_enabled_default=True,  # Can be enabled as they don't poll data
             entity_category=EntityCategory.CONFIG,
         )
-        super().__init__(vacuum_bot, entity_description)
+        super().__init__(vacuum_bot, None, entity_description)
         self._command = vacuum_bot.capabilities.life_span.reset(component)
 
     async def async_press(self) -> None:
@@ -54,19 +83,12 @@ class DeebotResetLifeSpanButtonEntity(DeebotEntity, ButtonEntity):  # type: igno
         await self._vacuum_bot.execute_command(self._command)
 
 
-class DeebotRelocateButtonEntity(DeebotEntity, ButtonEntity):  # type: ignore
-    """Deebot relocate button entity."""
-
-    entity_description = ButtonEntityDescription(
-        key="relocate",
-        translation_key="relocate",
-        icon="mdi:map-marker-question",
-        entity_registry_enabled_default=True,  # Can be enabled as they don't poll data
-        entity_category=EntityCategory.DIAGNOSTIC,
-    )
+class DeebotButtonEntity(
+    DeebotEntity[CapabilityExecute, DeebotButtonEntityDescription],
+    ButtonEntity,  # type: ignore
+):
+    """Deebot button entity."""
 
     async def async_press(self) -> None:
         """Press the button."""
-        await self._vacuum_bot.execute_command(
-            self._vacuum_bot.capabilities.map.relocation.execute()
-        )
+        await self._vacuum_bot.execute_command(self._capability.execute())
