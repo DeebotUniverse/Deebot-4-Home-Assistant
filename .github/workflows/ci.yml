@@ -52,3 +52,47 @@ jobs:
         run: mypy custom_components/
       - name: Pylint review
         run: pylint custom_components/
+
+  create_zip_file:
+    name: Create zip file for easy testing
+    permissions:
+      # Required to upload/save artifact, otherwise you'll get
+      # "Error: Resource not accessible by integration"
+      contents: write
+      # Required to post comment, otherwise you'll get
+      # "Error: Resource not accessible by integration"
+      pull-requests: write
+    needs:
+      - code-quality
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: 📥 Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: 📦 Create zip file for the integration
+        run: |
+          cd "${{ github.workspace }}/custom_components/deebot"
+          zip deebot.zip -r ./
+          mv deebot.zip "${{ github.workspace }}/"
+
+      - name: 📤 Create comment with the artifiactory
+        uses: gavv/pull-request-artifacts@v2
+        with:
+          # Commit hash that triggered PR
+          commit: ${{ github.event.pull_request.head.sha }}
+
+          # Token for current repo (used to post PR comment)
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+          artifacts-branch: artifacts
+          inter-link: false
+
+          comment-title: |
+            🤖 Pull request artifactsy
+
+            For testing please download the zip file below and extract it in `[config folder]/custom_components/deebot`.
+
+          # Whitespace-separated list of files to upload
+          artifacts: |
+            deebot.zip
