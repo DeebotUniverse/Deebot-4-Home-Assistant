@@ -1,4 +1,4 @@
-name: PR atrifacts
+name: PR artifacts
 
 on:
   pull_request:
@@ -6,7 +6,6 @@ on:
       - dev
 
 jobs:
-  # Main job
   build:
     permissions:
       # Required to upload/save artifact, otherwise you'll get
