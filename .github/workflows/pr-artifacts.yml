@@ -37,6 +37,11 @@ jobs:
 
           artifacts-branch: artifacts
 
+          comment-title: |
+            🤖 Pull request artifactsy
+
+            For testing please download the zip file below and extract it in `[config folder]/custom_components/deebot`.
+
           # Whitespace-separated list of files to upload
           artifacts: |
             deebot.zip
