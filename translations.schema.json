@@ -213,6 +213,33 @@
                 }
               },
               "type": "object"
+            },
+            "work_mode": {
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "state": {
+                  "additionalProperties": false,
+                  "properties": {
+                    "mop": {
+                      "type": "string"
+                    },
+                    "mop_after_vacuum": {
+                      "type": "string"
+                    },
+                    "vacuum": {
+                      "type": "string"
+                    },
+                    "vacuum_and_mop": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
             }
           },
           "type": "object"
