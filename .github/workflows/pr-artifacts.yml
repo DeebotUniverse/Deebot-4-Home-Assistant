@@ -6,7 +6,7 @@ on:
       - dev
 
 jobs:
-  build:
+  create:
     permissions:
       # Required to upload/save artifact, otherwise you'll get
       # "Error: Resource not accessible by integration"
@@ -24,6 +24,8 @@ jobs:
         run: |
           cd "${{ github.workspace }}/custom_components/deebot"
           zip deebot.zip -r ./
+          mv deebot.zip "${{ github.workspace }}/"
+
       - name: 📤 Create comment with the artifiactory
         uses: gavv/pull-request-artifacts@v2
         with:
