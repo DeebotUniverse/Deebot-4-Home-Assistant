@@ -25,10 +25,8 @@ async def async_get_device_diagnostics(
         "config": async_redact_data(config_entry.as_dict(), REDACT_CONFIG)
     }
 
-    for bot in controller.vacuum_bots:
-        for identifier in device.identifiers:
-            if bot.device_info.did == identifier[1]:
-                diag["device"] = async_redact_data(bot.device_info, REDACT_DEVICE)
-                break
+    diag["device"] = async_redact_data(
+        controller.get_device_info(device), REDACT_DEVICE
+    )
 
     return diag

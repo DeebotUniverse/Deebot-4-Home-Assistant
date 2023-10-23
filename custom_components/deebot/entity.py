@@ -1,15 +1,42 @@
 """Deebot entity module."""
-from typing import Any
+from collections.abc import Callable
+from dataclasses import dataclass
+from typing import Any, Generic, TypeVar
 
+from deebot_client.capabilities import Capabilities
 from deebot_client.events import AvailabilityEvent
+from deebot_client.events.base import Event
 from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.helpers.entity import DeviceInfo, Entity, EntityDescription
 
-from . import DOMAIN
+from .const import DOMAIN
+
+_EntityDescriptionT = TypeVar("_EntityDescriptionT", bound=EntityDescription)
+CapabilityT = TypeVar("CapabilityT")
+EventT = TypeVar("EventT", bound=Event)
 
 
-class DeebotEntity(Entity):  # type: ignore # lgtm [py/missing-equals]
+@dataclass
+class DeebotDescription(Generic[CapabilityT]):
+    """Deebot description."""
+
+    capability_fn: Callable[[Capabilities], CapabilityT | None]
+
+
+@dataclass
+class DeebotEntityDescription(
+    EntityDescription,  # type: ignore
+    DeebotDescription[CapabilityT],
+):
+    """Deebot Entity Description."""
+
+    always_available: bool = False
+
+
+class DeebotEntity(Entity, Generic[CapabilityT, _EntityDescriptionT]):  # type: ignore
     """Deebot entity."""
+
+    entity_description: _EntityDescriptionT
 
     _attr_should_poll = False
     _always_available: bool = False
@@ -18,10 +45,11 @@ class DeebotEntity(Entity):  # type: ignore # lgtm [py/missing-equals]
     def __init__(
         self,
         vacuum_bot: VacuumBot,
-        entity_description: EntityDescription | None = None,
+        capability: CapabilityT,
+        entity_description: _EntityDescriptionT | None = None,
         **kwargs: Any,
     ):
-        """Initialize the Sensor."""
+        """Initialize entity."""
         super().__init__(**kwargs)
         if entity_description:
             self.entity_description = entity_description
@@ -31,6 +59,7 @@ class DeebotEntity(Entity):  # type: ignore # lgtm [py/missing-equals]
             )
 
         self._vacuum_bot: VacuumBot = vacuum_bot
+        self._capability = capability
 
         device_info = self._vacuum_bot.device_info
         self._attr_unique_id = device_info.did
@@ -48,11 +77,11 @@ class DeebotEntity(Entity):  # type: ignore # lgtm [py/missing-equals]
             sw_version=self._vacuum_bot.fw_version,
         )
 
-        if "nick" in device:
-            info["name"] = device["nick"]
+        if nick := device.api_device_info.get("nick"):
+            info["name"] = nick
 
-        if "deviceName" in device:
-            info["model"] = device["deviceName"]
+        if model := device.api_device_info.get("deviceName"):
+            info["model"] = model
 
         return info
 

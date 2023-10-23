@@ -1,35 +1,70 @@
 """Switch module."""
-import logging
+from dataclasses import dataclass
 from typing import Any
 
-from deebot_client.commands import (
-    SetAdvancedMode,
-    SetCarpetAutoFanBoost,
-    SetCleanPreference,
-    SetContinuousCleaning,
-    SetTrueDetect,
-)
-from deebot_client.commands.common import SetEnableCommand
-from deebot_client.events import (
-    AdvancedModeEvent,
-    CarpetAutoFanBoostEvent,
-    CleanPreferenceEvent,
-    ContinuousCleaningEvent,
-    EnableEvent,
-    TrueDetectEvent,
-)
-from deebot_client.vacuum_bot import VacuumBot
+from deebot_client.capabilities import CapabilitySetEnable
+from deebot_client.events import EnableEvent
 from homeassistant.components.switch import SwitchEntity, SwitchEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity import EntityCategory, EntityDescription
+from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
 from .controller import DeebotController
-from .entity import DeebotEntity
+from .entity import DeebotEntity, DeebotEntityDescription
 
-_LOGGER = logging.getLogger(__name__)
+
+@dataclass
+class DeebotSwitchEntityDescription(
+    SwitchEntityDescription,  # type: ignore
+    DeebotEntityDescription,
+):
+    """Deebot switch entity description."""
+
+
+ENTITY_DESCRIPTIONS: tuple[DeebotSwitchEntityDescription, ...] = (
+    DeebotSwitchEntityDescription(
+        capability_fn=lambda c: c.settings.advanced_mode,
+        key="advanced_mode",
+        translation_key="advanced_mode",
+        entity_registry_enabled_default=False,
+        entity_category=EntityCategory.CONFIG,
+        icon="mdi:tune",
+    ),
+    DeebotSwitchEntityDescription(
+        capability_fn=lambda c: c.clean.continuous,
+        key="continuous_cleaning",
+        translation_key="continuous_cleaning",
+        entity_registry_enabled_default=False,
+        entity_category=EntityCategory.CONFIG,
+        icon="mdi:refresh-auto",
+    ),
+    DeebotSwitchEntityDescription(
+        capability_fn=lambda c: c.settings.carpet_auto_fan_boost,
+        key="carpet_auto_fan_speed_boost",
+        translation_key="carpet_auto_fan_speed_boost",
+        entity_registry_enabled_default=False,
+        entity_category=EntityCategory.CONFIG,
+        icon="mdi:fan-auto",
+    ),
+    DeebotSwitchEntityDescription(
+        capability_fn=lambda c: c.clean.preference,
+        key="clean_preference",
+        translation_key="clean_preference",
+        entity_registry_enabled_default=False,
+        entity_category=EntityCategory.CONFIG,
+        icon="mdi:broom",
+    ),
+    DeebotSwitchEntityDescription(
+        capability_fn=lambda c: c.settings.true_detect,
+        key="true_detect",
+        translation_key="true_detect",
+        entity_registry_enabled_default=False,
+        entity_category=EntityCategory.CONFIG,
+        icon="mdi:laser-pointer",
+    ),
+)
 
 
 async def async_setup_entry(
@@ -39,93 +74,18 @@ async def async_setup_entry(
 ) -> None:
     """Add entities for passed config_entry in HA."""
     controller: DeebotController = hass.data[DOMAIN][config_entry.entry_id]
-
-    new_devices = []
-    for vacbot in controller.vacuum_bots:
-        new_devices.extend(
-            [
-                DeebotSwitchEntity(
-                    vacbot,
-                    SwitchEntityDescription(
-                        key="advanced_mode",
-                        translation_key="advanced_mode",
-                        entity_registry_enabled_default=False,
-                        entity_category=EntityCategory.CONFIG,
-                        icon="mdi:tune",
-                    ),
-                    AdvancedModeEvent,
-                    SetAdvancedMode,
-                ),
-                DeebotSwitchEntity(
-                    vacbot,
-                    SwitchEntityDescription(
-                        key="continuous_cleaning",
-                        translation_key="continuous_cleaning",
-                        entity_registry_enabled_default=False,
-                        entity_category=EntityCategory.CONFIG,
-                        icon="mdi:refresh-auto",
-                    ),
-                    ContinuousCleaningEvent,
-                    SetContinuousCleaning,
-                ),
-                DeebotSwitchEntity(
-                    vacbot,
-                    SwitchEntityDescription(
-                        key="carpet_auto_fan_speed_boost",
-                        translation_key="carpet_auto_fan_speed_boost",
-                        entity_registry_enabled_default=False,
-                        entity_category=EntityCategory.CONFIG,
-                        icon="mdi:fan-auto",
-                    ),
-                    CarpetAutoFanBoostEvent,
-                    SetCarpetAutoFanBoost,
-                ),
-                DeebotSwitchEntity(
-                    vacbot,
-                    SwitchEntityDescription(
-                        key="clean_preference",
-                        translation_key="clean_preference",
-                        entity_registry_enabled_default=False,
-                        entity_category=EntityCategory.CONFIG,
-                        icon="mdi:broom",
-                    ),
-                    CleanPreferenceEvent,
-                    SetCleanPreference,
-                ),
-                DeebotSwitchEntity(
-                    vacbot,
-                    SwitchEntityDescription(
-                        key="true_detect",
-                        translation_key="true_detect",
-                        entity_registry_enabled_default=False,
-                        entity_category=EntityCategory.CONFIG,
-                        icon="mdi:laser-pointer",
-                    ),
-                    TrueDetectEvent,
-                    SetTrueDetect,
-                ),
-            ]
-        )
-
-    if new_devices:
-        async_add_entities(new_devices)
+    controller.register_platform_add_entities(
+        DeebotSwitchEntity, ENTITY_DESCRIPTIONS, async_add_entities
+    )
 
 
-class DeebotSwitchEntity(DeebotEntity, SwitchEntity):  # type: ignore
+class DeebotSwitchEntity(
+    DeebotEntity[CapabilitySetEnable, DeebotSwitchEntityDescription],
+    SwitchEntity,  # type: ignore
+):
     """Deebot switch entity."""
 
     _attr_is_on = False
-
-    def __init__(
-        self,
-        vacuum_bot: VacuumBot,
-        entity_description: EntityDescription,
-        event_type: type[EnableEvent],
-        set_command: type[SetEnableCommand],
-    ):
-        super().__init__(vacuum_bot, entity_description)
-        self._event_type = event_type
-        self._set_command = set_command
 
     async def async_added_to_hass(self) -> None:
         """Set up the event listeners now that hass is ready."""
@@ -136,13 +96,13 @@ class DeebotSwitchEntity(DeebotEntity, SwitchEntity):  # type: ignore
             self.async_write_ha_state()
 
         self.async_on_remove(
-            self._vacuum_bot.events.subscribe(self._event_type, on_enable)
+            self._vacuum_bot.events.subscribe(self._capability.event, on_enable)
         )
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn the entity on."""
-        await self._vacuum_bot.execute_command(self._set_command(True))
+        await self._vacuum_bot.execute_command(self._capability.set(True))
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn the entity off."""
-        await self._vacuum_bot.execute_command(self._set_command(False))
+        await self._vacuum_bot.execute_command(self._capability.set(False))

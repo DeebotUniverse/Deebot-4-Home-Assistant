@@ -1,6 +1,9 @@
 """Binary sensor module."""
-import logging
+from collections.abc import Callable
+from dataclasses import dataclass
+from typing import Generic
 
+from deebot_client.capabilities import CapabilityEvent
 from deebot_client.events.water_info import WaterInfoEvent
 from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
@@ -13,9 +16,37 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import DOMAIN
 from .controller import DeebotController
-from .entity import DeebotEntity
+from .entity import DeebotEntity, DeebotEntityDescription, EventT
 
-_LOGGER = logging.getLogger(__name__)
+
+@dataclass
+class DeebotBinarySensorEntityMixin(Generic[EventT]):
+    """Deebot binary sensor entity mixin."""
+
+    value_fn: Callable[[EventT], bool | None]
+    icon_fn: Callable[[bool | None], str | None]
+
+
+@dataclass
+class DeebotBinarySensorEntityDescription(
+    BinarySensorEntityDescription,  # type: ignore
+    DeebotEntityDescription,
+    DeebotBinarySensorEntityMixin[EventT],
+):
+    """Class describing Deebot binary sensor entity."""
+
+
+ENTITY_DESCRIPTIONS: tuple[DeebotBinarySensorEntityDescription, ...] = (
+    DeebotBinarySensorEntityDescription[WaterInfoEvent](
+        capability_fn=lambda caps: caps.water,
+        value_fn=lambda e: e.mop_attached,
+        icon_fn=lambda is_on: "mdi:water" if is_on else "mdi:water-off",
+        key="mop_attached",
+        translation_key="mop_attached",
+        entity_registry_enabled_default=False,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+)
 
 
 async def async_setup_entry(
@@ -25,38 +56,23 @@ async def async_setup_entry(
 ) -> None:
     """Add entities for passed config_entry in HA."""
     controller: DeebotController = hass.data[DOMAIN][config_entry.entry_id]
-
-    new_devices = []
-    for vacbot in controller.vacuum_bots:
-        new_devices.append(DeebotMopAttachedBinarySensor(vacbot))
-
-    if new_devices:
-        async_add_entities(new_devices)
-
-
-class DeebotMopAttachedBinarySensor(DeebotEntity, BinarySensorEntity):  # type: ignore
-    """Deebot mop attached binary sensor."""
-
-    entity_description = BinarySensorEntityDescription(
-        key="mop_attached",
-        translation_key="mop_attached",
-        entity_registry_enabled_default=False,
-        entity_category=EntityCategory.DIAGNOSTIC,
+    controller.register_platform_add_entities(
+        DeebotBinarySensor, ENTITY_DESCRIPTIONS, async_add_entities
     )
 
-    @property
-    def icon(self) -> str | None:
-        """Return the icon to use in the frontend, if any."""
-        return "mdi:water" if self.is_on else "mdi:water-off"
+
+class DeebotBinarySensor(DeebotEntity[CapabilityEvent[EventT], DeebotBinarySensorEntityDescription], BinarySensorEntity):  # type: ignore
+    """Deebot binary sensor."""
 
     async def async_added_to_hass(self) -> None:
         """Set up the event listeners now that hass is ready."""
         await super().async_added_to_hass()
 
-        async def on_event(event: WaterInfoEvent) -> None:
-            self._attr_is_on = event.mop_attached
+        async def on_event(event: EventT) -> None:
+            self._attr_is_on = self.entity_description.value_fn(event)
+            self._attr_icon = self.entity_description.icon_fn(self._attr_is_on)
             self.async_write_ha_state()
 
         self.async_on_remove(
-            self._vacuum_bot.events.subscribe(WaterInfoEvent, on_event)
+            self._vacuum_bot.events.subscribe(self._capability.event, on_event)
         )

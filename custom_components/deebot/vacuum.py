@@ -1,20 +1,10 @@
 """Support for Deebot Vacuums."""
 import logging
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import Any
 
 import voluptuous as vol
-from deebot_client.commands import (
-    Charge,
-    Clean,
-    FanSpeedLevel,
-    PlaySound,
-    SetFanSpeed,
-    SetRelocationState,
-    SetWaterInfo,
-)
-from deebot_client.commands.clean import CleanAction, CleanArea, CleanMode
-from deebot_client.commands.custom import CustomCommand
+from deebot_client.capabilities import Capabilities
 from deebot_client.events import (
     BatteryEvent,
     CustomCommandEvent,
@@ -24,7 +14,7 @@ from deebot_client.events import (
     RoomsEvent,
     StateEvent,
 )
-from deebot_client.models import Room
+from deebot_client.models import CleanAction, CleanMode, Room
 from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.vacuum import (
     StateVacuumEntity,
@@ -74,12 +64,14 @@ async def async_setup_entry(
     """Add entities for passed config_entry in HA."""
     controller: DeebotController = hass.data[DOMAIN][config_entry.entry_id]
 
-    new_devices = []
-    for vacbot in controller.vacuum_bots:
-        new_devices.append(DeebotVacuum(vacbot))
+    def vacuum_entity_generator(
+        device: VacuumBot,
+    ) -> Sequence[DeebotVacuum]:
+        return [DeebotVacuum(device)]
 
-    if new_devices:
-        async_add_entities(new_devices)
+    controller.register_platform_add_entities_generator(
+        async_add_entities, vacuum_entity_generator
+    )
 
     platform = entity_platform.async_get_current_platform()
 
@@ -90,7 +82,10 @@ async def async_setup_entry(
     )
 
 
-class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
+class DeebotVacuum(
+    DeebotEntity[Capabilities, StateVacuumEntityDescription],
+    StateVacuumEntity,  # type: ignore
+):
     """Deebot Vacuum."""
 
     _attr_supported_features = (
@@ -104,17 +99,22 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
         | VacuumEntityFeature.STATE
         | VacuumEntityFeature.START
     )
-    _attr_fan_speed_list = [level.display_name for level in FanSpeedLevel]
 
-    def __init__(self, vacuum_bot: VacuumBot):
+    def __init__(self, device: VacuumBot):
         """Initialize the Deebot Vacuum."""
+        capabilities = device.capabilities
         super().__init__(
-            vacuum_bot,
+            device,
+            capabilities,
             StateVacuumEntityDescription(key="", translation_key="bot", name=None),
         )
 
         self._rooms: list[Room] = []
         self._last_error: ErrorEvent | None = None
+
+        self._attr_fan_speed_list = [
+            level.display_name for level in capabilities.fan_speed.types
+        ]
 
     async def async_added_to_hass(self) -> None:
         """Set up the event listeners now that hass is ready."""
@@ -126,10 +126,6 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
 
         async def on_custom_command(event: CustomCommandEvent) -> None:
             self.hass.bus.fire(EVENT_CUSTOM_COMMAND, dataclass_to_dict(event))
-
-        async def on_error(event: ErrorEvent) -> None:
-            self._last_error = event
-            self.async_write_ha_state()
 
         async def on_fan_speed(event: FanSpeedEvent) -> None:
             self._attr_fan_speed = event.speed.display_name
@@ -147,14 +143,26 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
             self.async_write_ha_state()
 
         subscriptions = [
-            self._vacuum_bot.events.subscribe(BatteryEvent, on_battery),
-            self._vacuum_bot.events.subscribe(CustomCommandEvent, on_custom_command),
-            self._vacuum_bot.events.subscribe(ErrorEvent, on_error),
-            self._vacuum_bot.events.subscribe(FanSpeedEvent, on_fan_speed),
-            self._vacuum_bot.events.subscribe(ReportStatsEvent, on_report_stats),
-            self._vacuum_bot.events.subscribe(RoomsEvent, on_rooms),
-            self._vacuum_bot.events.subscribe(StateEvent, on_status),
+            self._vacuum_bot.events.subscribe(
+                self._capability.battery.event, on_battery
+            ),
+            self._vacuum_bot.events.subscribe(
+                self._capability.fan_speed.event, on_fan_speed
+            ),
+            self._vacuum_bot.events.subscribe(
+                self._capability.stats.report.event, on_report_stats
+            ),
+            self._vacuum_bot.events.subscribe(self._capability.state.event, on_status),
         ]
+
+        if custom := self._capability.custom:
+            subscriptions.append(
+                self._vacuum_bot.events.subscribe(custom.event, on_custom_command)
+            )
+        if map_caps := self._capability.map:
+            subscriptions.append(
+                self._vacuum_bot.events.subscribe(map_caps.rooms.event, on_rooms)
+            )
 
         def unsubscribe() -> None:
             for sub in subscriptions:
@@ -195,27 +203,34 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
 
     async def async_set_fan_speed(self, fan_speed: str, **kwargs: Any) -> None:
         """Set fan speed."""
-        await self._vacuum_bot.execute_command(SetFanSpeed(fan_speed))
+        await self._vacuum_bot.execute_command(
+            self._capability.fan_speed.set(fan_speed)
+        )
 
     async def async_return_to_base(self, **kwargs: Any) -> None:
         """Set the vacuum cleaner to return to the dock."""
-        await self._vacuum_bot.execute_command(Charge())
+        await self._vacuum_bot.execute_command(self._capability.charge.execute())
 
     async def async_stop(self, **kwargs: Any) -> None:
         """Stop the vacuum cleaner."""
-        await self._vacuum_bot.execute_command(Clean(CleanAction.STOP))
+        await self._clean_command(CleanAction.STOP)
 
     async def async_pause(self) -> None:
         """Pause the vacuum cleaner."""
-        await self._vacuum_bot.execute_command(Clean(CleanAction.PAUSE))
+        await self._clean_command(CleanAction.PAUSE)
 
     async def async_start(self) -> None:
         """Start the vacuum cleaner."""
-        await self._vacuum_bot.execute_command(Clean(CleanAction.START))
+        await self._clean_command(CleanAction.START)
+
+    async def _clean_command(self, action: CleanAction) -> None:
+        await self._vacuum_bot.execute_command(
+            self._capability.clean.action.command(action)
+        )
 
     async def async_locate(self, **kwargs: Any) -> None:
         """Locate the vacuum cleaner."""
-        await self._vacuum_bot.execute_command(PlaySound())
+        await self._vacuum_bot.execute_command(self._capability.play_sound.execute())
 
     async def async_send_command(
         self, command: str, params: dict[str, Any] | None = None, **kwargs: Any
@@ -223,39 +238,30 @@ class DeebotVacuum(DeebotEntity, StateVacuumEntity):  # type: ignore
         """Send a command to a vacuum cleaner."""
         _LOGGER.debug("async_send_command %s with %s", command, params)
 
-        if command in ["relocate", SetRelocationState.name]:
-            _LOGGER.warning("DEPRECATED! Please use relocate button entity instead.")
-            await self._vacuum_bot.execute_command(SetRelocationState())
-        elif command == "auto_clean":
-            clean_type = params.get("type", "auto") if params else "auto"
-            if clean_type == "auto":
-                _LOGGER.warning('DEPRECATED! Please use "vacuum.start" instead.')
-                await self.async_start()
-        elif command in ["spot_area", "custom_area", "set_water"]:
+        if command in ["spot_area", "custom_area"]:
             if params is None:
                 raise RuntimeError("Params are required!")
 
             if command in "spot_area":
                 await self._vacuum_bot.execute_command(
-                    CleanArea(
-                        mode=CleanMode.SPOT_AREA,
-                        area=str(params["rooms"]),
-                        cleanings=params.get("cleanings", 1),
+                    self._capability.clean.action.area(
+                        CleanMode.SPOT_AREA,
+                        str(params["rooms"]),
+                        params.get("cleanings", 1),
                     )
                 )
             elif command == "custom_area":
                 await self._vacuum_bot.execute_command(
-                    CleanArea(
-                        mode=CleanMode.CUSTOM_AREA,
-                        area=str(params["coordinates"]),
-                        cleanings=params.get("cleanings", 1),
+                    self._capability.clean.action.area(
+                        CleanMode.CUSTOM_AREA,
+                        str(params["coordinates"]),
+                        params.get("cleanings", 1),
                     )
                 )
-            elif command == "set_water":
-                _LOGGER.warning("DEPRECATED! Please use water select entity instead.")
-                await self._vacuum_bot.execute_command(SetWaterInfo(params["amount"]))
         else:
-            await self._vacuum_bot.execute_command(CustomCommand(command, params))
+            await self._vacuum_bot.execute_command(
+                self._capability.custom.set(command, params)
+            )
 
     async def service_refresh(self, category: str) -> None:
         """Service to manually refresh."""
