@@ -58,10 +58,10 @@ class DeebotEntity(Entity, Generic[CapabilityT, _EntityDescriptionT]):  # type: 
                 '"entity_description" must be either set as class variable or passed on init!'
             )
 
-        self._vacuum_bot = device
+        self._device = device
         self._capability = capability
 
-        device_info = self._vacuum_bot.device_info
+        device_info = self._device.device_info
         self._attr_unique_id = device_info.did
 
         if self.entity_description.key:
@@ -70,11 +70,11 @@ class DeebotEntity(Entity, Generic[CapabilityT, _EntityDescriptionT]):  # type: 
     @property
     def device_info(self) -> DeviceInfo | None:
         """Return device specific attributes."""
-        device = self._vacuum_bot.device_info
+        device = self._device.device_info
         info = DeviceInfo(
             identifiers={(DOMAIN, device.did)},
             manufacturer="Ecovacs",
-            sw_version=self._vacuum_bot.fw_version,
+            sw_version=self._device.fw_version,
         )
 
         if nick := device.api_device_info.get("nick"):
@@ -96,5 +96,5 @@ class DeebotEntity(Entity, Generic[CapabilityT, _EntityDescriptionT]):  # type: 
                 self.async_write_ha_state()
 
             self.async_on_remove(
-                self._vacuum_bot.events.subscribe(AvailabilityEvent, on_available)
+                self._device.events.subscribe(AvailabilityEvent, on_available)
             )

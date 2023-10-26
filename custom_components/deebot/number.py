@@ -114,9 +114,9 @@ class DeebotNumberEntity(
             self.async_write_ha_state()
 
         self.async_on_remove(
-            self._vacuum_bot.events.subscribe(self._capability.event, on_event)
+            self._device.events.subscribe(self._capability.event, on_event)
         )
 
     async def async_set_native_value(self, value: float) -> None:
         """Set new value."""
-        await self._vacuum_bot.execute_command(self._capability.set(int(value)))
+        await self._device.execute_command(self._capability.set(int(value)))

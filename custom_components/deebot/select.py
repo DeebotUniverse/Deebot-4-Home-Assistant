@@ -96,9 +96,9 @@ class DeebotSelectEntity(
             self.async_write_ha_state()
 
         self.async_on_remove(
-            self._vacuum_bot.events.subscribe(self._capability.event, on_water_info)
+            self._device.events.subscribe(self._capability.event, on_water_info)
         )
 
     async def async_select_option(self, option: str) -> None:
         """Change the selected option."""
-        await self._vacuum_bot.execute_command(self._capability.set(option))
+        await self._device.execute_command(self._capability.set(option))

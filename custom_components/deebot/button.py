@@ -80,7 +80,7 @@ class DeebotResetLifeSpanButtonEntity(
 
     async def async_press(self) -> None:
         """Press the button."""
-        await self._vacuum_bot.execute_command(self._command)
+        await self._device.execute_command(self._command)
 
 
 class DeebotButtonEntity(
@@ -91,4 +91,4 @@ class DeebotButtonEntity(
 
     async def async_press(self) -> None:
         """Press the button."""
-        await self._vacuum_bot.execute_command(self._capability.execute())
+        await self._device.execute_command(self._capability.execute())
