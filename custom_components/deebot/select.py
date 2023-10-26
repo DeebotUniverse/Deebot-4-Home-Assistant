@@ -44,6 +44,16 @@ ENTITY_DESCRIPTIONS: tuple[DeebotSelectEntityDescription, ...] = (
         icon="mdi:water",
         entity_category=EntityCategory.CONFIG,
     ),
+    DeebotSelectEntityDescription(
+        capability_fn=lambda caps: caps.clean.work_mode,
+        current_option_fn=lambda e: e.mode.display_name,
+        options_fn=lambda cap: [mode.display_name for mode in cap.types],
+        key="work_mode",
+        translation_key="work_mode",
+        entity_registry_enabled_default=False,
+        icon="mdi:cog",
+        entity_category=EntityCategory.CONFIG,
+    ),
 )
 
 

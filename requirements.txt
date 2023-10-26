@@ -1,5 +1,5 @@
 # if code from specific branch is needed
-git+https://github.com/DeebotUniverse/client.py@dev#deebot-client==4.0.0b0
+git+https://github.com/DeebotUniverse/client.py@dev#deebot-client==4.0.0dev1
 #deebot-client==3.0.2
 
 homeassistant>=2023.8.0b0

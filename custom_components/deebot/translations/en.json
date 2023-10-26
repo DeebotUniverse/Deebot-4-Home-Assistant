@@ -81,6 +81,15 @@
           "medium": "medium",
           "ultrahigh": "ultrahigh"
         }
+      },
+      "work_mode": {
+        "name": "Work mode",
+        "state": {
+          "mop": "Mop",
+          "mop_after_vacuum": "Mop after vacuum",
+          "vacuum": "Vacuum",
+          "vacuum_and_mop": "Vacuum & mop"
+        }
       }
     },
     "sensor": {
