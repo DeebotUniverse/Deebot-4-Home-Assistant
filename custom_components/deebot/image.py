@@ -4,8 +4,8 @@ from collections.abc import MutableMapping, Sequence
 from typing import Any
 
 from deebot_client.capabilities import CapabilityMap
+from deebot_client.device import Device
 from deebot_client.events.map import CachedMapInfoEvent, MapChangedEvent
-from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.image import ImageEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -26,7 +26,7 @@ async def async_setup_entry(
     controller: DeebotController = hass.data[DOMAIN][config_entry.entry_id]
 
     def image_entity_generator(
-        device: VacuumBot,
+        device: Device,
     ) -> Sequence[DeebotMap]:
         new_entities = []
         if caps := device.capabilities.map:
@@ -47,9 +47,7 @@ class DeebotMap(
 
     _attr_should_poll = True
 
-    def __init__(
-        self, hass: HomeAssistant, device: VacuumBot, capability: CapabilityMap
-    ):
+    def __init__(self, hass: HomeAssistant, device: Device, capability: CapabilityMap):
         super().__init__(
             device,
             capability,

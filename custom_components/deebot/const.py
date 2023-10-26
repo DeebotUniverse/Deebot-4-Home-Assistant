@@ -13,7 +13,7 @@ from deebot_client.events import (
     StatsEvent,
     WaterInfoEvent,
 )
-from deebot_client.models import VacuumState
+from deebot_client.models import State
 from homeassistant.components.vacuum import (
     STATE_CLEANING,
     STATE_DOCKED,
@@ -62,13 +62,13 @@ BUMPER_CONFIGURATION = {
 
 DEEBOT_DEVICES = f"{DOMAIN}_devices"
 
-VACUUMSTATE_TO_STATE = {
-    VacuumState.IDLE: STATE_IDLE,
-    VacuumState.CLEANING: STATE_CLEANING,
-    VacuumState.RETURNING: STATE_RETURNING,
-    VacuumState.DOCKED: STATE_DOCKED,
-    VacuumState.ERROR: STATE_ERROR,
-    VacuumState.PAUSED: STATE_PAUSED,
+STATE_TO_VACUUM_STATE = {
+    State.IDLE: STATE_IDLE,
+    State.CLEANING: STATE_CLEANING,
+    State.RETURNING: STATE_RETURNING,
+    State.DOCKED: STATE_DOCKED,
+    State.ERROR: STATE_ERROR,
+    State.PAUSED: STATE_PAUSED,
 }
 
 LAST_ERROR = "last_error"

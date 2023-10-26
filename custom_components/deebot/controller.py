@@ -7,11 +7,11 @@ from typing import Any
 
 from deebot_client.api_client import ApiClient
 from deebot_client.authentication import Authenticator
+from deebot_client.device import Device
 from deebot_client.exceptions import InvalidAuthenticationError
 from deebot_client.models import ApiDeviceInfo, Configuration
 from deebot_client.mqtt_client import MqttClient, MqttConfiguration
 from deebot_client.util import md5
-from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.const import (
     CONF_DEVICES,
     CONF_PASSWORD,
@@ -38,7 +38,7 @@ class DeebotController:
     def __init__(self, hass: HomeAssistant, config: Mapping[str, Any]):
         self._hass_config: Mapping[str, Any] = config
         self._hass: HomeAssistant = hass
-        self._devices: list[VacuumBot] = []
+        self._devices: list[Device] = []
         verify_ssl = config.get(CONF_VERIFY_SSL, True)
         device_id = config.get(CONF_CLIENT_DEVICE_ID)
 
@@ -79,7 +79,7 @@ class DeebotController:
                 if device.api_device_info["name"] in self._hass_config.get(
                     CONF_DEVICES, []
                 ):
-                    bot = VacuumBot(device, self._authenticator)
+                    bot = Device(device, self._authenticator)
                     _LOGGER.debug(
                         "New vacbot found: %s", device.api_device_info["name"]
                     )
@@ -114,7 +114,7 @@ class DeebotController:
     def register_platform_add_entities_generator(
         self,
         async_add_entities: AddEntitiesCallback,
-        func: Callable[[VacuumBot], Sequence[DeebotEntity[Any, EntityDescription]]],
+        func: Callable[[Device], Sequence[DeebotEntity[Any, EntityDescription]]],
     ) -> None:
         """Add entities generated through the provided function."""
         new_entites: list[DeebotEntity[Any, EntityDescription]] = []

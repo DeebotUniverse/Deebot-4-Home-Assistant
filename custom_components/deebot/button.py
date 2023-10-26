@@ -3,8 +3,8 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 
 from deebot_client.capabilities import CapabilityExecute
+from deebot_client.device import Device
 from deebot_client.events import LifeSpan
-from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -48,7 +48,7 @@ async def async_setup_entry(
     )
 
     def generate_reset_life_span(
-        device: VacuumBot,
+        device: Device,
     ) -> Sequence[DeebotResetLifeSpanButtonEntity]:
         return [
             DeebotResetLifeSpanButtonEntity(device, component)
@@ -66,7 +66,7 @@ class DeebotResetLifeSpanButtonEntity(
 ):
     """Deebot reset life span button entity."""
 
-    def __init__(self, vacuum_bot: VacuumBot, component: LifeSpan):
+    def __init__(self, device: Device, component: LifeSpan):
         key = f"life_span_{component.name.lower()}_reset"
         entity_description = ButtonEntityDescription(
             key=key,
@@ -75,8 +75,8 @@ class DeebotResetLifeSpanButtonEntity(
             entity_registry_enabled_default=True,  # Can be enabled as they don't poll data
             entity_category=EntityCategory.CONFIG,
         )
-        super().__init__(vacuum_bot, None, entity_description)
-        self._command = vacuum_bot.capabilities.life_span.reset(component)
+        super().__init__(device, None, entity_description)
+        self._command = device.capabilities.life_span.reset(component)
 
     async def async_press(self) -> None:
         """Press the button."""

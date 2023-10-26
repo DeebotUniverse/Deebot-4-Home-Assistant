@@ -5,6 +5,7 @@ from math import floor
 from typing import Any, Generic, TypeVar
 
 from deebot_client.capabilities import CapabilityEvent, CapabilityLifeSpan
+from deebot_client.device import Device
 from deebot_client.events import (
     BatteryEvent,
     CleanLogEvent,
@@ -15,7 +16,6 @@ from deebot_client.events import (
     StatsEvent,
     TotalStatsEvent,
 )
-from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorEntity,
@@ -230,7 +230,7 @@ async def async_setup_entry(
     )
 
     def life_span_entity_generator(
-        device: VacuumBot,
+        device: Device,
     ) -> Sequence[LifeSpanSensor]:
         new_entities = []
         capability = device.capabilities.life_span

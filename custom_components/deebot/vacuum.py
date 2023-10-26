@@ -5,6 +5,7 @@ from typing import Any
 
 import voluptuous as vol
 from deebot_client.capabilities import Capabilities
+from deebot_client.device import Device
 from deebot_client.events import (
     BatteryEvent,
     CustomCommandEvent,
@@ -15,7 +16,6 @@ from deebot_client.events import (
     StateEvent,
 )
 from deebot_client.models import CleanAction, CleanMode, Room
-from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.components.vacuum import (
     StateVacuumEntity,
     StateVacuumEntityDescription,
@@ -35,7 +35,7 @@ from .const import (
     LAST_ERROR,
     REFRESH_MAP,
     REFRESH_STR_TO_EVENT_DTO,
-    VACUUMSTATE_TO_STATE,
+    STATE_TO_VACUUM_STATE,
 )
 from .controller import DeebotController
 from .entity import DeebotEntity
@@ -65,7 +65,7 @@ async def async_setup_entry(
     controller: DeebotController = hass.data[DOMAIN][config_entry.entry_id]
 
     def vacuum_entity_generator(
-        device: VacuumBot,
+        device: Device,
     ) -> Sequence[DeebotVacuum]:
         return [DeebotVacuum(device)]
 
@@ -100,7 +100,7 @@ class DeebotVacuum(
         | VacuumEntityFeature.START
     )
 
-    def __init__(self, device: VacuumBot):
+    def __init__(self, device: Device):
         """Initialize the Deebot Vacuum."""
         capabilities = device.capabilities
         super().__init__(
@@ -139,7 +139,7 @@ class DeebotVacuum(
             self.async_write_ha_state()
 
         async def on_status(event: StateEvent) -> None:
-            self._attr_state = VACUUMSTATE_TO_STATE[event.state]
+            self._attr_state = STATE_TO_VACUUM_STATE[event.state]
             self.async_write_ha_state()
 
         subscriptions = [

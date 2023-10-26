@@ -4,9 +4,9 @@ from dataclasses import dataclass
 from typing import Any, Generic, TypeVar
 
 from deebot_client.capabilities import Capabilities
+from deebot_client.device import Device
 from deebot_client.events import AvailabilityEvent
 from deebot_client.events.base import Event
-from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.helpers.entity import DeviceInfo, Entity, EntityDescription
 
 from .const import DOMAIN
@@ -44,7 +44,7 @@ class DeebotEntity(Entity, Generic[CapabilityT, _EntityDescriptionT]):  # type: 
 
     def __init__(
         self,
-        vacuum_bot: VacuumBot,
+        device: Device,
         capability: CapabilityT,
         entity_description: _EntityDescriptionT | None = None,
         **kwargs: Any,
@@ -58,7 +58,7 @@ class DeebotEntity(Entity, Generic[CapabilityT, _EntityDescriptionT]):  # type: 
                 '"entity_description" must be either set as class variable or passed on init!'
             )
 
-        self._vacuum_bot: VacuumBot = vacuum_bot
+        self._vacuum_bot = device
         self._capability = capability
 
         device_info = self._vacuum_bot.device_info
