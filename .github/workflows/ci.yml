@@ -54,7 +54,7 @@ jobs:
         run: pylint custom_components/
 
   create_zip_file:
-    name: Create zip file for easy testing
+    name: Create zip file for testing
     permissions:
       # Required to upload/save artifact, otherwise you'll get
       # "Error: Resource not accessible by integration"
