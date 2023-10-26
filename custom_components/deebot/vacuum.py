@@ -15,8 +15,14 @@ from deebot_client.events import (
     RoomsEvent,
     StateEvent,
 )
-from deebot_client.models import CleanAction, CleanMode, Room
+from deebot_client.models import CleanAction, CleanMode, Room, State
 from homeassistant.components.vacuum import (
+    STATE_CLEANING,
+    STATE_DOCKED,
+    STATE_ERROR,
+    STATE_IDLE,
+    STATE_PAUSED,
+    STATE_RETURNING,
     StateVacuumEntity,
     StateVacuumEntityDescription,
     VacuumEntityFeature,
@@ -35,13 +41,21 @@ from .const import (
     LAST_ERROR,
     REFRESH_MAP,
     REFRESH_STR_TO_EVENT_DTO,
-    STATE_TO_VACUUM_STATE,
 )
 from .controller import DeebotController
 from .entity import DeebotEntity
 from .util import dataclass_to_dict
 
 _LOGGER = logging.getLogger(__name__)
+
+_STATE_TO_VACUUM_STATE = {
+    State.IDLE: STATE_IDLE,
+    State.CLEANING: STATE_CLEANING,
+    State.RETURNING: STATE_RETURNING,
+    State.DOCKED: STATE_DOCKED,
+    State.ERROR: STATE_ERROR,
+    State.PAUSED: STATE_PAUSED,
+}
 
 
 # Must be kept in sync with services.yaml
@@ -139,7 +153,7 @@ class DeebotVacuum(
             self.async_write_ha_state()
 
         async def on_status(event: StateEvent) -> None:
-            self._attr_state = STATE_TO_VACUUM_STATE[event.state]
+            self._attr_state = _STATE_TO_VACUUM_STATE[event.state]
             self.async_write_ha_state()
 
         subscriptions = [
