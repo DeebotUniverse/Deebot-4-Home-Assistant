@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Any, Generic
 
 from deebot_client.capabilities import CapabilitySetTypes
-from deebot_client.vacuum_bot import VacuumBot
+from deebot_client.device import Device
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -79,12 +79,12 @@ class DeebotSelectEntity(
 
     def __init__(
         self,
-        vacuum_bot: VacuumBot,
+        device: Device,
         capability: CapabilitySetTypes[EventT, str],
         entity_description: DeebotSelectEntityDescription | None = None,
         **kwargs: Any,
     ):
-        super().__init__(vacuum_bot, capability, entity_description, **kwargs)
+        super().__init__(device, capability, entity_description, **kwargs)
         self._attr_options = self.entity_description.options_fn(capability)
 
     async def async_added_to_hass(self) -> None:
@@ -96,9 +96,9 @@ class DeebotSelectEntity(
             self.async_write_ha_state()
 
         self.async_on_remove(
-            self._vacuum_bot.events.subscribe(self._capability.event, on_water_info)
+            self._device.events.subscribe(self._capability.event, on_water_info)
         )
 
     async def async_select_option(self, option: str) -> None:
         """Change the selected option."""
-        await self._vacuum_bot.execute_command(self._capability.set(option))
+        await self._device.execute_command(self._capability.set(option))

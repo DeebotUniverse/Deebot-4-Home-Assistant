@@ -96,13 +96,13 @@ class DeebotSwitchEntity(
             self.async_write_ha_state()
 
         self.async_on_remove(
-            self._vacuum_bot.events.subscribe(self._capability.event, on_enable)
+            self._device.events.subscribe(self._capability.event, on_enable)
         )
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn the entity on."""
-        await self._vacuum_bot.execute_command(self._capability.set(True))
+        await self._device.execute_command(self._capability.set(True))
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn the entity off."""
-        await self._vacuum_bot.execute_command(self._capability.set(False))
+        await self._device.execute_command(self._capability.set(False))

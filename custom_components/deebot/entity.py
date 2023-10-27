@@ -4,9 +4,9 @@ from dataclasses import dataclass
 from typing import Any, Generic, TypeVar
 
 from deebot_client.capabilities import Capabilities
+from deebot_client.device import Device
 from deebot_client.events import AvailabilityEvent
 from deebot_client.events.base import Event
-from deebot_client.vacuum_bot import VacuumBot
 from homeassistant.helpers.entity import DeviceInfo, Entity, EntityDescription
 
 from .const import DOMAIN
@@ -44,7 +44,7 @@ class DeebotEntity(Entity, Generic[CapabilityT, _EntityDescriptionT]):  # type: 
 
     def __init__(
         self,
-        vacuum_bot: VacuumBot,
+        device: Device,
         capability: CapabilityT,
         entity_description: _EntityDescriptionT | None = None,
         **kwargs: Any,
@@ -58,10 +58,10 @@ class DeebotEntity(Entity, Generic[CapabilityT, _EntityDescriptionT]):  # type: 
                 '"entity_description" must be either set as class variable or passed on init!'
             )
 
-        self._vacuum_bot: VacuumBot = vacuum_bot
+        self._device = device
         self._capability = capability
 
-        device_info = self._vacuum_bot.device_info
+        device_info = self._device.device_info
         self._attr_unique_id = device_info.did
 
         if self.entity_description.key:
@@ -70,11 +70,11 @@ class DeebotEntity(Entity, Generic[CapabilityT, _EntityDescriptionT]):  # type: 
     @property
     def device_info(self) -> DeviceInfo | None:
         """Return device specific attributes."""
-        device = self._vacuum_bot.device_info
+        device = self._device.device_info
         info = DeviceInfo(
             identifiers={(DOMAIN, device.did)},
             manufacturer="Ecovacs",
-            sw_version=self._vacuum_bot.fw_version,
+            sw_version=self._device.fw_version,
         )
 
         if nick := device.api_device_info.get("nick"):
@@ -96,5 +96,5 @@ class DeebotEntity(Entity, Generic[CapabilityT, _EntityDescriptionT]):  # type: 
                 self.async_write_ha_state()
 
             self.async_on_remove(
-                self._vacuum_bot.events.subscribe(AvailabilityEvent, on_available)
+                self._device.events.subscribe(AvailabilityEvent, on_available)
             )
