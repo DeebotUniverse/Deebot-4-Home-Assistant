@@ -89,7 +89,7 @@ jobs:
           inter-link: false
 
           comment-title: |
-            🤖 Pull request artifactsy
+            🤖 Pull request artifacts
 
             For testing please download the zip file below and extract it in `[config folder]/custom_components/deebot`.
 
