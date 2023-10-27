@@ -7,6 +7,7 @@ from deebot_client.capabilities import Capabilities
 from deebot_client.device import Device
 from deebot_client.events import AvailabilityEvent
 from deebot_client.events.base import Event
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.entity import DeviceInfo, Entity, EntityDescription
 
 from .const import DOMAIN
@@ -61,8 +62,7 @@ class DeebotEntity(Entity, Generic[CapabilityT, _EntityDescriptionT]):  # type: 
         self._device = device
         self._capability = capability
 
-        device_info = self._device.device_info
-        self._attr_unique_id = device_info.did
+        self._attr_unique_id = self._device.device_info.did
 
         if self.entity_description.key:
             self._attr_unique_id += f"_{self.entity_description.key}"
@@ -82,6 +82,9 @@ class DeebotEntity(Entity, Generic[CapabilityT, _EntityDescriptionT]):  # type: 
 
         if model := device.api_device_info.get("deviceName"):
             info["model"] = model
+
+        if mac := self._device.mac:
+            info["connections"] = {(dr.CONNECTION_NETWORK_MAC, mac)}
 
         return info
 

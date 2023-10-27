@@ -13,6 +13,7 @@ from deebot_client.events import (
     Event,
     LifeSpan,
     LifeSpanEvent,
+    NetworkInfoEvent,
     StatsEvent,
     TotalStatsEvent,
 )
@@ -169,6 +170,33 @@ ENTITY_DESCRIPTIONS: tuple[DeebotSensorEntityDescription, ...] = (
         translation_key="last_cleaning",
         icon="mdi:history",
         entity_registry_enabled_default=False,
+    ),
+    DeebotSensorEntityDescription[NetworkInfoEvent](
+        capability_fn=lambda caps: caps.network,
+        value_fn=lambda e: e.ip,
+        key="wifi_ip",
+        translation_key="wifi_ip",
+        icon="mdi:ip-network-outline",
+        entity_registry_enabled_default=False,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    DeebotSensorEntityDescription[NetworkInfoEvent](
+        capability_fn=lambda caps: caps.network,
+        value_fn=lambda e: e.rssi,
+        key="wifi_rssi",
+        translation_key="wifi_rssi",
+        icon="mdi:signal-variant",
+        entity_registry_enabled_default=False,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    DeebotSensorEntityDescription[NetworkInfoEvent](
+        capability_fn=lambda caps: caps.network,
+        value_fn=lambda e: e.ssid,
+        key="wifi_ssid",
+        translation_key="wifi_ssid",
+        icon="mdi:wifi",
+        entity_registry_enabled_default=False,
+        entity_category=EntityCategory.DIAGNOSTIC,
     ),
 )
 

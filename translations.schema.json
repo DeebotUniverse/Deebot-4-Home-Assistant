@@ -282,6 +282,15 @@
             },
             "stats_type": {
               "$ref": "#/definitions/translation_name"
+            },
+            "wifi_ip": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "wifi_rssi": {
+              "$ref": "#/definitions/translation_name"
+            },
+            "wifi_ssid": {
+              "$ref": "#/definitions/translation_name"
             }
           },
           "type": "object"

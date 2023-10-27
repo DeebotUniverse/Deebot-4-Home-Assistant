@@ -128,6 +128,15 @@
       },
       "stats_type": {
         "name": "Stats type"
+      },
+      "wifi_ip": {
+        "name": "Ip"
+      },
+      "wifi_rssi": {
+        "name": "Wifi rssi"
+      },
+      "wifi_ssid": {
+        "name": "Wifi ssid"
       }
     },
     "switch": {
