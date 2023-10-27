@@ -14,7 +14,7 @@
     "deebot_client"
   ],
   "requirements": [
-    "git+https://github.com/DeebotUniverse/client.py@device#deebot-client==4.0.0dev1",
+    "git+https://github.com/DeebotUniverse/client.py@dev#deebot-client==4.0.0dev0",
     "numpy>=1.23.2"
   ],
   "version": "v0.0.0"
