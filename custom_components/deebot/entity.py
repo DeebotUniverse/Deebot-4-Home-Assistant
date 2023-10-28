@@ -70,17 +70,18 @@ class DeebotEntity(Entity, Generic[CapabilityT, _EntityDescriptionT]):  # type: 
     @property
     def device_info(self) -> DeviceInfo | None:
         """Return device specific attributes."""
-        device = self._device.device_info
+        device_info = self._device.device_info
         info = DeviceInfo(
-            identifiers={(DOMAIN, device.did)},
+            identifiers={(DOMAIN, device_info.did)},
             manufacturer="Ecovacs",
             sw_version=self._device.fw_version,
+            serial_number=device_info.name,
         )
 
-        if nick := device.api_device_info.get("nick"):
+        if nick := device_info.api_device_info.get("nick"):
             info["name"] = nick
 
-        if model := device.api_device_info.get("deviceName"):
+        if model := device_info.api_device_info.get("deviceName"):
             info["model"] = model
 
         if mac := self._device.mac:
