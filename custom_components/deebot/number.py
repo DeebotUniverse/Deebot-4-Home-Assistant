@@ -80,6 +80,18 @@ ENTITY_DESCRIPTIONS: tuple[DeebotNumberEntityDescription, ...] = (
         native_step=1.0,
         icon="mdi:counter",
     ),
+    DeebotNumberEntityDescription(
+        capability_fn=lambda caps: caps.clean.pads.interval,
+        value_fn=lambda e: e.interval,
+        key="clean_pads_interval",
+        translation_key="clean_pads_interval",
+        entity_registry_enabled_default=False,
+        entity_category=EntityCategory.CONFIG,
+        native_min_value=1,
+        native_max_value=60,
+        native_step=1.0,
+        icon="mdi:wrench-clock",
+    ),
 )
 
 
