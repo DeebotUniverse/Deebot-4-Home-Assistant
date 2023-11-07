@@ -181,6 +181,9 @@
             "volume": {
               "$ref": "#/definitions/translation_name"
             }
+            "interval": {
+              "$ref": "#/definitions/translation_name"
+            }
           },
           "type": "object"
         },
