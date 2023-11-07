@@ -71,6 +71,9 @@
       "volume": {
         "name": "Volume"
       }
+      "interval": {
+      "name": "Interval"
+      }
     },
     "select": {
       "water_amount": {
