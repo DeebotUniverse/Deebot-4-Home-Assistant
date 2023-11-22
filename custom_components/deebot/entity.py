@@ -24,7 +24,6 @@ class DeebotEntityDescription(
 ):
     """Deebot Entity Description."""
 
-    always_available: bool = False
     capability_fn: Callable[[Capabilities], CapabilityT | None]
 
 

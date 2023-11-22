@@ -37,7 +37,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import StateType
 
-from .const import DOMAIN, LAST_ERROR
+from .const import DOMAIN
 from .controller import DeebotController
 from .entity import DeebotEntity, DeebotEntityDescription, EventT
 
@@ -144,27 +144,6 @@ ENTITY_DESCRIPTIONS: tuple[DeebotSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.BATTERY,
         entity_category=EntityCategory.DIAGNOSTIC,
     ),
-    DeebotSensorEntityDescription[ErrorEvent](
-        capability_fn=lambda caps: caps.error,
-        value_fn=lambda e: e.code,
-        extra_state_attributes_fn=lambda e: {CONF_DESCRIPTION: e.description},
-        always_available=True,
-        key=LAST_ERROR,
-        translation_key=LAST_ERROR,
-        icon="mdi:alert-circle",
-        entity_registry_enabled_default=False,
-        entity_category=EntityCategory.DIAGNOSTIC,
-    ),
-    DeebotSensorEntityDescription[CleanLogEvent](
-        capability_fn=lambda caps: caps.clean.log,
-        value_fn=_clean_log_event_value,
-        extra_state_attributes_fn=_clean_log_event_attributes,
-        always_available=True,
-        key="last_cleaning",
-        translation_key="last_cleaning",
-        icon="mdi:history",
-        entity_registry_enabled_default=False,
-    ),
     DeebotSensorEntityDescription[NetworkInfoEvent](
         capability_fn=lambda caps: caps.network,
         value_fn=lambda e: e.ip,
@@ -251,9 +230,21 @@ async def async_setup_entry(
         DeebotSensor, ENTITY_DESCRIPTIONS, async_add_entities
     )
 
-    def life_span_entity_generator(
+    def last_error_entity_generator(
         device: Device,
-    ) -> Sequence[LifeSpanSensor]:
+    ) -> Sequence[LastErrorSensor]:
+        if capability := device.capabilities.error:
+            return [(LastErrorSensor(device, capability))]
+        return []
+
+    def last_cleaning_entity_generator(
+        device: Device,
+    ) -> Sequence[LastCleaningSensor]:
+        if capability := device.capabilities.clean.log:
+            return [(LastCleaningSensor(device, capability))]
+        return []
+
+    def life_span_entity_generator(device: Device) -> Sequence[LifeSpanSensor]:
         new_entities = []
         capability = device.capabilities.life_span
         for description in LIFE_SPAN_DESCRIPTIONS:
@@ -262,7 +253,12 @@ async def async_setup_entry(
         return new_entities
 
     controller.register_platform_add_entities_generator(
-        async_add_entities, life_span_entity_generator
+        async_add_entities,
+        (
+            life_span_entity_generator,
+            last_error_entity_generator,
+            last_cleaning_entity_generator,
+        ),
     )
 
 
@@ -310,6 +306,74 @@ class LifeSpanSensor(
                 self._attr_extra_state_attributes = {
                     "remaining": floor(event.remaining / 60)
                 }
+                self.async_write_ha_state()
+
+        self.async_on_remove(
+            self._device.events.subscribe(self._capability.event, on_event)
+        )
+
+
+class LastErrorSensor(
+    DeebotEntity[CapabilityEvent[ErrorEvent], SensorEntityDescription],
+    SensorEntity,  # type: ignore
+):
+    """Last error sensor."""
+
+    _always_available: bool = True
+    _unrecorded_attributes = frozenset({CONF_DESCRIPTION})
+    entity_description: SensorEntityDescription = SensorEntityDescription(
+        key="last_error",
+        translation_key="last_error",
+        icon="mdi:alert-circle",
+        entity_registry_enabled_default=False,
+        entity_category=EntityCategory.DIAGNOSTIC,
+    )
+
+    async def async_added_to_hass(self) -> None:
+        """Set up the event listeners now that hass is ready."""
+        await super().async_added_to_hass()
+
+        async def on_event(event: ErrorEvent) -> None:
+            self._attr_native_value = event.code
+            self._attr_extra_state_attributes = {CONF_DESCRIPTION: event.description}
+
+            self.async_write_ha_state()
+
+        self.async_on_remove(
+            self._device.events.subscribe(self._capability.event, on_event)
+        )
+
+
+class LastCleaningSensor(
+    DeebotEntity[CapabilityEvent[CleanLogEvent], SensorEntityDescription],
+    SensorEntity,  # type: ignore
+):
+    """Last cleaning sensor."""
+
+    _always_available: bool = True
+    entity_description: SensorEntityDescription = SensorEntityDescription(
+        key="last_cleaning",
+        translation_key="last_cleaning",
+        icon="mdi:history",
+        entity_registry_enabled_default=False,
+    )
+
+    async def async_added_to_hass(self) -> None:
+        """Set up the event listeners now that hass is ready."""
+        await super().async_added_to_hass()
+
+        async def on_event(event: CleanLogEvent) -> None:
+            if event.logs:
+                log = event.logs[0]
+                self._attr_native_value = log.stop_reason.display_name
+                self._attr_extra_state_attributes = {
+                    "timestamp": log.timestamp,
+                    "image_url": log.image_url,
+                    "type": log.type,
+                    "area": log.area,
+                    "duration": log.duration / 60,
+                }
+
                 self.async_write_ha_state()
 
         self.async_on_remove(

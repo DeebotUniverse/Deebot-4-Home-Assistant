@@ -9,7 +9,6 @@ from deebot_client.device import Device
 from deebot_client.events import (
     BatteryEvent,
     CustomCommandEvent,
-    ErrorEvent,
     FanSpeedEvent,
     ReportStatsEvent,
     RoomsEvent,
@@ -38,7 +37,6 @@ from .const import (
     DOMAIN,
     EVENT_CLEANING_JOB,
     EVENT_CUSTOM_COMMAND,
-    LAST_ERROR,
     REFRESH_MAP,
     REFRESH_STR_TO_EVENT_DTO,
 )
@@ -96,11 +94,16 @@ async def async_setup_entry(
     )
 
 
+_ATTR_ROOMS = "rooms"
+
+
 class DeebotVacuum(
     DeebotEntity[Capabilities, StateVacuumEntityDescription],
     StateVacuumEntity,  # type: ignore
 ):
     """Deebot Vacuum."""
+
+    _unrecorded_attributes = frozenset({_ATTR_ROOMS})
 
     _attr_supported_features = (
         VacuumEntityFeature.PAUSE
@@ -124,7 +127,6 @@ class DeebotVacuum(
         )
 
         self._rooms: list[Room] = []
-        self._last_error: ErrorEvent | None = None
 
         self._attr_fan_speed_list = [
             level.display_name for level in capabilities.fan_speed.types
@@ -204,12 +206,7 @@ class DeebotVacuum(
                 rooms[room_name] = [room_values, room.id]
 
         if rooms:
-            attributes["rooms"] = rooms
-
-        if self._last_error:
-            attributes[
-                LAST_ERROR
-            ] = f"{self._last_error.description} ({self._last_error.code})"
+            attributes[_ATTR_ROOMS] = rooms
 
         return attributes
 
