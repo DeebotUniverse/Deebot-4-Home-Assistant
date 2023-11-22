@@ -42,24 +42,18 @@ from .controller import DeebotController
 from .entity import DeebotEntity, DeebotEntityDescription, EventT
 
 
-@dataclass
-class DeebotSensorMixin(Generic[EventT]):
-    """Deebot sensor mixin."""
-
-    value_fn: Callable[[EventT], StateType]
-
-
-@dataclass
+@dataclass(kw_only=True)
 class DeebotSensorEntityDescription(
     SensorEntityDescription,  # type: ignore
     DeebotEntityDescription,
-    DeebotSensorMixin[EventT],
+    Generic[EventT],
 ):
     """Deebot sensor entity description."""
 
     extra_state_attributes_fn: Callable[
         [EventT], MutableMapping[str, Any]
     ] | None = None
+    value_fn: Callable[[EventT], StateType]
 
 
 def _clean_log_event_value(event: CleanLogEvent) -> str | None:

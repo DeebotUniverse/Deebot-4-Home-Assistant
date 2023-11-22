@@ -16,23 +16,17 @@ from .controller import DeebotController
 from .entity import DeebotEntity, DeebotEntityDescription, EventT
 
 
-@dataclass
-class DeebotNumberEntityMixin(Generic[EventT]):
-    """Deebot number entity mixin."""
-
-    value_fn: Callable[[EventT], float | None]
-
-
-@dataclass
+@dataclass(kw_only=True)
 class DeebotNumberEntityDescription(
     NumberEntityDescription,  # type: ignore
     DeebotEntityDescription,
-    DeebotNumberEntityMixin[EventT],
+    Generic[EventT],
 ):
     """Deebot number entity description."""
 
-    native_max_value_fn: Callable[[EventT], float | None] = lambda _: None
     icon_fn: Callable[["DeebotNumberEntity"], str | None] = lambda _: None
+    native_max_value_fn: Callable[[EventT], float | None] = lambda _: None
+    value_fn: Callable[[EventT], float | None]
 
 
 def _volume_icon(instance: "DeebotNumberEntity") -> str | None:

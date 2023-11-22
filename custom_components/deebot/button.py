@@ -16,7 +16,7 @@ from .controller import DeebotController
 from .entity import DeebotEntity, DeebotEntityDescription
 
 
-@dataclass
+@dataclass(kw_only=True)
 class DeebotButtonEntityDescription(
     ButtonEntityDescription,  # type: ignore
     DeebotEntityDescription,
