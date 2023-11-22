@@ -19,21 +19,16 @@ from .controller import DeebotController
 from .entity import DeebotEntity, DeebotEntityDescription, EventT
 
 
-@dataclass
-class DeebotBinarySensorEntityMixin(Generic[EventT]):
-    """Deebot binary sensor entity mixin."""
-
-    value_fn: Callable[[EventT], bool | None]
-    icon_fn: Callable[[bool | None], str | None]
-
-
-@dataclass
+@dataclass(kw_only=True)
 class DeebotBinarySensorEntityDescription(
     BinarySensorEntityDescription,  # type: ignore
     DeebotEntityDescription,
-    DeebotBinarySensorEntityMixin[EventT],
+    Generic[EventT],
 ):
     """Class describing Deebot binary sensor entity."""
+
+    value_fn: Callable[[EventT], bool | None]
+    icon_fn: Callable[[bool | None], str | None]
 
 
 ENTITY_DESCRIPTIONS: tuple[DeebotBinarySensorEntityDescription, ...] = (

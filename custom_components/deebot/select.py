@@ -16,21 +16,16 @@ from .controller import DeebotController
 from .entity import DeebotEntity, DeebotEntityDescription, EventT
 
 
-@dataclass
-class DeebotSelectEntityMixin(Generic[EventT]):
-    """Deebot select entity mixin."""
-
-    current_option_fn: Callable[[EventT], str | None]
-    options_fn: Callable[[CapabilitySetTypes], list[str]]
-
-
-@dataclass
+@dataclass(kw_only=True)
 class DeebotSelectEntityDescription(
     SelectEntityDescription,  # type: ignore
     DeebotEntityDescription,
-    DeebotSelectEntityMixin[EventT],
+    Generic[EventT],
 ):
     """Deebot select entity description."""
+
+    current_option_fn: Callable[[EventT], str | None]
+    options_fn: Callable[[CapabilitySetTypes], list[str]]
 
 
 ENTITY_DESCRIPTIONS: tuple[DeebotSelectEntityDescription, ...] = (

@@ -17,21 +17,15 @@ CapabilityT = TypeVar("CapabilityT")
 EventT = TypeVar("EventT", bound=Event)
 
 
-@dataclass
-class DeebotDescription(Generic[CapabilityT]):
-    """Deebot description."""
-
-    capability_fn: Callable[[Capabilities], CapabilityT | None]
-
-
-@dataclass
+@dataclass(kw_only=True)
 class DeebotEntityDescription(
     EntityDescription,  # type: ignore
-    DeebotDescription[CapabilityT],
+    Generic[CapabilityT],
 ):
     """Deebot Entity Description."""
 
     always_available: bool = False
+    capability_fn: Callable[[Capabilities], CapabilityT | None]
 
 
 class DeebotEntity(Entity, Generic[CapabilityT, _EntityDescriptionT]):  # type: ignore
