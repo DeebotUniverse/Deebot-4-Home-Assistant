@@ -31,6 +31,10 @@ from .const import CONF_CLIENT_DEVICE_ID, CONF_CONTINENT, CONF_COUNTRY
 
 _LOGGER = logging.getLogger(__name__)
 
+_EntityGeneratorType = Callable[
+    [Device], Sequence[DeebotEntity[Any, EntityDescription]]
+]
+
 
 class DeebotController:
     """Deebot Controller."""
@@ -114,13 +118,16 @@ class DeebotController:
     def register_platform_add_entities_generator(
         self,
         async_add_entities: AddEntitiesCallback,
-        func: Callable[[Device], Sequence[DeebotEntity[Any, EntityDescription]]],
+        functions: _EntityGeneratorType | tuple[_EntityGeneratorType, ...],
     ) -> None:
         """Add entities generated through the provided function."""
         new_entites: list[DeebotEntity[Any, EntityDescription]] = []
 
         for device in self._devices:
-            new_entites.extend(func(device))
+            if callable(functions):
+                functions = (functions,)
+            for func in functions:
+                new_entites.extend(func(device))
 
         if new_entites:
             async_add_entities(new_entites)

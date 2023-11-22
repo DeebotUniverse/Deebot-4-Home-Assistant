@@ -54,9 +54,6 @@ BUMPER_CONFIGURATION = {
 DEEBOT_DEVICES = f"{DOMAIN}_devices"
 
 
-LAST_ERROR = "last_error"
-
-
 REFRESH_STR_TO_EVENT_DTO: Mapping[str, type[Event]] = {
     "battery": BatteryEvent,
     "clean_logs": CleanLogEvent,
