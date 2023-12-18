@@ -180,6 +180,9 @@
             },
             "volume": {
               "$ref": "#/definitions/translation_name"
+            },
+            "wash_interval": {
+              "$ref": "#/definitions/translation_name"
             }
           },
           "type": "object"
