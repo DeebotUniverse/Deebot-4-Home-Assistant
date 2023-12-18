@@ -71,6 +71,9 @@
       "volume": {
         "name": "Volume"
       }
+      "wash_interval": {
+        "name": "Clean pads interval"
+      }
     },
     "select": {
       "water_amount": {
