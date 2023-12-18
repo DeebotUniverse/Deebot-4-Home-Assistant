@@ -71,6 +71,9 @@
       "volume": {
         "name": "Volume"
       }
+      "wash_interval": {
+        "name": "Nettoyage serpillères intervalle"
+      }
     },
     "select": {
       "water_amount": {
