@@ -75,7 +75,7 @@ ENTITY_DESCRIPTIONS: tuple[DeebotNumberEntityDescription, ...] = (
         icon="mdi:counter",
     ),
     DeebotNumberEntityDescription(
-        capability_fn=lambda caps: caps.wash.interval,
+        capability_fn=lambda caps: caps.clean.wash.interval,
         value_fn=lambda e: e.interval,
         key="wash_interval",
         translation_key="wash_interval",
