@@ -40,6 +40,7 @@ good-names=i,j,k,ex,_,T,x,y,id
 # abstract-method - with intro of async there are always methods missing
 # inconsistent-return-statements - doesn't handle raise
 # wrong-import-order - isort guards this
+# unexpected-keyword-arg - to many false positives
 disable=
   format,
   abstract-method,
@@ -48,7 +49,8 @@ disable=
   inconsistent-return-statements,
   too-many-instance-attributes,
   wrong-import-order,
-  too-few-public-methods
+  too-few-public-methods,
+  unexpected-keyword-arg
 
 # enable useless-suppression temporarily every now and then to clean them up
 enable=
