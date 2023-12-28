@@ -17,7 +17,7 @@ CapabilityT = TypeVar("CapabilityT")
 EventT = TypeVar("EventT", bound=Event)
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, frozen=True)
 class DeebotEntityDescription(
     EntityDescription,  # type: ignore
     Generic[CapabilityT],

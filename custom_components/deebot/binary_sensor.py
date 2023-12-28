@@ -19,7 +19,7 @@ from .controller import DeebotController
 from .entity import DeebotEntity, DeebotEntityDescription, EventT
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, frozen=True)
 class DeebotBinarySensorEntityDescription(
     BinarySensorEntityDescription,  # type: ignore
     DeebotEntityDescription,
