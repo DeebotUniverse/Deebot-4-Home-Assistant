@@ -29,9 +29,8 @@ from homeassistant.const import (
     ATTR_BATTERY_LEVEL,
     CONF_DESCRIPTION,
     PERCENTAGE,
-    TIME_HOURS,
-    TIME_MINUTES,
     EntityCategory,
+    UnitOfTime,
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -94,7 +93,7 @@ ENTITY_DESCRIPTIONS: tuple[DeebotSensorEntityDescription, ...] = (
         value_fn=lambda e: round(e.time / 60) if e.time else None,
         translation_key="stats_time",
         icon="mdi:timer-outline",
-        native_unit_of_measurement=TIME_MINUTES,
+        native_unit_of_measurement=UnitOfTime.MINUTES,
         entity_registry_enabled_default=False,
     ),
     DeebotSensorEntityDescription[StatsEvent](
@@ -122,7 +121,7 @@ ENTITY_DESCRIPTIONS: tuple[DeebotSensorEntityDescription, ...] = (
         key="stats_total_time",
         translation_key="stats_total_time",
         icon="mdi:timer-outline",
-        native_unit_of_measurement=TIME_HOURS,
+        native_unit_of_measurement=UnitOfTime.HOURS,
         entity_registry_enabled_default=False,
         state_class=SensorStateClass.TOTAL_INCREASING,
     ),
