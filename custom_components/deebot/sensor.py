@@ -42,7 +42,7 @@ from .controller import DeebotController
 from .entity import DeebotEntity, DeebotEntityDescription, EventT
 
 
-@dataclass(kw_only=True)
+@dataclass(kw_only=True, frozen=True)
 class DeebotSensorEntityDescription(
     SensorEntityDescription,  # type: ignore
     DeebotEntityDescription,
@@ -174,18 +174,13 @@ ENTITY_DESCRIPTIONS: tuple[DeebotSensorEntityDescription, ...] = (
 )
 
 
-@dataclass
-class DeebotLifeSpanSensorMixin:
-    """Deebot life span sensor mixin."""
-
-    component: LifeSpan
-
-
-@dataclass
+@dataclass(kw_only=True, frozen=True)
 class DeebotLifeSpanSensorEntityDescription(
-    SensorEntityDescription, DeebotLifeSpanSensorMixin  # type: ignore
+    SensorEntityDescription,  # type: ignore
 ):
     """Class describing Deebot sensor entity."""
+
+    component: LifeSpan
 
 
 LIFE_SPAN_DESCRIPTIONS: tuple[DeebotLifeSpanSensorEntityDescription, ...] = (
