@@ -2,7 +2,7 @@
 git+https://github.com/DeebotUniverse/client.py@dev#deebot-client==4.0.0dev0
 #deebot-client==4.0.0
 
-homeassistant>=2023.11.0b0
+homeassistant>=2024.1.0b0
 mypy==1.8.0
 
 numpy>=1.23.2
