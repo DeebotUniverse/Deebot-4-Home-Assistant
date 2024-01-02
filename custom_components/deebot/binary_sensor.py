@@ -68,6 +68,4 @@ class DeebotBinarySensor(DeebotEntity[CapabilityEvent[EventT], DeebotBinarySenso
             self._attr_icon = self.entity_description.icon_fn(self._attr_is_on)
             self.async_write_ha_state()
 
-        self.async_on_remove(
-            self._device.events.subscribe(self._capability.event, on_event)
-        )
+        self._subscribe(self._capability.event, on_event)

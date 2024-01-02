@@ -91,13 +91,11 @@ class DeebotSwitchEntity(
         """Set up the event listeners now that hass is ready."""
         await super().async_added_to_hass()
 
-        async def on_enable(event: EnableEvent) -> None:
+        async def on_event(event: EnableEvent) -> None:
             self._attr_is_on = event.enable
             self.async_write_ha_state()
 
-        self.async_on_remove(
-            self._device.events.subscribe(self._capability.event, on_enable)
-        )
+        self._subscribe(self._capability.event, on_event)
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn the entity on."""

@@ -107,9 +107,7 @@ class DeebotNumberEntity(
                 self._attr_icon = icon
             self.async_write_ha_state()
 
-        self.async_on_remove(
-            self._device.events.subscribe(self._capability.event, on_event)
-        )
+        self._subscribe(self._capability.event, on_event)
 
     async def async_set_native_value(self, value: float) -> None:
         """Set new value."""

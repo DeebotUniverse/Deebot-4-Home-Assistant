@@ -177,6 +177,19 @@
       }
     }
   },
+  "issues": {
+    "deprecated_service_refresh": {
+      "fix_flow": {
+        "step": {
+          "confirm": {
+            "description": "The service `deebot.refresh` is deprecated and will be removed.\nTo refresh an entity please use `homeassistant.update_entity` on the respective entity instead.\n\nPlease remove this service from your automations and scripts and select **submit** to close this issue.",
+            "title": "Deebot refresh service is being removed"
+          }
+        }
+      },
+      "title": "Deebot refresh service is being removed"
+    }
+  },
   "options": {
     "abort": {
       "cannot_connect": "Can't connect to the ecovacs API. Please check the logs",

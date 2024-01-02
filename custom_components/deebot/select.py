@@ -86,13 +86,11 @@ class DeebotSelectEntity(
         """Set up the event listeners now that hass is ready."""
         await super().async_added_to_hass()
 
-        async def on_water_info(event: EventT) -> None:
+        async def on_event(event: EventT) -> None:
             self._attr_current_option = self.entity_description.current_option_fn(event)
             self.async_write_ha_state()
 
-        self.async_on_remove(
-            self._device.events.subscribe(self._capability.event, on_water_info)
-        )
+        self._subscribe(self._capability.event, on_event)
 
     async def async_select_option(self, option: str) -> None:
         """Change the selected option."""

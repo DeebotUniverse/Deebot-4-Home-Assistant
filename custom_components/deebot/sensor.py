@@ -276,9 +276,7 @@ class DeebotSensor(
                 self._attr_extra_state_attributes = attr_fn(event)
             self.async_write_ha_state()
 
-        self.async_on_remove(
-            self._device.events.subscribe(self._capability.event, on_event)
-        )
+        self._subscribe(self._capability.event, on_event)
 
 
 T = TypeVar("T", bound=Event)
@@ -302,9 +300,7 @@ class LifeSpanSensor(
                 }
                 self.async_write_ha_state()
 
-        self.async_on_remove(
-            self._device.events.subscribe(self._capability.event, on_event)
-        )
+        self._subscribe(self._capability.event, on_event)
 
 
 class LastErrorSensor(
@@ -333,9 +329,7 @@ class LastErrorSensor(
 
             self.async_write_ha_state()
 
-        self.async_on_remove(
-            self._device.events.subscribe(self._capability.event, on_event)
-        )
+        self._subscribe(self._capability.event, on_event)
 
 
 class LastCleaningSensor(
@@ -370,6 +364,4 @@ class LastCleaningSensor(
 
                 self.async_write_ha_state()
 
-        self.async_on_remove(
-            self._device.events.subscribe(self._capability.event, on_event)
-        )
+        self._subscribe(self._capability.event, on_event)

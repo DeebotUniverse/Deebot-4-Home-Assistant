@@ -1,5 +1,5 @@
 """Deebot entity module."""
-from collections.abc import Callable
+from collections.abc import Callable, Coroutine
 from dataclasses import dataclass
 from typing import Any, Generic, TypeVar
 
@@ -33,8 +33,9 @@ class DeebotEntity(Entity, Generic[CapabilityT, _EntityDescriptionT]):  # type: 
     entity_description: _EntityDescriptionT
 
     _attr_should_poll = False
-    _always_available: bool = False
     _attr_has_entity_name = True
+    _always_available: bool = False
+    _subscribed_events: set[type[Event]] = set()
 
     def __init__(
         self,
@@ -92,6 +93,21 @@ class DeebotEntity(Entity, Generic[CapabilityT, _EntityDescriptionT]):  # type: 
                 self._attr_available = event.available
                 self.async_write_ha_state()
 
-            self.async_on_remove(
-                self._device.events.subscribe(AvailabilityEvent, on_available)
-            )
+            self._subscribe(AvailabilityEvent, on_available)
+
+    def _subscribe(
+        self,
+        event_type: type[EventT],
+        callback: Callable[[EventT], Coroutine[Any, Any, None]],
+    ) -> None:
+        """Subscribe to events."""
+        self._subscribed_events.add(event_type)
+        self.async_on_remove(self._device.events.subscribe(event_type, callback))
+
+    async def async_update(self) -> None:
+        """Update the entity.
+
+        Only used by the generic entity update service.
+        """
+        for event_type in self._subscribed_events:
+            self._device.events.request_refresh(event_type)

@@ -31,6 +31,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_platform
 from homeassistant.helpers.config_validation import make_entity_service_schema
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.issue_registry import IssueSeverity, async_create_issue
 from homeassistant.util import slugify
 
 from .const import (
@@ -158,31 +159,15 @@ class DeebotVacuum(
             self._attr_state = _STATE_TO_VACUUM_STATE[event.state]
             self.async_write_ha_state()
 
-        subscriptions = [
-            self._device.events.subscribe(self._capability.battery.event, on_battery),
-            self._device.events.subscribe(
-                self._capability.fan_speed.event, on_fan_speed
-            ),
-            self._device.events.subscribe(
-                self._capability.stats.report.event, on_report_stats
-            ),
-            self._device.events.subscribe(self._capability.state.event, on_status),
-        ]
+        self._subscribe(self._capability.battery.event, on_battery)
+        self._subscribe(self._capability.fan_speed.event, on_fan_speed)
+        self._subscribe(self._capability.stats.report.event, on_report_stats)
+        self._subscribe(self._capability.state.event, on_status)
 
         if custom := self._capability.custom:
-            subscriptions.append(
-                self._device.events.subscribe(custom.event, on_custom_command)
-            )
+            self._subscribe(custom.event, on_custom_command)
         if map_caps := self._capability.map:
-            subscriptions.append(
-                self._device.events.subscribe(map_caps.rooms.event, on_rooms)
-            )
-
-        def unsubscribe() -> None:
-            for sub in subscriptions:
-                sub()
-
-        self.async_on_remove(unsubscribe)
+            self._subscribe(map_caps.rooms.event, on_rooms)
 
     @property
     def extra_state_attributes(self) -> Mapping[str, Any] | None:
@@ -272,6 +257,18 @@ class DeebotVacuum(
 
     async def service_refresh(self, category: str) -> None:
         """Service to manually refresh."""
+        _LOGGER.warning(
+            'Service "deebot.refresh" is deprecated. To refresh an entity please use "homeassistant.update_entity" on the respective entity instead'
+        )
+        async_create_issue(
+            self.hass,
+            DOMAIN,
+            "deprecated_service_refresh",
+            is_fixable=True,
+            severity=IssueSeverity.WARNING,
+            translation_key="deprecated_service_refresh",
+        )
+
         _LOGGER.debug("Manually refresh %s", category)
         event = REFRESH_STR_TO_EVENT_DTO.get(category, None)
         if event:
