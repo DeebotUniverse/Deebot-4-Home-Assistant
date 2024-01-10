@@ -44,7 +44,6 @@ class DeebotMap(
 ):
     """Deebot map."""
 
-    _attr_should_poll = True
     _attr_content_type = "image/svg+xml"
 
     def __init__(self, hass: HomeAssistant, device: Device, capability: CapabilityMap):
