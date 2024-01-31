@@ -414,6 +414,18 @@
             }
           },
           "type": "object"
+        },
+        "deprecated_yaml_import_issue_cannot_connect": {
+          "additionalProperties": false,
+          "properties": {
+            "description": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            }
+          },
+          "type": "object"
         }
       },
       "type": "object"

@@ -80,12 +80,6 @@ class DeebotMap(
         self._subscribe(self._capability.chached_info.event, on_info)
         self._subscribe(self._capability.changed.event, on_changed)
 
-        def on_remove() -> None:
-            self._device.map.disable()
-
-        self.async_on_remove(on_remove)
-        self._device.map.enable()
-
     async def async_update(self) -> None:
         """Update the entity.
 
