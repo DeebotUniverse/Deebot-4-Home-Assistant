@@ -8,7 +8,11 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_DEVICES, CONF_USERNAME, CONF_VERIFY_SSL, Platform
 from homeassistant.const import __version__ as HA_VERSION
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.issue_registry import IssueSeverity, async_create_issue
+from homeassistant.helpers.issue_registry import (
+    IssueSeverity,
+    async_create_issue,
+    async_delete_issue,
+)
 
 from custom_components.deebot.controller import DeebotController
 
@@ -107,6 +111,11 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.data[DOMAIN].pop(entry.entry_id)
         if len(hass.data[DOMAIN]) == 0:
             hass.data.pop(DOMAIN)
+            async_delete_issue(
+                hass,
+                DOMAIN,
+                "deprecated_integration_issue",
+            )
 
     return unload_ok
 
