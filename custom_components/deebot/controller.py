@@ -6,11 +6,12 @@ from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 
 from deebot_client.api_client import ApiClient
-from deebot_client.authentication import Authenticator
+from deebot_client.authentication import Authenticator, create_rest_config
+from deebot_client.const import UNDEFINED
 from deebot_client.device import Device
 from deebot_client.exceptions import InvalidAuthenticationError
-from deebot_client.models import ApiDeviceInfo, Configuration
-from deebot_client.mqtt_client import MqttClient, MqttConfiguration
+from deebot_client.models import ApiDeviceInfo, DeviceInfo
+from deebot_client.mqtt_client import MqttClient, create_mqtt_config
 from deebot_client.util import md5
 from homeassistant.const import (
     CONF_DEVICES,
@@ -24,10 +25,11 @@ from homeassistant.helpers import aiohttp_client
 from homeassistant.helpers.device_registry import DeviceEntry
 from homeassistant.helpers.entity import EntityDescription
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.util.ssl import get_default_no_verify_context
 
 from custom_components.deebot.entity import DeebotEntity, DeebotEntityDescription
 
-from .const import CONF_CLIENT_DEVICE_ID, CONF_CONTINENT, CONF_COUNTRY
+from .const import CONF_CLIENT_DEVICE_ID, CONF_COUNTRY
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -52,12 +54,11 @@ class DeebotController:
                 random.choice(string.ascii_uppercase + string.digits) for _ in range(12)
             )
 
-        deebot_config = Configuration(
+        country = config.get(CONF_COUNTRY, "it").upper()
+        deebot_config = create_rest_config(
             aiohttp_client.async_get_clientsession(self._hass, verify_ssl=verify_ssl),
             device_id=device_id,
-            country=config.get(CONF_COUNTRY, "it").lower(),
-            continent=config.get(CONF_CONTINENT, "eu").lower(),
-            verify_ssl=config.get(CONF_VERIFY_SSL, True),
+            country=country,
         )
 
         self._authenticator = Authenticator(
@@ -67,7 +68,11 @@ class DeebotController:
         )
         self._api_client = ApiClient(self._authenticator)
 
-        mqtt_config = MqttConfiguration(config=deebot_config)
+        mqtt_config = create_mqtt_config(
+            device_id=device_id,
+            country=country,
+            ssl_context=UNDEFINED if verify_ssl else get_default_no_verify_context(),
+        )
         self._mqtt: MqttClient = MqttClient(mqtt_config, self._authenticator)
 
     async def initialize(self) -> None:
@@ -80,6 +85,10 @@ class DeebotController:
             await self._mqtt.connect()
 
             for device in devices:
+                if not isinstance(device, DeviceInfo):
+                    # Legacy devices are not supported
+                    continue
+
                 if device.api_device_info["name"] in self._hass_config.get(
                     CONF_DEVICES, []
                 ):

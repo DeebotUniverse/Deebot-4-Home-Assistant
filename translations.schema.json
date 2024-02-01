@@ -382,6 +382,18 @@
     "issues": {
       "additionalProperties": false,
       "properties": {
+        "deprecated_integration_issue": {
+          "additionalProperties": false,
+          "properties": {
+            "description": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
         "deprecated_service_refresh": {
           "additionalProperties": false,
           "properties": {

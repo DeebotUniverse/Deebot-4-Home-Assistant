@@ -8,6 +8,11 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_DEVICES, CONF_USERNAME, CONF_VERIFY_SSL, Platform
 from homeassistant.const import __version__ as HA_VERSION
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.issue_registry import (
+    IssueSeverity,
+    async_create_issue,
+    async_delete_issue,
+)
 
 from custom_components.deebot.controller import DeebotController
 
@@ -60,6 +65,21 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if INTEGRATION_VERSION == "main":
         _LOGGER.warning("Beta-Version! Use this version only for testing.")
 
+    if AwesomeVersion(HA_VERSION) >= "2024.2.0b0":
+        async_create_issue(
+            hass,
+            DOMAIN,
+            "deprecated_integration_issue",
+            is_fixable=False,
+            issue_domain=DOMAIN,
+            severity=IssueSeverity.WARNING,
+            translation_key="deprecated_integration_issue",
+            translation_placeholders={
+                "config_url": "/config/integrations/dashboard/add?domain=ecovacs",
+                "docs_url": "https://www.home-assistant.io/integrations/ecovacs/",
+            },
+        )
+
     # Store an instance of the "connecting" class that does the work of speaking
     # with your actual devices.
     controller = DeebotController(hass, {**entry.data, **entry.options})
@@ -91,6 +111,11 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.data[DOMAIN].pop(entry.entry_id)
         if len(hass.data[DOMAIN]) == 0:
             hass.data.pop(DOMAIN)
+            async_delete_issue(
+                hass,
+                DOMAIN,
+                "deprecated_integration_issue",
+            )
 
     return unload_ok
 

@@ -178,6 +178,10 @@
     }
   },
   "issues": {
+    "deprecated_integration_issue": {
+      "description": "I migrated the custom component `Deebot 4 Home Assistant` to the core and merged it with the existing `Ecovacs` integration.\n\nThe custom component is no longer needed and will be archived in the future.\n\nEverything was migrated except:\n- The events `cleaning_job` and `custom_command`.\n- The last cleaning and stats type sensors\n- Deprecated services\n\nMigration steps:\n1: Remove all `Deebot 4 Home Assistant` config entries\n2: Uninstall `Deebot 4 Home Assistant` via HACS\n3: Setup the [Ecovacs integration]({docs_url}) by clicking [here]({config_url})",
+      "title": "Time to migrate!"
+    },
     "deprecated_service_refresh": {
       "fix_flow": {
         "step": {

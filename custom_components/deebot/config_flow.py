@@ -8,9 +8,9 @@ from typing import Any
 import voluptuous as vol
 from aiohttp import ClientError
 from deebot_client.api_client import ApiClient
-from deebot_client.authentication import Authenticator
+from deebot_client.authentication import Authenticator, create_rest_config
 from deebot_client.exceptions import InvalidAuthenticationError
-from deebot_client.models import Configuration, DeviceInfo
+from deebot_client.models import DeviceInfo
 from deebot_client.util import md5
 from homeassistant.config_entries import ConfigEntry, ConfigFlow, OptionsFlow
 from homeassistant.const import (
@@ -244,12 +244,10 @@ async def _retrieve_devices(
     hass: HomeAssistant, domain_config: dict[str, Any]
 ) -> list[DeviceInfo]:
     verify_ssl = domain_config.get(CONF_VERIFY_SSL, True)
-    deebot_config = Configuration(
+    deebot_config = create_rest_config(
         aiohttp_client.async_get_clientsession(hass, verify_ssl=verify_ssl),
         device_id=DEEBOT_API_DEVICEID,
-        continent=domain_config[CONF_CONTINENT],
-        country=domain_config[CONF_COUNTRY],
-        verify_ssl=verify_ssl,
+        country=domain_config[CONF_COUNTRY].upper(),
     )
 
     authenticator = Authenticator(
@@ -259,7 +257,8 @@ async def _retrieve_devices(
     )
     api_client = ApiClient(authenticator)
 
-    return await api_client.get_devices()
+    devices = await api_client.get_devices()
+    return [device for device in devices if isinstance(device, DeviceInfo)]
 
 
 class DeebotOptionsFlowHandler(OptionsFlow):  # type: ignore[misc]
