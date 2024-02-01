@@ -382,6 +382,18 @@
     "issues": {
       "additionalProperties": false,
       "properties": {
+        "deprecated_integration_issue": {
+          "additionalProperties": false,
+          "properties": {
+            "description": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
         "deprecated_service_refresh": {
           "additionalProperties": false,
           "properties": {
@@ -408,18 +420,6 @@
                 }
               },
               "type": "object"
-            },
-            "title": {
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "deprecated_yaml_import_issue_cannot_connect": {
-          "additionalProperties": false,
-          "properties": {
-            "description": {
-              "type": "string"
             },
             "title": {
               "type": "string"
