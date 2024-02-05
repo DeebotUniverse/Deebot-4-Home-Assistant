@@ -16,7 +16,7 @@ With this custom component you'll be able to
 ## Useful links
 
 - [Documentation](https://deebot.readthedocs.io/integrations/home-assistant/)
-- [FAQ](https://deebot.readthedocs.io/general/faq/)
+- [FAQ](https://deebot.readthedocs.io/home/faq/)
 - [GitHub](https://github.com/DeebotUniverse/Deebot-4-Home-Assistant)
 - [BuyMe~~Coffee~~Beer? 🍺🙈](https://buymeacoffee.com/edenhaus)
 
