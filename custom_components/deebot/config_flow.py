@@ -247,7 +247,7 @@ async def _retrieve_devices(
     deebot_config = create_rest_config(
         aiohttp_client.async_get_clientsession(hass, verify_ssl=verify_ssl),
         device_id=DEEBOT_API_DEVICEID,
-        country=domain_config[CONF_COUNTRY].upper(),
+        alpha_2_country=domain_config[CONF_COUNTRY].upper(),
     )
 
     authenticator = Authenticator(

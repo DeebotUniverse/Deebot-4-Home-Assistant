@@ -58,7 +58,7 @@ class DeebotController:
         deebot_config = create_rest_config(
             aiohttp_client.async_get_clientsession(self._hass, verify_ssl=verify_ssl),
             device_id=device_id,
-            country=country,
+            alpha_2_country=country,
         )
 
         self._authenticator = Authenticator(
