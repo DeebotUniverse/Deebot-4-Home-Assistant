@@ -1,4 +1,5 @@
 """Sensor module."""
+
 from collections.abc import Callable, MutableMapping, Sequence
 from dataclasses import dataclass
 from math import floor
@@ -49,9 +50,9 @@ class DeebotSensorEntityDescription(
 ):
     """Deebot sensor entity description."""
 
-    extra_state_attributes_fn: Callable[
-        [EventT], MutableMapping[str, Any]
-    ] | None = None
+    extra_state_attributes_fn: Callable[[EventT], MutableMapping[str, Any]] | None = (
+        None
+    )
     value_fn: Callable[[EventT], StateType]
 
 

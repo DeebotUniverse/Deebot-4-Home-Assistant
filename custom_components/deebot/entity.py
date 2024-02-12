@@ -1,4 +1,5 @@
 """Deebot entity module."""
+
 from collections.abc import Callable, Coroutine
 from dataclasses import dataclass
 from typing import Any, Generic, TypeVar

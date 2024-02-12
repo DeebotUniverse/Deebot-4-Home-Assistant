@@ -1,4 +1,5 @@
 """Controller module."""
+
 import logging
 import random
 import string

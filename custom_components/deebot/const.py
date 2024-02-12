@@ -1,4 +1,5 @@
 """Const module."""
+
 from collections.abc import Mapping
 
 from deebot_client.events import (

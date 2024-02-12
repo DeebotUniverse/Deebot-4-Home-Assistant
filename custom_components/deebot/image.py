@@ -1,4 +1,5 @@
 """Support for Deebot image entities."""
+
 from collections.abc import MutableMapping, Sequence
 from typing import Any
 
