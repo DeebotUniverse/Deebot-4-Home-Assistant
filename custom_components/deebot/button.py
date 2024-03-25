@@ -1,4 +1,5 @@
 """Binary sensor module."""
+
 from collections.abc import Sequence
 from dataclasses import dataclass
 

@@ -1,4 +1,5 @@
 """Support for Deebot Vacuums."""
+
 import asyncio
 import logging
 from typing import Any

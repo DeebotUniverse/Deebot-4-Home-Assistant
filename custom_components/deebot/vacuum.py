@@ -1,4 +1,5 @@
 """Support for Deebot Vacuums."""
+
 import logging
 from collections.abc import Mapping, Sequence
 from typing import Any
