@@ -1,4 +1,5 @@
 """Config flow for Deebot integration."""
+
 import logging
 import random
 import string
